@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoImpact Hero</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Distinctive pairing -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            body: ['Be Vietnam Pro', 'sans-serif'],
+          },
+          colors: {
+            eco: {
+              green:  '#4ade80',
+              glow:   '#22c55e',
+              dark:   '#0f172a',
+              glass:  'rgba(255,255,255,0.08)',
+            },
+          },
+          backdropBlur: {
+            xs: '2px',
+            glass: '18px',
+            heavy: '32px',
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Three.js 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+
+<body class="page-index">
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <nav class="navbar glass anim-navbar">
+    <!-- Brand -->
+    <div class="flex items-center gap-2">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="13" cy="13" r="12" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1.5"/>
+        <path d="M13 6 C8 9, 6 14, 9 18 C11 21, 15 21, 17 18 C20 14, 18 9, 13 6Z" fill="#22c55e" opacity="0.85"/>
+        <path d="M13 8 C13 12, 10 16, 13 20" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <span class="text-white font-bold text-[1rem] tracking-tight">EcoImpact</span>
+    </div>
+
+    <!-- Nav links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-link active">Trang chủ</a>
+      <a href="dashboard.html" class="nav-link">Bảng điều khiển</a>
+      <a href="calculator.html" class="nav-link">Công cụ</a>
+      <a href="news.html" class="nav-link">Tin tức</a>
+      <a href="community.html" class="nav-link">Cộng đồng</a>
+    </div>
+
+    <!-- Login -->
+    <button class="btn-login">Đăng nhập</button>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════ -->
+  <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-10">
+
+    <!-- Headline card with glassmorphism -->
+    <div class="glass-hero rounded-3xl px-10 py-8 max-w-2xl w-full text-center anim-hero">
+      <h1
+        class="hero-title font-body font-black text-white leading-[1.08] tracking-tight"
+        style="font-size: clamp(2.6rem, 6vw, 4.2rem); text-shadow: 0 2px 24px rgba(0,0,0,0.4);"
+      >
+        Thói Quen Nhỏ,<br />
+        <span style="background: linear-gradient(90deg, #ffffff 0%, #bae6fd 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+          Tác Động Lớn
+        </span>
+      </h1>
+    </div>
+
+    <!-- Subtitle -->
+    <p
+      class="anim-sub mt-6 text-center text-white/80 font-body font-light max-w-xl leading-relaxed"
+      style="font-size: clamp(0.95rem, 2vw, 1.1rem); text-shadow: 0 1px 8px rgba(0,0,0,0.6);"
+    >
+      Theo dõi và giảm thiểu tác động môi trường của bạn,<br class="hidden sm:block" />
+      chung tay vì một tương lai bền vững.
+    </p>
+
+    <!-- CTA -->
+    <div class="anim-btn mt-9">
+      <button class="btn-cta" onclick="window.location.href='calculator.html'">Bắt đầu ngay</button>
+    </div>
+
+
+    <!-- ── Bottom stat cards ─────────────────── -->
+    <div class="anim-stats absolute bottom-8 right-6 flex gap-3 flex-col sm:flex-row items-end sm:items-stretch">
+
+      <!-- CO2 Concentration -->
+      <div class="stat-card min-w-[180px]">
+        <p class="text-white/55 text-xs font-medium mb-1 tracking-wide">Nồng độ CO2 Toàn cầu:</p>
+        <div class="flex items-baseline gap-2">
+          <span class="text-white font-bold text-xl tracking-tight">421.7 ppm</span>
+          <span class="text-green-400 text-sm font-semibold">↑</span>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="stat-card min-w-[210px]">
+        <p class="text-white/55 text-xs font-medium mb-1 tracking-wide">Trạng thái:</p>
+        <div class="flex items-center gap-2">
+          <span class="pulse-dot"></span>
+          <span class="text-white font-bold text-sm leading-tight">Đang gia tăng <span class="text-red-400">(Cảnh báo)</span></span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       SUBTLE SCROLL HINT
+  ═══════════════════════════════════════════ -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 opacity-50" style="animation: fadeIn 1.5s 1.2s ease both;">
+    <span class="text-white/60 text-xs tracking-widest uppercase font-light">Cuộn</span>
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="animation: fadeUp 1.2s 1.5s infinite alternate ease-in-out;">
+      <path d="M9 3v12M4 10l5 5 5-5" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 — HIỆN TRẠNG THẾ GIỚI
+  ═══════════════════════════════════════════ -->
+  <section class="scroll-section" id="hien-trang">
+
+    <div class="reveal">
+      <div class="section-tag"><span class="tag-dot"></span> Dữ liệu toàn cầu</div>
+      <h2 class="section-heading">Hiện trạng thế giới</h2>
+      <p class="section-desc">
+        Những con số dưới đây cho thấy tình trạng môi trường toàn cầu đang thay đổi từng ngày.
+      </p>
+    </div>
+
+    <div class="bento-grid-3">
+
+      <!-- Card 1 — CO₂ trung bình -->
+      <div class="bento-card reveal reveal-d1">
+        <div class="bento-icon">
+          <!-- Cloud / Factory icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <path d="M20 8V6a2 2 0 0 0-2-2h-1"/>
+            <path d="M3 8V6a2 2 0 0 1 2-2h1"/>
+            <path d="M12 3v4"/>
+            <path d="M8 5l4 2 4-2"/>
+            <path d="M16 11a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+          </svg>
+        </div>
+        <div class="bento-value">
+          <span class="counter" data-target="12.5" data-decimals="1">0</span>
+        </div>
+        <p class="bento-unit">kg CO₂ / người / ngày</p>
+        <div class="sparkline-wrap">
+          <canvas class="sparkline" data-values="9.5,10.2,10.8,11.1,11.6,12.0,12.3,12.5"></canvas>
+        </div>
+        <p class="bento-desc">
+          Mỗi người trên thế giới thải ra trung bình khoảng 12.5 kg CO₂ mỗi ngày.
+        </p>
+      </div>
+
+      <!-- Card 2 — Diện tích rừng bị mất -->
+      <div class="bento-card reveal reveal-d2">
+        <div class="bento-icon">
+          <!-- Tree icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 22v-2"/>
+            <path d="M7 22v-2"/>
+            <path d="M12 22V8"/>
+            <path d="M12 8 5 14h4l-2 4h10l-2-4h4Z"/>
+            <path d="M12 8 8 12h2l-1 2h6l-1-2h2Z"/>
+          </svg>
+        </div>
+        <div class="bento-value">
+          <span class="counter" data-target="10" data-decimals="0">0</span> <span style="font-size:0.6em;">triệu</span>
+        </div>
+        <p class="bento-unit">hecta rừng mất / năm</p>
+        <div class="sparkline-wrap">
+          <canvas class="sparkline" data-values="15,14,13,12.5,11.8,11,10.5,10"></canvas>
+        </div>
+        <p class="bento-desc">
+          Mỗi năm, hàng triệu hecta rừng biến mất do khai thác và cháy rừng.
+        </p>
+      </div>
+
+      <!-- Card 3 — Rác thải sinh hoạt -->
+      <div class="bento-card reveal reveal-d3">
+        <div class="bento-icon">
+          <!-- Trash / Recycle icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"/>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+        </div>
+        <div class="bento-value">
+          <span class="counter" data-target="0.74" data-decimals="2">0</span>
+        </div>
+        <p class="bento-unit">kg rác thải / người / ngày</p>
+        <div class="sparkline-wrap">
+          <canvas class="sparkline" data-values="0.55,0.58,0.62,0.65,0.68,0.70,0.72,0.74"></canvas>
+        </div>
+        <p class="bento-desc">
+          Một người trung bình tạo ra gần 0.74 kg rác thải mỗi ngày.
+        </p>
+      </div>
+
+    </div><!-- /bento-grid-3 -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 — MỤC ĐÍCH CỐT LÕI
+  ═══════════════════════════════════════════ -->
+  <section class="scroll-section" id="muc-dich">
+
+    <div class="reveal">
+      <div class="section-tag"><span class="tag-dot"></span> Sứ mệnh</div>
+      <h2 class="section-heading">Mục đích cốt lõi</h2>
+      <p class="section-desc">
+        Biến nhận thức thành hành động, và hành động thành tác động tích cực cho Trái Đất.
+      </p>
+    </div>
+
+    <div class="bento-grid-4">
+
+      <!-- Panel 1 — Cá nhân hóa con số -->
+      <div class="bento-card bento-wide reveal reveal-d1">
+        <div class="bento-icon">
+          <!-- Calculator icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="8" y2="10.01"/>
+            <line x1="12" y1="10" x2="12" y2="10.01"/>
+            <line x1="16" y1="10" x2="16" y2="10.01"/>
+            <line x1="8" y1="14" x2="8" y2="14.01"/>
+            <line x1="12" y1="14" x2="12" y2="14.01"/>
+            <line x1="16" y1="14" x2="16" y2="14.01"/>
+            <line x1="8" y1="18" x2="8" y2="18.01"/>
+            <line x1="12" y1="18" x2="16" y2="18"/>
+          </svg>
+        </div>
+        <p class="bento-panel-title">Cá nhân hóa con số</p>
+        <p class="bento-panel-desc">
+          Biến mỗi thói quen hằng ngày thành con số CO₂ cụ thể, giúp người dùng hiểu rõ dấu chân sinh thái của chính mình.
+        </p>
+      </div>
+
+      <!-- Panel 2 — Xây dựng mạng lưới -->
+      <div class="bento-card bento-wide reveal reveal-d2">
+        <div class="bento-icon">
+          <!-- Users icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <p class="bento-panel-title">Xây dựng mạng lưới</p>
+        <p class="bento-panel-desc">
+          Kết nối cộng đồng yêu môi trường để chia sẻ kinh nghiệm, mẹo sống xanh và tham gia các thử thách chung.
+        </p>
+      </div>
+
+      <!-- Panel 3 — Tạo động lực -->
+      <div class="bento-card bento-wide reveal reveal-d3">
+        <div class="bento-icon">
+          <!-- Trophy icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 22V14.6a.5.5 0 0 0-.1-.4L6 10V4h12v6l-3.9 3.6a.5.5 0 0 0-.1.4V22"/>
+          </svg>
+        </div>
+        <p class="bento-panel-title">Tạo động lực</p>
+        <p class="bento-panel-desc">
+          Gamify hành trình sống xanh với leaderboard và dashboard cá nhân để tăng động lực hành động mỗi ngày.
+        </p>
+      </div>
+
+      <!-- Panel 4 — Nâng cao nhận thức -->
+      <div class="bento-card bento-wide reveal reveal-d4">
+        <div class="bento-icon">
+          <!-- Globe icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <p class="bento-panel-title">Nâng cao nhận thức</p>
+        <p class="bento-panel-desc">
+          Cập nhật dữ liệu môi trường và tin tức mới nhất từ các API uy tín trên thế giới.
+        </p>
+      </div>
+
+    </div><!-- /bento-grid-4 -->
+  </section>
+
+  <!-- spacer so content clears above fixed ticker if present -->
+  <div style="height: 60px;"></div>
+
+
+  <script>
+    // ── Smooth scrolling for anchor links ──────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // ── Live CO2 counter ticker (subtle) ───────────────
+    let co2 = 421.7;
+    const co2El = document.querySelector('.stat-card span.text-white');
+    if (co2El) {
+      setInterval(() => {
+        co2 += (Math.random() - 0.48) * 0.01;
+        co2El.textContent = co2.toFixed(1) + ' ppm';
+      }, 3200);
+    }
+
+
+    /* ══════════════════════════════════════════
+       SCROLL REVEAL — IntersectionObserver
+    ══════════════════════════════════════════ */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // If the revealed element (or its children) has counters, start them
+          entry.target.querySelectorAll('.counter').forEach(startCounter);
+          // If it has sparklines, draw them
+          entry.target.querySelectorAll('.sparkline').forEach(drawSparkline);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+    /* ══════════════════════════════════════════
+       ANIMATED COUNTERS
+    ══════════════════════════════════════════ */
+    function startCounter(el) {
+      if (el.dataset.started) return;
+      el.dataset.started = '1';
+
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      const duration = 1800; // ms
+      const startTime = performance.now();
+
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = target * easeOut(progress);
+        el.textContent = value.toFixed(decimals);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+
+    /* ══════════════════════════════════════════
+       SPARKLINE CHARTS
+    ══════════════════════════════════════════ */
+    function drawSparkline(canvas) {
+      if (canvas.dataset.drawn) return;
+      canvas.dataset.drawn = '1';
+
+      const values = canvas.dataset.values.split(',').map(Number);
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const W = rect.width;
+      const H = rect.height;
+      const pad = 4;
+      const min = Math.min(...values) * 0.92;
+      const max = Math.max(...values) * 1.05;
+      const range = max - min || 1;
+
+      const points = values.map((v, i) => ({
+        x: pad + (i / (values.length - 1)) * (W - pad * 2),
+        y: pad + (1 - (v - min) / range) * (H - pad * 2),
+      }));
+
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, 'rgba(74,222,128,0.25)');
+      grad.addColorStop(1, 'rgba(74,222,128,0.00)');
+
+      // Draw area
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, H);
+      points.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.lineTo(points[points.length - 1].x, H);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Draw line
+      ctx.beginPath();
+      points.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // End dot
+      const last = points[points.length - 1];
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#4ade80';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(74,222,128,0.22)';
+      ctx.fill();
+    }
+
+    /* ── Hide scroll hint on scroll ─────────── */
+    const scrollHint = document.querySelector('.fixed.bottom-6');
+    if (scrollHint) {
+      window.addEventListener('scroll', () => {
+        scrollHint.style.opacity = window.scrollY > 120 ? '0' : '0.5';
+        scrollHint.style.pointerEvents = window.scrollY > 120 ? 'none' : 'auto';
+      }, { passive: true });
+    }
+  </script>
+
+  <!-- 3D Background -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="js/bg3d.js"></script>
+
+</body>
+</html>

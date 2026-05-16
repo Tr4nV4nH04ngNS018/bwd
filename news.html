@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoImpact — Tin tức</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { body: ['Be Vietnam Pro', 'sans-serif'] } } },
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Three.js 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body class="page-index" style="display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <nav class="navbar anim-navbar">
+    <div class="flex items-center gap-2">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <circle cx="13" cy="13" r="12" fill="rgba(34,197,94,0.15)" stroke="#3ddc84" stroke-width="1.5"/>
+        <path d="M13 6 C8 9, 6 14, 9 18 C11 21, 15 21, 17 18 C20 14, 18 9, 13 6Z" fill="#22c55e" opacity="0.85"/>
+      </svg>
+      <span class="text-white font-black text-lg tracking-wide">EcoImpact</span>
+    </div>
+
+    <!-- Nav links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-link">Trang chủ</a>
+      <a href="dashboard.html" class="nav-link">Bảng điều khiển</a>
+      <a href="calculator.html" class="nav-link">Công cụ</a>
+      <a href="news.html" class="nav-link active">Tin tức</a>
+      <a href="community.html" class="nav-link">Cộng đồng</a>
+    </div>
+
+    <!-- Login -->
+    <button class="btn-login hidden sm:block">Đăng nhập</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       CONTENT AREA (IFRAME)
+  ═══════════════════════════════════════════ -->
+  <div style="flex: 1; margin-top: 80px; width: 100%; border-radius: 20px 20px 0 0; overflow: hidden; background: white; z-index: 10; position: relative;">
+    <!-- Nếu trang web bị chặn nhúng (X-Frame-Options), bạn có thể xóa thẻ iframe và viết code HTML của mình vào đây -->
+    <iframe src="https://www.theguardian.com/uk/environment" style="width: 100%; height: 100%; border: none;"></iframe>
+  </div>
+
+  <!-- 3D Background -->
+  <script src="js/bg3d.js"></script>
+
+</body>
+</html>
