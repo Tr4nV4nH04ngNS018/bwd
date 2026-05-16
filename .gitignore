@@ -1,17 +1,3 @@
-# Large 3D model files (exceed GitHub 100MB limit)
-*.blend
-*.blend1
-
-# Large GLB/GLTF files (keep only the small planet_earth.glb)
-earth.glb
-earth.gltf
-juan.glb
-caytrangchu.glb
-cartoon-lowpoly-earth-planet-2-uvw-textured.glb
-cartoon-lowpoly-earth-planet-2-uvw-textured.gltf
-the-last-tree-experimental-volumetric-fog.glb
-the-last-tree-experimental-volumetric-fog.gltf
-
 # Environment variables
 .env
 
