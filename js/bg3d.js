@@ -1274,7 +1274,7 @@
       lightningTime += delta;
       if (lightningTime >= nextLightningTime) {
         lightningTime = 0;
-        nextLightningTime = 1.5 + Math.random() * 2.5; // Hẹn giờ cho lần chớp sét tiếp theo
+        nextLightningTime = 0.8 + Math.random() * 1.5; // Hẹn giờ cho lần chớp sét tiếp theo (tần suất dày đặc hơn)
         lightningFlashActive = true;
         flashIntensity = 1.0; // Bắt đầu chớp chói lòa
       }
@@ -1291,7 +1291,8 @@
     }
 
     if (lightningFlashActive) {
-      flashIntensity -= delta * 3.2; // Độ sáng tiêu giảm nhanh theo thời gian
+      // Độ sáng tiêu giảm chậm hơn để luồng sét có chiều sâu và kéo dài hơn (từ 3.2 xuống 2.2)
+      flashIntensity -= delta * 2.2; 
       if (flashIntensity <= 0) {
         flashIntensity = 0;
         lightningFlashActive = false;
@@ -1302,21 +1303,28 @@
         scene.fog.density = targetFogDensity;
         hemiLight.intensity = baseHemiIntensity;
         ambLight.intensity = baseAmbIntensity;
+        dirLight.intensity = 3.8; // Cường độ tĩnh gốc
       } else {
-        // Nhấp nháy sấm chớp dạng răng cưa (Double-flash giật cục)
+        // Nhấp nháy sấm chớp dạng răng cưa đa tần số (Flicker nhấp nháy 3 pha cực chân thật)
         let currentFlash = flashIntensity;
-        const phase = flashIntensity * 24.0;
-        if (Math.sin(phase) > 0.45 && flashIntensity > 0.15) {
-          currentFlash *= 0.25; // Giật sáng rồi giảm rồi giật lại
+        const phase = t * 35.0; // Sử dụng thời gian thực tế để đồng bộ tần số nhấp nháy
+        const flicker = Math.sin(phase) * 0.4 + 0.6; // Dao động nhẹ giữ chớp sáng liên tục
+        currentFlash *= flicker;
+
+        // Thỉnh thoảng dập tắt đột ngột rồi chớp sáng lại (Double-flash đặc trưng của giông bão)
+        if (flashIntensity > 0.2 && flashIntensity < 0.6 && Math.sin(t * 12.0) > 0.5) {
+          currentFlash *= 0.15;
         }
 
-        // Lerp màu nền và màu sương mù sang sắc trắng xanh chói
-        scene.background.copy(baseFogColor).lerp(flashColor, currentFlash * 0.75);
-        scene.fog.color.copy(baseFogColor).lerp(flashColor, currentFlash * 0.75);
+        // Lerp màu nền và màu sương mù sang sắc trắng xanh chói của sét (tăng độ bao phủ ánh chớp từ 0.75 lên 0.95)
+        scene.background.copy(baseFogColor).lerp(flashColor, currentFlash * 0.95);
+        scene.fog.color.copy(baseFogColor).lerp(flashColor, currentFlash * 0.95);
 
-        // Đẩy mạnh ánh sáng hắt từ bầu trời và môi trường
-        hemiLight.intensity = baseHemiIntensity + currentFlash * 3.8;
-        ambLight.intensity = baseAmbIntensity + currentFlash * 1.6;
+        // Đẩy cực mạnh cường độ ánh sáng của bầu trời và môi trường (hemi từ 3.8 lên 6.8, amb từ 1.6 lên 2.8)
+        hemiLight.intensity = baseHemiIntensity + currentFlash * 6.8;
+        ambLight.intensity = baseAmbIntensity + currentFlash * 2.8;
+        // Chớp sáng cả nguồn Directional Light chính để tạo bóng đổ giật cục ấn tượng
+        dirLight.intensity = 3.8 + currentFlash * 5.0;
       }
     } else {
       // Khi không có sấm sét, sương mù và màu nền bám theo vị trí cuộn trang (smoothPct)
