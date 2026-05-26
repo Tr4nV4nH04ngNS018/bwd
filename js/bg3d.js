@@ -198,6 +198,19 @@
             // Cực kỳ quan trọng: hiển thị 2 mặt cho lá cây/vật thể mỏng
             mat.side = THREE.DoubleSide;
             
+            // Tinh chỉnh lá cây (LeafCard) để tránh răng cưa trắng, sẫm màu tự nhiên và tránh cháy sáng
+            if (mat.name.toLowerCase().includes('leaf')) {
+              mat.transparent = true;
+              mat.alphaTest = 0.52; // Cắt tỉa viền thô ráp của thẻ lá
+              mat.color.setHex(0x5dbb7d); // Đổi sang màu xanh lục tự nhiên, dịu mát hơn màu bạc trắng
+              if (mat.emissive) {
+                mat.emissive.setHex(0x0a2f14); // Phát quang nhẹ màu xanh rừng già
+                mat.emissiveIntensity = 0.15;
+              }
+              mat.roughness = 0.65;
+              mat.metalness = 0.05;
+            }
+            
             // Lưu lại các chất liệu môi trường (Đất, Đá, Thân cây) để tạo hiệu ứng ướt mưa động
             if (mat.name === 'Ground' || mat.name === 'Rock' || mat.name === 'Stump') {
               if (mat.normalMap) {
