@@ -73,8 +73,28 @@
       <a href="community.html" class="nav-link">Cộng đồng</a>
     </div>
 
+    <!-- Toggle Input -->
+    <input type="checkbox" id="nav-toggle" class="hidden" />
+
+    <!-- Mobile nav panel -->
+    <div class="mobile-nav-panel hidden md:hidden flex-col items-center gap-4 p-6 glass-dark border border-white/10 rounded-2xl absolute top-[calc(100%+10px)] left-0 right-0 z-50 text-center">
+      <a href="index.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg active">Trang chủ</a>
+      <a href="dashboard.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Bảng điều khiển</a>
+      <a href="calculator.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Công cụ</a>
+      <a href="news.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Tin tức</a>
+      <a href="community.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Cộng đồng</a>
+      <button class="btn-login w-full mt-2 py-2" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
+    </div>
+
+    <!-- Hamburger toggle -->
+    <label for="nav-toggle" class="hamburger-toggle md:hidden cursor-pointer flex flex-col gap-[5px] p-2 rounded-lg hover:bg-white/10 active:scale-95 transition-all">
+      <span class="w-5 h-[2px] bg-white rounded-full"></span>
+      <span class="w-5 h-[2px] bg-white rounded-full"></span>
+      <span class="w-5 h-[2px] bg-white rounded-full"></span>
+    </label>
+
     <!-- Login -->
-    <button class="btn-login">Đăng nhập</button>
+    <button class="btn-login hidden md:block" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
   </nav>
 
 
@@ -116,7 +136,7 @@
 
 
     <!-- ── Bottom stat cards ─────────────────── -->
-    <div class="anim-stats absolute bottom-8 right-6 flex gap-3 flex-col sm:flex-row items-end sm:items-stretch">
+    <div class="anim-stats relative md:absolute md:bottom-8 md:right-6 flex gap-3 flex-col sm:flex-row items-center md:items-end justify-center w-full mt-10 md:mt-0 px-6 md:px-0">
 
       <!-- CO2 Concentration -->
       <div class="stat-card min-w-[180px] relative overflow-hidden cyber-border-box">
