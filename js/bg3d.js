@@ -132,6 +132,9 @@
   scene.add(dirLight);
 
 
+  // Mảng lưu trữ chất liệu môi trường để tạo hiệu ứng ướt mưa động
+  const wetMaterials = [];
+
   // Load the Earth model
   const loader = new THREE.GLTFLoader();
   let loadedEarth = null;
@@ -195,11 +198,23 @@
             // Cực kỳ quan trọng: hiển thị 2 mặt cho lá cây/vật thể mỏng
             mat.side = THREE.DoubleSide;
             
+            // Lưu lại các chất liệu môi trường (Đất, Đá, Thân cây) để tạo hiệu ứng ướt mưa động
+            if (mat.name === 'Ground' || mat.name === 'Rock' || mat.name === 'Stump') {
+              wetMaterials.push({
+                material: mat,
+                baseRoughness: mat.name === 'Ground' ? 0.96 : (mat.name === 'Rock' ? 0.85 : 0.90),
+                baseMetalness: mat.name === 'Ground' ? 0.01 : 0.05,
+                wetRoughness: mat.name === 'Ground' ? 0.18 : 0.22,
+                wetMetalness: mat.name === 'Ground' ? 0.14 : 0.16,
+                name: mat.name
+              });
+            }
+
             // Tạo hiệu ứng bóng bẩy, ẩm ướt sau cơn mưa bão (wet highlights)
             // Trả lại chất liệu tự nhiên của gỗ và lá cây, tránh bóng loáng giả tạo
             // Giữ nguyên bản roughness và metalness từ file glb của họa sĩ
-            if (mat.clearcoat !== undefined) {
-              mat.clearcoat = 0.0; // Tắt lớp bóng clearcoat nhân tạo
+            if (mat.clearcoat !== undefined && mat.name !== 'Ground' && mat.name !== 'Rock' && mat.name !== 'Stump') {
+              mat.clearcoat = 0.0; // Tắt lớp bóng clearcoat nhân tạo cho các bộ phận khác
             }
           });
         }
@@ -1179,6 +1194,32 @@
       } else {
         rainParticles.visible = false;
       }
+    }
+
+    // ── Cập nhật hiệu ứng mặt đất và đá cây ướt mưa động (Dynamic Wetness)
+    if (typeof wetMaterials !== 'undefined' && wetMaterials.length > 0) {
+      // Khi mưa tạnh hoàn toàn ở smoothPct >= 0.40, mặt đất sẽ khô hẳn
+      const wetness = Math.min(Math.max(1.0 - smoothPct / 0.40, 0.0), 1.0); 
+      
+      wetMaterials.forEach(item => {
+        const mat = item.material;
+        
+        // 1. Độ nhám (Roughness): Ướt thì nhẵn bóng phản xạ gương, khô thì nhám lì chân thật
+        mat.roughness = item.baseRoughness + (item.wetRoughness - item.baseRoughness) * wetness;
+        
+        // 2. Độ kim loại (Metalness): Tăng nhẹ phản xạ gương khi ướt
+        mat.metalness = item.baseMetalness + (item.wetMetalness - item.baseMetalness) * wetness;
+        
+        // 3. Clearcoat (Lớp bóng phản chiếu nước bề mặt): Chỉ có ở vật liệu Physical
+        if (mat.clearcoat !== undefined) {
+          mat.clearcoat = wetness * 0.48;
+          mat.clearcoatRoughness = 0.12 + 0.38 * (1.0 - wetness);
+        }
+        
+        // 4. Độ tối màu (Darkening): Đất/đá/gỗ khi thấm đẫm nước mưa sẽ sẫm màu
+        const tint = 1.0 - 0.42 * wetness; // Sẫm màu đi 42% khi ướt sũng
+        mat.color.setRGB(tint, tint, tint);
+      });
     }
 
     // ── Cập nhật hạt tàn tro ô nhiễm rơi chậm (giảm dần và tạnh khi cuộn xuống)
