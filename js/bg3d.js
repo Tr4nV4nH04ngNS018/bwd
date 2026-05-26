@@ -134,7 +134,6 @@
 
   // Mảng lưu trữ chất liệu môi trường để tạo hiệu ứng ướt mưa động
   const wetMaterials = [];
-  const noiseBumpMap = createNoiseTexture();
 
   // Load the Earth model
   const loader = new THREE.GLTFLoader();
@@ -201,12 +200,9 @@
             
             // Lưu lại các chất liệu môi trường (Đất, Đá, Thân cây) để tạo hiệu ứng ướt mưa động
             if (mat.name === 'Ground' || mat.name === 'Rock' || mat.name === 'Stump') {
-              // Áp dụng bumpMap nhiễu hạt siêu sần sùi chi tiết
-              mat.bumpMap = noiseBumpMap;
-              mat.bumpScale = mat.name === 'Ground' ? 0.08 : 0.05; // Tách độ sần sùi đất vs đá/gốc cây
               if (mat.normalMap) {
-                // Tăng độ sâu sần sùi của Normal Map gốc lên gấp 3.2 lần (mặc định là 1)
-                mat.normalScale.set(3.2, 3.2);
+                // Tăng cường độ gồ ghề nổi khối của vân gốc lên gấp 3.5 lần để tạo độ sần sùi chân thực không bị lỗi lưới
+                mat.normalScale.set(3.5, 3.5);
               }
               
               wetMaterials.push({
@@ -388,42 +384,6 @@
     ctx.fill();
     
     return new THREE.CanvasTexture(canvas);
-  }
-
-  function createNoiseTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, 256, 256);
-    
-    // Tạo nhiễu hạt xám ngẫu nhiên
-    const imgData = ctx.createImageData(256, 256);
-    const data = imgData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const x = (i / 4) % 256;
-      const y = Math.floor((i / 4) / 256);
-      
-      let noiseVal = Math.random() * 255;
-      
-      // Thêm cấu trúc gợn sóng lồi lõm
-      noiseVal += Math.sin(x * 0.15) * Math.cos(y * 0.15) * 45;
-      noiseVal += Math.sin(x * 0.05) * 25;
-      
-      const val = Math.min(Math.max(Math.floor(noiseVal), 0), 255);
-      
-      data[i]     = val;
-      data[i + 1] = val;
-      data[i + 2] = val;
-      data[i + 3] = 255;
-    }
-    ctx.putImageData(imgData, 0, 0);
-    
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(12, 12); // Lặp hạt mịn tạo độ sần sùi tự nhiên cho bề mặt đất/đá
-    return texture;
   }
 
   // Khởi tạo vị trí hạt mưa ngẫu nhiên xung quanh sân khấu
