@@ -1,10 +1,38 @@
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Reset & Base Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ── Reset & Base ────────────────── */
+:root {
+  --neon-green: #4ade80;
+  --neon-green-glow: rgba(74, 222, 128, 0.4);
+  --neon-cyan: #06b6d4;
+  --neon-cyan-glow: rgba(6, 182, 212, 0.4);
+  --neon-orange: #f97316;
+  --neon-orange-glow: rgba(249, 115, 22, 0.4);
+  --neon-red: #ef4444;
+  --neon-red-glow: rgba(239, 68, 68, 0.4);
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; height: 100%; }
 
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(8, 18, 14, 0.95);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.25);
+  border-radius: 99px;
+  border: 2px solid rgba(8, 18, 14, 0.95);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.5);
+}
+
 body {
   font-family: 'Be Vietnam Pro', sans-serif;
-  background: radial-gradient(ellipse at 50% 35%, #1f201a 0%, #121310 40%, #070806 100%); /* Nền mù mịt ô nhiễm */
+  background: radial-gradient(ellipse at 50% 35%, #0a0f0d 0%, #050706 60%, #010202 100%);
   min-height: 100vh;
   color: #fff;
   overflow-x: hidden;
@@ -234,6 +262,8 @@ body {
   background: url('mucdich.png') center top / cover no-repeat;
   z-index: -1;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 300px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 300px), transparent 100%);
 }
 
 /* Thêm khung nổi bật cho phần tiêu đề "Mục đích cốt lõi" */
@@ -814,4 +844,293 @@ input[type=range]:active::-webkit-slider-thumb {
   100% { filter: drop-shadow(0 0 40px rgba(74,222,128,0.55)) drop-shadow(0 0 80px rgba(74,222,128,0.25)); }
 }
 .orb-flash { animation: orbFlash 0.45s ease-out; }
+
+/* ── Sci-Fi HUD Corner Ornaments ── */
+.hud-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(74, 222, 128, 0.4);
+  pointer-events: none;
+}
+.hud-corner-tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+.hud-corner-tr { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+.hud-corner-bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+.hud-corner-br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+
+/* ── Glowing Sci-Fi Border ── */
+.cyber-border-box {
+  position: relative;
+}
+.cyber-border-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(74, 222, 128, 0.12);
+  pointer-events: none;
+  box-shadow: inset 0 0 12px rgba(74, 222, 128, 0.03);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.cyber-border-box:hover::before {
+  border-color: rgba(74, 222, 128, 0.35);
+  box-shadow: inset 0 0 15px rgba(74, 222, 128, 0.08), 0 0 15px rgba(74, 222, 128, 0.05);
+}
+
+/* ── Laser Shimmer Scan Effect for CTA Buttons ── */
+.btn-cta, .btn-challenge, .btn-action {
+  position: relative;
+  overflow: hidden;
+}
+.btn-cta::after, .btn-challenge::after, .btn-action::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-25deg);
+  transition: none;
+}
+.btn-cta:hover::after, .btn-challenge:hover::after, .btn-action:hover::after {
+  left: 150%;
+  transition: left 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* ── Micro-circuit Input Range Style ── */
+.slider-card input[type=range] {
+  background: linear-gradient(to right, #4ade80 0%, rgba(255,255,255,0.08) 0%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  height: 6px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ── Custom Modal Reader ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 6, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-content {
+  background: rgba(10, 22, 17, 0.95);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(74, 222, 128, 0.15);
+  border-radius: 24px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+/* ── Target crosshair overlay for calculator ── */
+.targeting-crosshair {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.targeting-crosshair::before, .targeting-crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(74, 222, 128, 0.2);
+}
+.targeting-crosshair::before {
+  top: 50%; left: 0; right: 0; height: 1px;
+}
+.targeting-crosshair::after {
+  left: 50%; top: 0; bottom: 0; width: 1px;
+}
+.targeting-circle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(74, 222, 128, 0.25);
+  border-radius: 50%;
+}
+
+/* ── Eco Forum Form Control ── */
+.cyber-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.cyber-input:focus {
+  border-color: rgba(74, 222, 128, 0.5);
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Grid Overlay & Radar Scan ── */
+.grid-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background-image: linear-gradient(rgba(74, 222, 128, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(74, 222, 128, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.radar-line {
+  position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.35), transparent);
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+  pointer-events: none; z-index: -1;
+  animation: radarScan 8s linear infinite;
+}
+@keyframes radarScan {
+  0% { transform: translateY(-50px); }
+  100% { transform: translateY(105vh); }
+}
+
+/* ── Nested Comment System ── */
+.comment-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px; padding: 10px 14px; margin-top: 6px;
+}
+.comment-input-wrap {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.comment-input-wrap input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px; padding: 6px 12px; color: #fff;
+  font-size: 0.75rem; outline: none; flex-grow: 1;
+  transition: border-color 0.2s;
+}
+.comment-input-wrap input:focus {
+  border-color: rgba(74, 222, 128, 0.4);
+}
+.comment-submit-btn {
+  background: rgba(74, 222, 128, 0.15);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: #86efac; border-radius: 8px; padding: 6px 14px;
+  font-size: 0.75rem; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.comment-submit-btn:hover {
+  background: rgba(74, 222, 128, 0.25);
+  color: #fff;
+}
+
+/* ── Achievements Grid & Badge Cards ── */
+.badge-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.badge-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px; padding: 12px; text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.badge-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+  pointer-events: none;
+}
+.badge-card.unlocked {
+  border-color: rgba(74, 222, 128, 0.2);
+  background: rgba(74, 222, 128, 0.03);
+}
+.badge-card.unlocked:hover {
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.1), 0 4px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  border-color: rgba(74, 222, 128, 0.45);
+}
+.badge-icon-wrap {
+  width: 44px; height: 44px; border-radius: 50%;
+  margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.3s;
+}
+.badge-card.unlocked .badge-icon-wrap {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+}
+.badge-card:hover.unlocked .badge-icon-wrap {
+  transform: scale(1.08) rotate(5deg);
+}
+
+/* ── Semicircular Gauge (Eco stability alternative UI) ── */
+.gauge-container {
+  position: relative; width: 140px; height: 70px; overflow: hidden;
+}
+.gauge-bar {
+  position: absolute; top: 0; left: 0; width: 140px; height: 140px;
+  border: 14px solid rgba(255,255,255,0.06); border-radius: 50%;
+  border-bottom-color: transparent; border-left-color: transparent;
+  transform: rotate(-45deg);
+}
+.gauge-fill {
+  position: absolute; top: 0; left: 0; width: 140px; height: 140px;
+  border: 14px solid #4ade80; border-radius: 50%;
+  border-bottom-color: transparent; border-left-color: transparent;
+  transform: rotate(-45deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Custom Styled Table ── */
+.custom-table {
+  width: 100%; border-collapse: collapse; text-align: left;
+}
+.custom-table th {
+  padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.72rem; color: rgba(255,255,255,0.4); text-transform: uppercase; font-weight: 700;
+}
+.custom-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.78rem; color: rgba(255,255,255,0.85);
+}
+.custom-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* ── Timeline (Eco Hero Journey) ── */
+.journey-timeline {
+  position: relative; padding-left: 28px;
+}
+.journey-timeline::before {
+  content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px;
+  width: 2px; background: rgba(74, 222, 128, 0.15);
+}
+.journey-step {
+  position: relative; margin-bottom: 24px;
+}
+.journey-step::before {
+  content: ''; position: absolute; left: -27px; top: 4px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #0a0f0d; border: 2.5px solid rgba(74, 222, 128, 0.4);
+  transition: all 0.3s;
+}
+.journey-step:hover::before {
+  background: #4ade80; border-color: #fff; box-shadow: 0 0 8px #4ade80;
+}
+
+
 

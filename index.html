@@ -47,6 +47,8 @@
 </head>
 
 <body class="page-index">
+  <div class="grid-overlay"></div>
+  <div class="radar-line"></div>
 
   <!-- ═══════════════════════════════════════════
        NAVBAR
@@ -82,7 +84,11 @@
   <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-10">
 
     <!-- Headline card with glassmorphism -->
-    <div class="glass-hero rounded-3xl px-10 py-8 max-w-2xl w-full text-center anim-hero">
+    <div class="glass-hero rounded-3xl px-10 py-8 max-w-2xl w-full text-center anim-hero relative overflow-hidden cyber-border-box">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
       <h1
         class="hero-title font-body font-black text-white leading-[1.08] tracking-tight"
         style="font-size: clamp(2.6rem, 6vw, 4.2rem); text-shadow: 0 2px 24px rgba(0,0,0,0.4);"
@@ -113,7 +119,9 @@
     <div class="anim-stats absolute bottom-8 right-6 flex gap-3 flex-col sm:flex-row items-end sm:items-stretch">
 
       <!-- CO2 Concentration -->
-      <div class="stat-card min-w-[180px]">
+      <div class="stat-card min-w-[180px] relative overflow-hidden cyber-border-box">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <p class="text-white/55 text-xs font-medium mb-1 tracking-wide">Nồng độ CO2 Toàn cầu:</p>
         <div class="flex items-baseline gap-2">
           <span class="text-white font-bold text-xl tracking-tight">421.7 ppm</span>
@@ -122,7 +130,9 @@
       </div>
 
       <!-- Status -->
-      <div class="stat-card min-w-[210px]">
+      <div class="stat-card min-w-[210px] relative overflow-hidden cyber-border-box">
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
         <p class="text-white/55 text-xs font-medium mb-1 tracking-wide">Trạng thái:</p>
         <div class="flex items-center gap-2">
           <span class="pulse-dot"></span>
@@ -160,7 +170,11 @@
     <div class="bento-grid-3">
 
       <!-- Card 1 — CO₂ trung bình -->
-      <div class="bento-card reveal reveal-d1">
+      <div class="bento-card cyber-border-box reveal reveal-d1 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Cloud / Factory icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -185,7 +199,11 @@
       </div>
 
       <!-- Card 2 — Diện tích rừng bị mất -->
-      <div class="bento-card reveal reveal-d2">
+      <div class="bento-card cyber-border-box reveal reveal-d2 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Tree icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -209,7 +227,11 @@
       </div>
 
       <!-- Card 3 — Rác thải sinh hoạt -->
-      <div class="bento-card reveal reveal-d3">
+      <div class="bento-card cyber-border-box reveal reveal-d3 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Trash / Recycle icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -252,7 +274,11 @@
     <div class="bento-grid-4">
 
       <!-- Panel 1 — Cá nhân hóa con số -->
-      <div class="bento-card bento-wide reveal reveal-d1">
+      <div class="bento-card bento-wide cyber-border-box reveal reveal-d1 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Calculator icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -275,7 +301,11 @@
       </div>
 
       <!-- Panel 2 — Xây dựng mạng lưới -->
-      <div class="bento-card bento-wide reveal reveal-d2">
+      <div class="bento-card bento-wide cyber-border-box reveal reveal-d2 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Users icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -292,7 +322,11 @@
       </div>
 
       <!-- Panel 3 — Tạo động lực -->
-      <div class="bento-card bento-wide reveal reveal-d3">
+      <div class="bento-card bento-wide cyber-border-box reveal reveal-d3 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Trophy icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -309,7 +343,11 @@
       </div>
 
       <!-- Panel 4 — Nâng cao nhận thức -->
-      <div class="bento-card bento-wide reveal reveal-d4">
+      <div class="bento-card bento-wide cyber-border-box reveal reveal-d4 relative overflow-hidden">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
         <div class="bento-icon">
           <!-- Globe icon -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -327,11 +365,136 @@
     </div><!-- /bento-grid-4 -->
   </section>
 
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 — HÀNH TRÌNH NGƯỜI HÙNG
+  ═══════════════════════════════════════════ -->
+  <section class="scroll-section" id="hanh-trinh">
+    <div class="reveal text-center">
+      <div class="section-tag"><span class="tag-dot"></span> Tiến trình</div>
+      <h2 class="section-heading">Hành trình Người Hùng</h2>
+      <p class="section-desc mx-auto">Bắt đầu từ những thay đổi cá nhân nhỏ bé để kiến tạo nên tác động lớn lao toàn cầu.</p>
+    </div>
+    
+    <div class="glass p-8 rounded-3xl border-white/10 cyber-border-box relative overflow-hidden reveal reveal-d1 max-w-3xl mx-auto mt-6">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
+      
+      <div class="journey-timeline">
+        <div class="journey-step">
+          <h3 class="text-white font-bold text-base">Bước 1: Đánh giá Tác động</h3>
+          <p class="text-white/60 text-xs mt-1.5 leading-relaxed">Sử dụng công cụ máy tính để đo lường chính xác lượng phát thải CO2 phát sinh từ thói quen đi lại, điện nước và nhựa tiêu dùng hàng ngày.</p>
+        </div>
+        <div class="journey-step">
+          <h3 class="text-white font-bold text-base">Bước 2: Thay đổi Cá nhân</h3>
+          <p class="text-white/60 text-xs mt-1.5 leading-relaxed">Điều chỉnh thói quen sinh hoạt: đi bộ hoặc đi xe đạp cho quãng đường ngắn, rút thiết bị điện khi không sử dụng, từ chối nilon.</p>
+        </div>
+        <div class="journey-step">
+          <h3 class="text-white font-bold text-base">Bước 3: Lan tỏa Cộng đồng</h3>
+          <p class="text-white/60 text-xs mt-1.5 leading-relaxed">Tham gia các chiến dịch sống xanh lớn, chia sẻ sáng kiến sinh thái hữu ích của bạn lên bảng ý tưởng của cộng đồng.</p>
+        </div>
+        <div class="journey-step">
+          <h3 class="text-white font-bold text-base">Bước 4: Theo dõi Tiến trình</h3>
+          <p class="text-white/60 text-xs mt-1.5 leading-relaxed">Kiểm tra bảng điều khiển để xem điểm tích lũy sinh thái tăng lên, mở khóa huy hiệu mới và theo dõi biểu đồ giảm thải theo tuần.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 — CHIA SẺ CỘNG ĐỒNG
+  ═══════════════════════════════════════════ -->
+  <section class="scroll-section" id="nhan-xet">
+    <div class="reveal text-center">
+      <div class="section-tag"><span class="tag-dot"></span> Đánh giá</div>
+      <h2 class="section-heading">Chia sẻ từ Chiến binh Xanh</h2>
+      <p class="section-desc mx-auto">Lắng nghe những trải nghiệm thay đổi tích cực từ những thành viên trong cộng đồng EcoImpact.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <!-- Testimonial 1 -->
+      <div class="glass p-6 rounded-2xl border-white/10 cyber-border-box relative overflow-hidden reveal reveal-d1">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <p class="text-xs text-white/70 italic leading-relaxed">"Nhờ máy tính CO2, mình mới nhận ra việc cắm sạc laptop và bật bình nóng lạnh cả ngày lãng phí điện năng khủng khiếp thế nào. Đã tiết kiệm được 15% tiền điện tháng qua!"</p>
+        <div class="flex items-center gap-3 mt-4 pt-3 border-t border-white/5">
+          <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 font-bold text-xs flex items-center justify-center">TL</div>
+          <div>
+            <p class="text-xs font-bold text-white">Trần Khánh Linh</p>
+            <p class="text-[0.62rem] text-white/40">Học sinh - Hà Nội</p>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 2 -->
+      <div class="glass p-6 rounded-2xl border-white/10 cyber-border-box relative overflow-hidden reveal reveal-d2">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <p class="text-xs text-white/70 italic leading-relaxed">"Tham gia thử thách 7 ngày không túi nilon thực sự khó khăn lúc đầu, nhưng giờ đây túi vải gấp gọn đã trở thành vật bất ly thân mỗi khi mình ra đường mua đồ."</p>
+        <div class="flex items-center gap-3 mt-4 pt-3 border-t border-white/5">
+          <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center">MD</div>
+          <div>
+            <p class="text-xs font-bold text-white">Phạm Minh Đức</p>
+            <p class="text-[0.62rem] text-white/40">Kỹ sư - TP.HCM</p>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 3 -->
+      <div class="glass p-6 rounded-2xl border-white/10 cyber-border-box relative overflow-hidden reveal reveal-d3">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <p class="text-xs text-white/70 italic leading-relaxed">"Nhật ký kiểm soát carbon giúp nhóm tình nguyện của tụi mình có số liệu thực tế để tổ chức các cuộc thi đua sống xanh trong khu phố. Mọi người hưởng ứng rất nhiệt tình!"</p>
+        <div class="flex items-center gap-3 mt-4 pt-3 border-t border-white/5">
+          <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 font-bold text-xs flex items-center justify-center">HT</div>
+          <div>
+            <p class="text-xs font-bold text-white">Hoàng Thu Trang</p>
+            <p class="text-[0.62rem] text-white/40">Trưởng nhóm Cộng đồng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 — ĐĂNG KÝ BẢN TIN
+  ═══════════════════════════════════════════ -->
+  <section class="scroll-section" id="dang-ky-tin">
+    <div class="glass p-8 rounded-3xl border-white/10 cyber-border-box relative overflow-hidden max-w-2xl mx-auto text-center reveal reveal-d1">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
+      
+      <h2 class="text-xl md:text-2xl font-black text-white leading-tight">Đăng ký Nhận Bản tin Sinh thái</h2>
+      <p class="text-xs text-white/60 mt-2 max-w-md mx-auto leading-relaxed">Nhận các mẹo sống xanh hàng tuần, thông tin thách thức cộng đồng mới nhất trực tiếp vào hộp thư điện tử của bạn.</p>
+      
+      <form id="subscribeForm" onsubmit="handleSubscribe(event)" class="mt-6 flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+        <input type="email" id="subEmail" placeholder="Nhập địa chỉ email của bạn..." required class="cyber-input text-xs flex-grow" />
+        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white text-xs font-bold rounded-xl shadow-lg shadow-green-500/20 hover:scale-[1.02] active:scale-95 transition-all">
+          Đăng ký ngay
+        </button>
+      </form>
+      <p id="subSuccessMsg" class="text-xs text-green-400 font-bold mt-3 hidden">✓ Đăng ký thành công! Hệ thống đã gửi thư xác nhận vào email của bạn.</p>
+    </div>
+  </section>
+
   <!-- spacer so content clears above fixed ticker if present -->
   <div style="height: 60px;"></div>
 
 
   <script>
+    // ── Newsletter subscription handler ────────────────
+    function handleSubscribe(e) {
+      e.preventDefault();
+      const email = document.getElementById('subEmail').value.trim();
+      if (!email) return;
+      document.getElementById('subSuccessMsg').classList.remove('hidden');
+      document.getElementById('subscribeForm').reset();
+      setTimeout(() => {
+        document.getElementById('subSuccessMsg').classList.add('hidden');
+      }, 5000);
+    }
+
     // ── Smooth scrolling for anchor links ──────────────
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
@@ -478,7 +641,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-  <script src="js/bg3d.js"></script>
+  <script src="js/bg3d.js?v=4.0"></script>
 
 </body>
 </html>

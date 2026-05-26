@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
@@ -29,6 +29,8 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body class="page-dashboard">
+  <div class="grid-overlay"></div>
+  <div class="radar-line"></div>
 
 <!-- ═══════════════════════════════════════════
      NAVBAR (shared)
@@ -65,7 +67,11 @@
     <!-- ══════════════════════════════════════
          CARD 1 — DEEP ANALYSIS
     ═══════════════════════════════════════ -->
-    <div class="glass-card p-5 flex flex-col gap-4 card-1">
+    <div class="glass-card p-5 flex flex-col gap-4 card-1 cyber-border-box relative overflow-hidden">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
 
       <!-- Header -->
       <div>
@@ -84,13 +90,15 @@
       <!-- Two sub-cards side by side -->
       <div class="grid grid-cols-2 gap-3">
 
-        <!-- Text sub-card -->
-        <div class="glass-inner p-4 flex flex-col gap-2">
-          <p class="text-[0.78rem] font-semibold text-white/80 leading-snug">Dấu chân Carbon theo thời gian.</p>
-          <p class="text-[0.72rem] text-white/50 leading-relaxed">
-            Mỗi hành động đều để lại hệ lụy sinh thái.<br/><br/>
-            Trái Đất ghi nhận mọi thứ chúng ta tiêu thụ, đốt cháy và thải loại.
+        <!-- Logs simulator sub-card -->
+        <div class="glass-inner p-4 flex flex-col gap-2 relative overflow-hidden h-[155px]">
+          <p class="text-[0.78rem] font-semibold text-white/80 leading-snug flex items-center justify-between">
+            <span>Nhật ký Kiểm soát</span>
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
           </p>
+          <div id="commandLogs" class="text-[0.62rem] font-mono text-green-400/80 leading-relaxed overflow-hidden h-full flex flex-col gap-1 mt-1">
+            <!-- Simulated logs updated by JS -->
+          </div>
         </div>
 
         <!-- Mini bar chart sub-card -->
@@ -126,7 +134,11 @@
     <!-- ══════════════════════════════════════
          CARD 2 — REAL-TIME GLOBAL DATA
     ═══════════════════════════════════════ -->
-    <div class="glass-card p-5 flex flex-col gap-4 card-2">
+    <div class="glass-card p-5 flex flex-col gap-4 card-2 cyber-border-box relative overflow-hidden">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
 
       <!-- Header -->
       <div>
@@ -137,16 +149,16 @@
       <!-- Legend -->
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1.5">
-          <span class="legend-dot" style="background:#4ade80;"></span>
-          <span class="text-[0.75rem] text-white/60">Nóng</span>
+          <span class="legend-dot" style="background:#fb923c;"></span>
+          <span class="text-[0.75rem] text-white/60">Nóng ấm</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <span class="legend-dot" style="background:#fb923c;"></span>
-          <span class="text-[0.75rem] text-white/60">Vùng</span>
+          <span class="legend-dot" style="background:#4ade80;"></span>
+          <span class="text-[0.75rem] text-white/60">Bình thường</span>
         </div>
         <div class="flex items-center gap-1.5">
           <span class="legend-dot" style="background:#60a5fa;"></span>
-          <span class="text-[0.75rem] text-white/60">Nhiệt độ</span>
+          <span class="text-[0.75rem] text-white/60">Lạnh mát</span>
         </div>
       </div>
 
@@ -154,9 +166,9 @@
       <div class="glass-inner p-3 relative">
         <canvas id="worldCanvas" style="width:100%;height:180px;border-radius:10px;display:block;"></canvas>
         <!-- Temperature callout chips -->
-        <div class="temp-chip" style="top:52px;left:22%;">14.5°C</div>
-        <div class="temp-chip" style="top:38px;right:20%;">14.5°C</div>
-        <div class="temp-chip" style="top:65px;right:10%;">14.5°C</div>
+        <div class="temp-chip" id="tempChip1" style="top:52px;left:22%;">14.5°C</div>
+        <div class="temp-chip" id="tempChip2" style="top:38px;right:20%;">14.5°C</div>
+        <div class="temp-chip" id="tempChip3" style="top:65px;right:10%;">14.5°C</div>
       </div>
 
       <!-- Current global temp -->
@@ -219,7 +231,11 @@
     <!-- ══════════════════════════════════════
          CARD 3 — GLOBAL LEADERBOARD
     ═══════════════════════════════════════ -->
-    <div class="glass-card p-5 flex flex-col gap-4 card-3">
+    <div class="glass-card p-5 flex flex-col gap-4 card-3 cyber-border-box relative overflow-hidden">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
 
       <!-- Header -->
       <div>
@@ -239,12 +255,113 @@
         <!-- Populated by JS -->
       </div>
 
+      <!-- Badge Section [MỚI] -->
+      <div class="glass-inner p-4 mt-2">
+        <p class="text-[0.7rem] text-white/50 font-bold mb-3 tracking-wide uppercase">Huy hiệu Sinh thái (Eco Badges)</p>
+        <div class="badge-grid">
+          <!-- Badge 1: Xe đạp vàng -->
+          <div class="badge-card unlocked" title="Xe đạp Vàng: Đã đạp xe liên tục trên 10km thay thế xe máy">
+            <div class="badge-icon-wrap text-base">🚴‍♂️</div>
+            <span class="text-[0.55rem] font-bold text-white/80 block leading-tight mt-1">Xe Đạp Vàng</span>
+          </div>
+          <!-- Badge 2: Anti-plastic -->
+          <div class="badge-card unlocked" title="Không Đồ Nhựa: Không sử dụng đồ nhựa một lần trong 3 ngày">
+            <div class="badge-icon-wrap text-base">🚫🥤</div>
+            <span class="text-[0.55rem] font-bold text-white/80 block leading-tight mt-1">Kẻ Thù Nhựa</span>
+          </div>
+          <!-- Badge 3: Power saver -->
+          <div class="badge-card unlocked" title="Hộ vệ Năng lượng: Sử dụng điện năng dưới mức 10kWh/ngày">
+            <div class="badge-icon-wrap text-base">💡</div>
+            <span class="text-[0.55rem] font-bold text-white/80 block leading-tight mt-1">Hộ Vệ Điện</span>
+          </div>
+          <!-- Badge 4: Clean Diet (Locked) -->
+          <div class="badge-card opacity-40" title="Chưa mở khóa: Ăn chay hoàn toàn trong 7 ngày">
+            <div class="badge-icon-wrap text-base">🥗</div>
+            <span class="text-[0.55rem] font-bold text-white/40 block leading-tight mt-1">Ăn Chay</span>
+          </div>
+          <!-- Badge 5: Waste reducer (Locked) -->
+          <div class="badge-card opacity-40" title="Chưa mở khóa: Thải ít rác thải sinh hoạt dưới 0.5kg/ngày">
+            <div class="badge-icon-wrap text-base">🗑️</div>
+            <span class="text-[0.55rem] font-bold text-white/40 block leading-tight mt-1">Hạ Rác Thải</span>
+          </div>
+          <!-- Badge 6: Tree planter (Locked) -->
+          <div class="badge-card opacity-40" title="Chưa mở khóa: Trồng 5 cây xanh thực tế và báo cáo lên cộng đồng">
+            <div class="badge-icon-wrap text-base">🌳</div>
+            <span class="text-[0.55rem] font-bold text-white/40 block leading-tight mt-1">Gieo Mầm</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Join a Challenge -->
-      <button class="btn-challenge mt-auto" onclick="window.location.href='community.html'">Tham gia Thử thách →</button>
+      <button class="btn-challenge mt-2" onclick="window.location.href='community.html'">Tham gia Thử thách →</button>
 
     </div>
 
   </div><!-- /cards-grid -->
+
+  <!-- ══════════════════════════════════════
+       CARD 4 — HISTORICAL ACTIVITY LOGS
+       ═══════════════════════════════════════ -->
+  <div class="glass-card p-5 col-span-full flex flex-col gap-4 card-4 cyber-border-box relative overflow-hidden mt-6">
+    <div class="hud-corner hud-corner-tl"></div>
+    <div class="hud-corner hud-corner-tr"></div>
+    <div class="hud-corner hud-corner-bl"></div>
+    <div class="hud-corner hud-corner-br"></div>
+    
+    <div>
+      <p class="card-title">Nhật ký Hoạt động Lịch sử</p>
+      <p class="card-sub">Dữ liệu ghi nhận dấu chân sinh thái tự động theo ngày</p>
+    </div>
+    
+    <div class="glass-inner overflow-x-auto w-full">
+      <table class="custom-table w-full">
+        <thead>
+          <tr>
+            <th>Ngày ghi nhận</th>
+            <th>Di chuyển</th>
+            <th>Nhựa</th>
+            <th>Điện năng</th>
+            <th>Rác thải</th>
+            <th>Bữa ăn thịt</th>
+            <th>Tổng CO2</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>25/05/2026</td>
+            <td>12 km/ngày</td>
+            <td>2 món/ngày</td>
+            <td>15 kWh/ngày</td>
+            <td>0.5 kg/ngày</td>
+            <td>1 bữa/ngày</td>
+            <td><strong class="text-green-400">5.4 kg</strong></td>
+            <td><span class="px-2 py-0.5 rounded text-[0.62rem] font-bold bg-green-500/10 border border-green-500/35 text-green-400">Tốt (Eco)</span></td>
+          </tr>
+          <tr>
+            <td>24/05/2026</td>
+            <td>45 km/ngày</td>
+            <td>9 món/ngày</td>
+            <td>22 kWh/ngày</td>
+            <td>1.5 kg/ngày</td>
+            <td>2 bữa/ngày</td>
+            <td><strong class="text-yellow-400">12.5 kg</strong></td>
+            <td><span class="px-2 py-0.5 rounded text-[0.62rem] font-bold bg-yellow-500/10 border border-yellow-500/35 text-yellow-400">Trung bình</span></td>
+          </tr>
+          <tr>
+            <td>23/05/2026</td>
+            <td>85 km/ngày</td>
+            <td>14 món/ngày</td>
+            <td>35 kWh/ngày</td>
+            <td>2.5 kg/ngày</td>
+            <td>3 bữa/ngày</td>
+            <td><strong class="text-red-400">22.1 kg</strong></td>
+            <td><span class="px-2 py-0.5 rounded text-[0.62rem] font-bold bg-red-500/10 border border-red-500/35 text-red-400">Quá tải</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </section>
 
@@ -369,15 +486,39 @@ async function renderDashboard() {
   const data = await fetchDashboardData();
 
   // 1. Cập nhật Text & Chỉ số
-  document.getElementById('valGlobalTemp').textContent = `${data.globalTemp.toFixed(1)}°C`;
+  const baseTemp = data.globalTemp;
+  document.getElementById('valGlobalTemp').textContent = `${baseTemp.toFixed(1)}°C`;
   const tempSign = data.tempChange > 0 ? '+' : '';
   document.getElementById('valTempChange').textContent = `(${tempSign}${data.tempChange.toFixed(2)}°C)`;
+
+  // Update heatmap chips dynamically
+  document.getElementById('tempChip1').textContent = `${(baseTemp - 0.7).toFixed(1)}°C`;
+  document.getElementById('tempChip2').textContent = `${baseTemp.toFixed(1)}°C`;
+  document.getElementById('tempChip3').textContent = `${(baseTemp + 1.2).toFixed(1)}°C`;
   
   document.getElementById('valCo2').textContent = data.co2.toFixed(1);
-  document.getElementById('valAqi').textContent = `${data.aqi * 20}%`; // Mock AQI pct
-
   document.getElementById('co2Bar').style.width = '74%';
-  document.getElementById('aqBar').style.width = `${Math.min(100, data.aqi * 20)}%`;
+
+  // Correct AQI status text, color, and progress bar cleanliness percentage
+  let aqiStatus = 'Tốt';
+  let aqiColor = '#86efac';
+  if (data.aqi > 150) {
+    aqiStatus = 'Nguy hại';
+    aqiColor = '#ef4444';
+  } else if (data.aqi > 100) {
+    aqiStatus = 'Kém';
+    aqiColor = '#fb923c';
+  } else if (data.aqi > 50) {
+    aqiStatus = 'Trung bình';
+    aqiColor = '#eab308';
+  }
+  
+  const valAqiEl = document.getElementById('valAqi');
+  valAqiEl.textContent = `${data.aqi} AQI (${aqiStatus})`;
+  valAqiEl.style.color = aqiColor;
+
+  const aqPct = Math.max(10, Math.min(100, 100 - (data.aqi * 0.5)));
+  document.getElementById('aqBar').style.width = `${aqPct}%`;
 
   // 2. Line Chart (Carbon History)
   const lineCtx = document.getElementById('lineChart').getContext('2d');
@@ -462,6 +603,43 @@ async function renderDashboard() {
 
 // Gọi render
 renderDashboard();
+
+// Command Logs Simulation
+const logsEl = document.getElementById('commandLogs');
+if (logsEl) {
+  const LOG_MESSAGES = [
+    'SYSTEM: Kho phát thải CO2 toàn cầu cập nhật +0.12%',
+    'ACTION: Lê Hoàng Gia Bảo đã giảm 2.6kg carbon',
+    'MONITOR: Lớp ozone khu vực Nam Cực hồi phục nhẹ',
+    'MONITOR: Nhiệt độ bề mặt nước biển tăng +0.02°C',
+    'ACTION: Võ Tá Dũng đã hoàn thành thử thách Đi xe đạp',
+    'ALERT: Nồng độ CO2 chạm mốc 421.7 ppm',
+    'SYSTEM: Cập nhật chỉ số chất lượng không khí AQI',
+    'ACTION: Huỳnh Kim Linh đã trồng 3 cây xanh mới'
+  ];
+  function addLog() {
+    const time = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+    const msg = LOG_MESSAGES[Math.floor(Math.random() * LOG_MESSAGES.length)];
+    const logLine = document.createElement('p');
+    logLine.style.opacity = '0';
+    logLine.style.transform = 'translateY(5px)';
+    logLine.style.transition = 'all 0.3s ease';
+    logLine.innerHTML = `<span class="text-white/30">[${time}]</span> ${msg}`;
+    logsEl.appendChild(logLine);
+    if (logsEl.childNodes.length > 5) {
+      logsEl.removeChild(logsEl.firstChild);
+    }
+    setTimeout(() => {
+      logLine.style.opacity = '1';
+      logLine.style.transform = 'translateY(0)';
+    }, 50);
+  }
+  // Init with some logs
+  for(let i=0; i<4; i++) {
+    setTimeout(addLog, i * 200);
+  }
+  setInterval(addLog, 3500);
+}
 
 /* ── Leaderboard data (Giữ nguyên theo yêu cầu) ── */
 const leaders = [
@@ -569,6 +747,6 @@ leaders.forEach(l => {
 </script>
 
 <!-- 3D Background -->
-<script src="js/bg3d.js"></script>
+  <script src="js/bg3d.js?v=4.0"></script>
 </body>
 </html>
