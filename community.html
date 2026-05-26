@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EcoImpact — Cộng đồng</title>
 
+  <script src="app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +23,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
-<body class="page-index">
+<body class="page-index" style="display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
   <div class="grid-overlay"></div>
   <div class="radar-line"></div>
 
@@ -58,7 +59,7 @@
       <a href="calculator.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Công cụ</a>
       <a href="news.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Tin tức</a>
       <a href="community.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg active">Cộng đồng</a>
-      <button class="btn-login w-full mt-2 py-2" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
+      <a href="login.html" class="btn-login w-full mt-2 py-2 block text-center" style="text-decoration:none;">Đăng nhập</a>
     </div>
 
     <!-- Hamburger toggle -->
@@ -69,447 +70,88 @@
     </label>
 
     <!-- Login -->
-    <button class="btn-login hidden md:block" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
+    <a href="login.html" class="btn-login hidden md:block" style="text-decoration:none;">Đăng nhập</a>
   </nav>
 
   <!-- ═══════════════════════════════════════════
        MAIN CONTENT
   ═══════════════════════════════════════════ -->
-  <main class="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24 min-h-screen">
+  <!-- Content Area (Placeholder) -->
+  <div style="flex: 1; margin-top: 80px; width: 100%; overflow-y: auto; padding: 40px 24px; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center;">
     
-    <!-- Title -->
-    <div class="text-center mb-12 anim-title">
-      <h1 class="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
-        Trung tâm Cộng đồng EcoImpact
-      </h1>
-      <p class="text-white/60 mt-3 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-        Tham gia vào các chiến dịch phủ xanh Trái Đất, chia sẻ những sáng kiến hữu ích và cập nhật hành động môi trường thời gian thực.
+    <div style="background: rgba(12, 28, 16, 0.62); backdrop-filter: blur(26px) saturate(160%); border: 1px solid rgba(255, 255, 255, 0.13); border-radius: 20px; padding: 40px; text-align: center; max-width: 500px;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 20px;">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: -0.02em;">Sự kiện Cộng đồng</h2>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); line-height: 1.6; margin-bottom: 24px;">
+        Trang Global Landscapes Forum không hỗ trợ xem trực tiếp trong trang web khác do chính sách bảo mật. Bạn có thể xem sự kiện ở tab mới hoặc tự xây dựng trang cộng đồng của bạn tại đây!
       </p>
+      <a class="btn-login" href="https://events.globallandscapesforum.org/" target="_blank" rel="noreferrer" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; padding: 12px 28px; text-decoration: none; display: inline-block;">
+        Truy cập trang Sự kiện →
+      </a>
     </div>
+  </div>
 
-    <!-- 2-Column Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- LEFT & CENTER — CHALLENGES & FORUM (Span 2) -->
-      <div class="lg:col-span-2 flex flex-col gap-10">
-        
-        <!-- SECTION 1: Active Challenges -->
-        <div class="anim-left">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-black text-white flex items-center gap-2">
-              <span class="w-1.5 h-6 bg-green-400 rounded-full"></span>
-              Thử thách Sống xanh Đang diễn ra
-            </h2>
-            <button onclick="proposeChallenge()" class="px-3 py-1.5 bg-white/5 border border-white/10 hover:border-white/20 text-white/70 hover:text-white rounded-lg text-xs font-bold transition-all">
-              + Đề xuất Thử thách
-            </button>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="challengesContainer">
-            <!-- Rendered by JS -->
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="site-footer__panel">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <svg class="site-footer__logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
+            <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
+            <path d="M32 22C31 29 29 35 26 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.78"/>
+            <path d="M32 22C36 28 38 35 40 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.42"/>
+          </svg>
+          <div>
+            <div class="site-footer__title">EcoImpact</div>
+            <p class="site-footer__text">Nền tảng theo dõi, học hỏi và giảm thiểu tác động môi trường từ những thói quen nhỏ mỗi ngày.</p>
           </div>
         </div>
-        
-        <!-- SECTION 2: Eco Ideas Board -->
-        <div class="anim-center">
-          <h2 class="text-xl font-black text-white mb-6 flex items-center gap-2">
-            <span class="w-1.5 h-6 bg-green-400 rounded-full"></span>
-            Bảng Ý tưởng Sáng tạo Xanh
-          </h2>
-          
-          <!-- Submission Form -->
-          <div class="glass p-5 rounded-2xl border-white/10 mb-6 relative overflow-hidden cyber-border-box">
-            <div class="hud-corner hud-corner-tl"></div>
-            <div class="hud-corner hud-corner-tr"></div>
-            <h3 class="text-sm font-bold text-white mb-4">Chia sẻ Sáng kiến/Ý tưởng của bạn</h3>
-            
-            <form id="ideaForm" onsubmit="submitIdea(event)" class="flex flex-col gap-3">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input type="text" id="authorName" placeholder="Họ và Tên của bạn" required class="cyber-input text-xs" />
-                <input type="text" id="ideaTitle" placeholder="Tên ý tưởng chính (VD: Tự ủ phân hữu cơ)" required class="cyber-input text-xs" />
-              </div>
-              <textarea id="ideaDesc" placeholder="Mô tả ngắn gọn về ý tưởng và cách mọi người có thể thực hiện..." rows="3" required class="cyber-input text-xs resize-none"></textarea>
-              
-              <div class="flex justify-between items-center mt-1">
-                <span class="text-[0.7rem] text-white/40">* Ý tưởng sẽ được duyệt và hiển thị lập tức</span>
-                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-white text-xs font-bold rounded-xl shadow-lg shadow-green-500/20 hover:scale-[1.02] active:scale-95 transition-all">
-                  Chia sẻ ý tưởng →
-                </button>
-              </div>
-            </form>
-          </div>
 
-          <!-- Ideas Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="ideasGrid">
-            <!-- Populated by JS -->
+        <div>
+          <div class="site-footer__label">Liên kết nhanh</div>
+          <div class="site-footer__links">
+            <a class="site-footer__link" href="index.html">Trang chủ</a>
+            <a class="site-footer__link" href="dashboard.html">Bảng điều khiển</a>
+            <a class="site-footer__link" href="calculator.html">Công cụ</a>
+            <a class="site-footer__link" href="news.html">Tin tức</a>
+            <a class="site-footer__link" href="community.html">Cộng đồng</a>
+            <a class="site-footer__link" href="login.html">Đăng nhập</a>
           </div>
-
         </div>
 
+        <div>
+          <div class="site-footer__label">Liên hệ & Kết nối</div>
+          <div class="site-footer__meta">
+            <div><strong>Email:</strong> baolhg.25ns@vku.udn.vn</div>
+            <div><strong>Điện thoại:</strong> 0374571549</div>
+            <div><strong>Địa chỉ:</strong> 470 Đường Trần Đại Nghĩa, Phường Ngũ Hành Sơn, Thành phố Đà Nẵng</div>
+          </div>
+          <div class="site-footer__label" style="margin-top: 20px;">Mạng xã hội</div>
+          <div class="site-footer__social">
+            <span class="site-footer__badge">Facebook</span>
+            <span class="site-footer__badge">Instagram</span>
+            <span class="site-footer__badge">YouTube</span>
+            <span class="site-footer__badge">TikTok</span>
+          </div>
+        </div>
       </div>
 
-      <!-- RIGHT COLUMN — LIVE ACTION FEED (Span 1) -->
-      <div class="lg:col-span-1 flex flex-col gap-6 anim-right">
-        
-        <div class="glass-card p-5 flex flex-col gap-4 relative overflow-hidden h-[540px] cyber-border-box">
-          <div class="hud-corner hud-corner-tl"></div>
-          <div class="hud-corner hud-corner-tr"></div>
-          <div class="hud-corner hud-corner-bl"></div>
-          <div class="hud-corner hud-corner-br"></div>
-          
-          <div>
-            <div class="flex items-center justify-between">
-              <h2 class="text-sm font-black text-white uppercase tracking-wider">Hành động thực tế</h2>
-              <span class="inline-flex items-center gap-1 bg-green-500/10 border border-green-500/25 px-2 py-0.5 rounded-full text-[0.62rem] text-green-400 font-bold">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                Trực tiếp
-              </span>
-            </div>
-            <p class="text-[0.65rem] text-white/55 mt-1">Hành động sống xanh thời gian thực từ cộng đồng.</p>
-          </div>
-
-          <!-- Feed Container -->
-          <div id="liveActionsFeed" class="flex flex-col gap-3 overflow-hidden h-full">
-            <!-- Action logs added dynamically -->
-          </div>
+      <div class="site-footer__bottom">
+        <div>© 2026 EcoImpact. All rights reserved.</div>
+        <div class="site-footer__policy">
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Hỗ trợ</a>
         </div>
-
       </div>
-
     </div>
-
-  </main>
-
-  <!-- ═══════════════════════════════════════════
-       JAVASCRIPT LOGIC
-  ═══════════════════════════════════════════ -->
-  <script>
-    // Challenges Data
-    const CHALLENGES = [
-      {
-        id: 1,
-        title: 'Đi xe đạp đi làm / học',
-        desc: 'Sử dụng xe đạp thay thế xe máy hoặc ô tô cho quãng đường dưới 5km để giảm khí thải trực tiếp.',
-        participants: 1254,
-        progress: 68,
-        joined: false
-      },
-      {
-        id: 2,
-        title: '7 ngày không túi nilon',
-        desc: 'Sử dụng túi vải canvas hoặc túi lưới khi đi siêu thị, mua sắm tạp hóa hàng ngày.',
-        participants: 845,
-        progress: 42,
-        joined: false
-      },
-      {
-        id: 3,
-        title: 'Giảm 1 giờ sử dụng điều hòa',
-        desc: 'Tắt điều hòa sớm hơn 1 tiếng hoặc duy trì nhiệt độ từ 26°C để tiết kiệm điện tiêu dùng.',
-        participants: 2120,
-        progress: 85,
-        joined: false
-      },
-      {
-        id: 4,
-        title: 'Phủ xanh ban công nhà bạn',
-        desc: 'Trồng thêm 1 chậu cây xanh hoặc dây leo tại ban công, cửa sổ để tăng diện tích lọc khí carbon.',
-        participants: 618,
-        progress: 30,
-        joined: false
-      }
-    ];
-
-    // Initial Ideas Data with Comments
-    const IDEAS = [
-      {
-        id: 1,
-        title: 'Tự ủ rác hữu cơ tại ban công chung cư',
-        author: 'Lê Minh Tuấn',
-        desc: 'Sử dụng thùng xốp có đục lỗ thoát khí, bổ sung đất sạch và men vi sinh để ủ vỏ trái cây, rau thừa làm phân bón cây.',
-        likes: 24,
-        liked: false,
-        time: '2 giờ trước',
-        comments: [
-          { author: 'Trần Văn Hoàng', text: 'Nhà mình cũng làm thùng này, bón cây cực tốt!' },
-          { author: 'Nguyễn Linh', text: 'Ủ có bị mùi hôi không bạn?' }
-        ]
-      },
-      {
-        id: 2,
-        title: 'Quyên góp quần áo cũ thay vì vứt bỏ',
-        author: 'Nguyễn Khánh Linh',
-        desc: 'Thu gom các quần áo cũ không còn sử dụng nhưng vẫn tốt để tặng cho các trạm tình nguyện vùng cao hoặc tái chế.',
-        likes: 18,
-        liked: false,
-        time: '5 giờ trước',
-        comments: [
-          { author: 'Võ Quốc Anh', text: 'Ý tưởng nhân văn tuyệt vời!' }
-        ]
-      },
-      {
-        id: 3,
-        title: 'Thay thế miếng rửa bát mút nhựa bằng xơ mướp',
-        author: 'Võ Quốc Anh',
-        desc: 'Miếng xơ mướp tự nhiên phân hủy sinh học 100% thay thế hoàn hảo miếng bọt biển bằng nhựa tạo vi hạt nhựa.',
-        likes: 31,
-        liked: false,
-        time: '1 ngày trước',
-        comments: []
-      }
-    ];
-
-    // Mock Live Action Names & Actions
-    const NAMES = [
-      'Nguyễn Hải Đăng', 'Trần Thu Trang', 'Phạm Minh Đức', 'Lê Khánh Huyền',
-      'Huỳnh Gia Bảo', 'Vũ Quốc Khánh', 'Đỗ Thùy Dương', 'Lương Minh Tuấn'
-    ];
-    const ACTIONS = [
-      'đã đạp xe 6km đi làm buổi sáng',
-      'đã từ chối nhận túi nilon tại siêu thị',
-      'đã trồng thêm 1 chậu cây lan ý trong phòng',
-      'đã tắt điều hòa văn phòng sớm 1 giờ',
-      'đã gom 5kg giấy vụn để đem tái chế',
-      'đã sử dụng hộp bã mía thay hộp xốp đựng thức ăn',
-      'đã tắt các thiết bị điện khi ra khỏi nhà'
-    ];
-
-    // Render Challenges
-    function renderChallenges() {
-      const container = document.getElementById('challengesContainer');
-      container.innerHTML = '';
-      CHALLENGES.forEach(ch => {
-        const card = document.createElement('div');
-        card.className = `glass p-5 rounded-2xl border-white/10 flex flex-col gap-4 relative overflow-hidden transition-all ${
-          ch.joined ? 'border-green-500/30 bg-green-500/5' : ''
-        }`;
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold text-white/50">${ch.participants.toLocaleString()} người thực hiện</span>
-            ${ch.joined 
-              ? '<span class="text-[0.65rem] font-bold text-green-400 flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">✓ Đã Tham Gia</span>' 
-              : ''
-            }
-          </div>
-          <div>
-            <h3 class="text-base font-black text-white mb-1.5 leading-snug">${ch.title}</h3>
-            <p class="text-xs text-white/60 leading-relaxed">${ch.desc}</p>
-          </div>
-          
-          <div class="mt-2 flex flex-col gap-1.5">
-            <div class="flex justify-between text-[0.68rem] text-white/40 font-medium">
-              <span>Độ ổn định hành động</span>
-              <span>${ch.progress}%</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width: ${ch.progress}%; background: linear-gradient(90deg, #4ade80, #22c55e);"></div>
-            </div>
-          </div>
-
-          <button onclick="toggleJoinChallenge(${ch.id})" class="w-full mt-2 py-2 text-xs font-bold rounded-xl transition-all ${
-            ch.joined 
-              ? 'border border-green-500/35 text-green-400 bg-transparent cursor-default' 
-              : 'bg-white/10 hover:bg-white/18 text-white hover:scale-[1.01]'
-          }">
-            ${ch.joined ? 'Bạn đã tham gia thử thách' : 'Tham gia chiến dịch'}
-          </button>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function toggleJoinChallenge(id) {
-      const ch = CHALLENGES.find(c => c.id === id);
-      if (!ch || ch.joined) return;
-      ch.joined = true;
-      ch.participants++;
-      ch.progress = Math.min(100, ch.progress + 1);
-      renderChallenges();
-      
-      // Send a deed to the live feed representing user action
-      addFeedDeed('Bạn', `đã tham gia chiến dịch "${ch.title}"`);
-    }
-
-    // Render Ideas Board
-    function renderIdeas() {
-      const grid = document.getElementById('ideasGrid');
-      grid.innerHTML = '';
-      IDEAS.forEach(id => {
-        const card = document.createElement('div');
-        card.className = 'glass p-5 rounded-2xl border-white/10 flex flex-col gap-3 relative overflow-hidden transition-all duration-300 hover:border-white/20';
-        
-        let commentsHTML = '';
-        id.comments.forEach(c => {
-          commentsHTML += `
-            <div class="text-[0.70rem] text-white/80 bg-white/3 px-3 py-1.5 rounded-lg mt-1.5 border border-white/5">
-              <strong class="text-green-400 font-bold">${c.author}:</strong> ${c.text}
-            </div>
-          `;
-        });
-
-        card.innerHTML = `
-          <div class="flex justify-between items-center text-[0.68rem] text-white/40">
-            <span>đăng bởi <strong class="text-white/70">${id.author}</strong></span>
-            <span>${id.time}</span>
-          </div>
-          <div>
-            <h4 class="text-sm font-black text-white leading-snug mb-1.5">${id.title}</h4>
-            <p class="text-xs text-white/60 leading-relaxed">${id.desc}</p>
-          </div>
-          
-          <div class="flex items-center gap-4 mt-2 pt-2 border-t border-white/5">
-            <button onclick="likeIdea(${id.id})" class="flex items-center gap-1.5 text-[0.7rem] font-bold transition-colors ${
-              id.liked ? 'text-green-400' : 'text-white/50 hover:text-white'
-            }">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="${id.liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
-                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
-              </svg>
-              <span>Thích (${id.likes})</span>
-            </button>
-            <span class="text-[0.7rem] text-white/45">Bình luận (${id.comments.length})</span>
-          </div>
-
-          <!-- Comments List -->
-          <div class="mt-2 space-y-1" id="commentsList-${id.id}">
-            ${commentsHTML}
-          </div>
-
-          <!-- Comment Form -->
-          <div class="comment-input-wrap">
-            <input type="text" id="commInput-${id.id}" placeholder="Nhập bình luận..." onkeydown="handleCommentKey(event, ${id.id})" />
-            <button onclick="submitComment(${id.id})" class="comment-submit-btn">Gửi</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function likeIdea(id) {
-      const idea = IDEAS.find(i => i.id === id);
-      if (!idea) return;
-      if (idea.liked) {
-        idea.liked = false;
-        idea.likes--;
-      } else {
-        idea.liked = true;
-        idea.likes++;
-      }
-      renderIdeas();
-    }
-
-    // Submit inline comment
-    function submitComment(ideaId) {
-      const input = document.getElementById(`commInput-${ideaId}`);
-      const text = input.value.trim();
-      if (!text) return;
-      const idea = IDEAS.find(i => i.id === ideaId);
-      if (idea) {
-        idea.comments.push({ author: 'Bạn', text: text });
-        renderIdeas();
-      }
-    }
-
-    function handleCommentKey(e, ideaId) {
-      if (e.key === 'Enter') {
-        submitComment(ideaId);
-      }
-    }
-
-    // Submit a new idea
-    function submitIdea(e) {
-      e.preventDefault();
-      const authorName = document.getElementById('authorName').value.trim();
-      const ideaTitle = document.getElementById('ideaTitle').value.trim();
-      const ideaDesc = document.getElementById('ideaDesc').value.trim();
-
-      if (!authorName || !ideaTitle || !ideaDesc) return;
-
-      const newIdea = {
-        id: Date.now(),
-        title: ideaTitle,
-        author: authorName,
-        desc: ideaDesc,
-        likes: 0,
-        liked: false,
-        time: 'Vừa xong',
-        comments: []
-      };
-
-      IDEAS.unshift(newIdea);
-      renderIdeas();
-
-      // Reset form
-      document.getElementById('ideaForm').reset();
-
-      // Push event to feed
-      addFeedDeed(authorName, `đã đăng sáng kiến: "${ideaTitle}"`);
-    }
-
-    // Propose Challenge Function
-    function proposeChallenge() {
-      const name = prompt('Nhập tên Thử thách bạn muốn đề xuất (ví dụ: Thách thức tắt bớt 1 bóng đèn điện từ 12h-13h):');
-      if (name && name.trim()) {
-        alert('✓ Cảm ơn đề xuất của bạn! Thử thách "' + name.trim() + '" đã được ghi nhận và đang đợi xét duyệt từ quản trị viên.');
-      }
-    }
-
-    // Live Action Feed simulation
-    const feed = document.getElementById('liveActionsFeed');
-    
-    function addFeedDeed(name, action) {
-      const time = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-      const row = document.createElement('div');
-      row.className = 'glass-inner p-3 flex gap-3 items-start border-l-2 border-l-green-400';
-      row.style.opacity = '0';
-      row.style.transform = 'translateY(10px)';
-      row.style.transition = 'all 0.4s ease';
-
-      row.innerHTML = `
-        <div class="avatar text-[0.68rem] w-8 h-8 rounded-full border border-green-500/25 flex-shrink-0 flex items-center justify-center font-bold text-green-400 bg-green-500/10">
-          ${name === 'Bạn' ? 'ME' : name.split(' ').pop().substring(0, 2).toUpperCase()}
-        </div>
-        <div class="flex-grow">
-          <p class="text-[0.72rem] leading-relaxed text-white">
-            <strong class="font-bold text-white/90">${name}</strong> ${action}
-          </p>
-          <span class="text-[0.62rem] text-white/30 block mt-0.5">${time}</span>
-        </div>
-      `;
-
-      feed.prepend(row);
-      
-      // Limit to max 6 logs
-      if (feed.childNodes.length > 6) {
-        feed.removeChild(feed.lastChild);
-      }
-
-      setTimeout(() => {
-        row.style.opacity = '1';
-        row.style.transform = 'translateY(0)';
-      }, 50);
-    }
-
-    // Automatically simulate random actions
-    function runFeedSimulation() {
-      const name = NAMES[Math.floor(Math.random() * NAMES.length)];
-      const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
-      addFeedDeed(name, action);
-    }
-
-    // Init Page Elements
-    window.addEventListener('DOMContentLoaded', () => {
-      renderChallenges();
-      renderIdeas();
-      
-      // Seed initial deeds
-      for(let i = 0; i < 4; i++) {
-        setTimeout(runFeedSimulation, i * 400);
-      }
-
-      // Live updates every 4.5 seconds
-      setInterval(runFeedSimulation, 4500);
-    });
-  </script>
+  </footer>
 
   <!-- 3D Background -->
   <script src="js/bg3d.js?v=4.0"></script>

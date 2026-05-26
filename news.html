@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EcoImpact — Tin tức</title>
 
+  <script src="app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +23,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
-<body class="page-index">
+<body class="page-index" style="display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
   <div class="grid-overlay"></div>
   <div class="radar-line"></div>
 
@@ -58,7 +59,7 @@
       <a href="calculator.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Công cụ</a>
       <a href="news.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg active">Tin tức</a>
       <a href="community.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Cộng đồng</a>
-      <button class="btn-login w-full mt-2 py-2" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
+      <a href="login.html" class="btn-login w-full mt-2 py-2 block text-center" style="text-decoration:none;">Đăng nhập</a>
     </div>
 
     <!-- Hamburger toggle -->
@@ -69,362 +70,70 @@
     </label>
 
     <!-- Login -->
-    <button class="btn-login hidden md:block" onclick="alert('Tính năng Đăng nhập đang được phát triển!')">Đăng nhập</button>
+    <a href="login.html" class="btn-login hidden md:block" style="text-decoration:none;">Đăng nhập</a>
   </nav>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT
-  ═══════════════════════════════════════════ -->
-  <main class="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24 min-h-screen">
-    
-    <!-- Title Section -->
-    <div class="text-center mb-12 anim-title">
-      <h1 class="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
-        Trung tâm Tin tức Môi trường
-      </h1>
-      <p class="text-white/60 mt-3 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-        Cập nhật tin tức, sự kiện và công nghệ bảo vệ môi trường tiên tiến nhất trên thế giới.
-      </p>
-    </div>
-    
-    <!-- Search & Category Filters -->
-    <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-10 anim-left glass p-4 rounded-2xl border-white/10">
-      <!-- Filter Categories -->
-      <div class="flex flex-wrap gap-2 justify-center" id="categoryFilters">
-        <!-- Buttons rendered by JS -->
-      </div>
-      
-      <!-- Search Input -->
-      <div class="relative w-full md:w-80">
-        <input type="text" id="searchInput" placeholder="Tìm kiếm tin tức..." class="cyber-input w-full pr-10" oninput="filterNews()"/>
-        <svg class="absolute right-3 top-3.5 w-4 h-4 text-white/40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-        </svg>
-      </div>
-    </div>
-    
-    <!-- News Cards Grid -->
-    <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 anim-center">
-      <!-- News cards rendered by JS -->
-    </div>
-    
-  </main>
-
-  <!-- ═══════════════════════════════════════════
-       MODAL READER
-  ═══════════════════════════════════════════ -->
-  <div id="newsModal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content p-6 md:p-8 relative" onclick="event.stopPropagation()">
-      <button class="absolute top-4 right-4 text-white/50 hover:text-white text-3xl leading-none font-light transition-colors" onclick="closeModalDirect()">&times;</button>
-      <div id="modalBody">
-        <!-- Full Article Content rendered by JS -->
-      </div>
-    </div>
+  <!-- Content Area (Iframe) -->
+  <div style="flex: 1; margin-top: 80px; width: 100%; border-radius: 20px 20px 0 0; overflow: hidden; background: white; z-index: 10; position: relative;">
+    <iframe src="https://moitruong.net.vn/" style="width: 100%; height: 100%; border: none;"></iframe>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       JAVASCRIPT FOR NEWS PORTAL
-  ═══════════════════════════════════════════ -->
-  <script>
-    const ARTICLES = [
-      {
-        id: 1,
-        category: 'energy',
-        categoryName: 'Năng lượng Xanh',
-        title: 'Việt Nam dẫn đầu Đông Nam Á về tăng trưởng điện mặt trời',
-        summary: 'Với chính sách mở cửa và ưu đãi đầu tư, Việt Nam đã bứt phá ngoạn mục trở thành trung tâm năng lượng tái tạo lớn nhất khu vực.',
-        date: '26/05/2026',
-        readTime: '5 phút đọc',
-        gradient: 'from-emerald-600 to-teal-950',
-        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-        content: `
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">Năng lượng Xanh</span>
-              <span class="text-xs text-white/40">26/05/2026 • 5 phút đọc</span>
-            </div>
-            <button onclick="toggleBookmarkInModal(1)" class="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/25 px-2.5 py-1 rounded-lg">
-              <span id="modalBookmarkText">Đã Lưu</span>
-            </button>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="site-footer__panel">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <svg class="site-footer__logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
+            <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
+            <path d="M32 22C31 29 29 35 26 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.78"/>
+            <path d="M32 22C36 28 38 35 40 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.42"/>
+          </svg>
+          <div>
+            <div class="site-footer__title">EcoImpact</div>
+            <p class="site-footer__text">Nền tảng theo dõi, học hỏi và giảm thiểu tác động môi trường từ những thói quen nhỏ mỗi ngày.</p>
           </div>
-          <h2 class="text-2xl md:text-3xl font-black text-white leading-tight mt-3 mb-6">Việt Nam dẫn đầu Đông Nam Á về tăng trưởng điện mặt trời</h2>
-          <div class="h-56 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-950 mb-6 flex items-center justify-center relative overflow-hidden border border-emerald-500/30">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <div class="text-white/80 space-y-4 text-sm md:text-base leading-relaxed">
-            <p class="font-semibold text-white text-base">Việt Nam đã ghi dấu ấn mạnh mẽ trên bản đồ năng lượng tái tạo toàn cầu khi liên tục ghi nhận mức tăng trưởng công suất phát điện ấn tượng.</p>
-            <p>Hàng loạt dự án điện mặt trời trang trại quy mô lớn tại các tỉnh Nam Trung Bộ như Ninh Thuận, Bình Thuận đã đi vào vận hành ổn định. Cùng với đó, phong trào lắp đặt điện mặt trời mái nhà tự sản tự tiêu tại các khu công nghiệp phía Nam giúp giảm tải đáng kể cho lưới điện quốc gia.</p>
-            <p>Mục tiêu Net Zero vào năm 2050 theo cam kết tại COP26 đang được cụ thể hóa bằng Quy hoạch điện VIII sửa đổi, khuyến khích các hình thức tích trữ năng lượng (BESS) thông minh và cải tạo lưới điện phân phối quốc gia.</p>
-          </div>
-        `
-      },
-      {
-        id: 2,
-        category: 'climate',
-        categoryName: 'Biến đổi Khí hậu',
-        title: 'Nhiệt độ bề mặt nước biển đạt mức cao nhất trong lịch sử đo đạc',
-        summary: 'Các chuyên gia khí tượng cảnh báo rằng hiện tượng tẩy trắng san hô trên diện rộng đang gia tăng do nhiệt độ đại dương quá cao.',
-        date: '24/05/2026',
-        readTime: '4 phút đọc',
-        gradient: 'from-orange-600 to-red-950',
-        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
-        content: `
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-orange-400 uppercase tracking-widest px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20">Biến đổi Khí hậu</span>
-              <span class="text-xs text-white/40">24/05/2026 • 4 phút đọc</span>
-            </div>
-            <button onclick="toggleBookmarkInModal(2)" class="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/25 px-2.5 py-1 rounded-lg">
-              <span id="modalBookmarkText">Đã Lưu</span>
-            </button>
-          </div>
-          <h2 class="text-2xl md:text-3xl font-black text-white leading-tight mt-3 mb-6">Nhiệt độ bề mặt nước biển đạt mức cao nhất trong lịch sử đo đạc</h2>
-          <div class="h-56 rounded-2xl bg-gradient-to-br from-orange-600 to-red-950 mb-6 flex items-center justify-center relative overflow-hidden border border-orange-500/30">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.5"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 1.5 2 2.5 2 4 0 1.5-1 2.5-1 3.5a2.5 2.5 0 0 0 2.5 2.5H16c.5 0 1-.5 1-1a6.88 6.88 0 0 0-3-5c2 1 4 3 4 6a4 4 0 0 1-8 0v-.5z"/></svg>
-          </div>
-          <div class="text-white/80 space-y-4 text-sm md:text-base leading-relaxed">
-            <p class="font-semibold text-white text-base">Hệ thống giám sát khí hậu Copernicus đã phát đi cảnh báo đỏ khi nhiệt độ bề mặt đại dương liên tục phá vỡ các kỷ lục cũ.</p>
-            <p>Hơn 90% nhiệt lượng dư thừa do khí nhà kính giữ lại trong bầu sinh quyển đã được đại dương hấp thụ, làm ấm các dòng hải lưu và kích hoạt các phản ứng suy giảm sinh thái biển dây chuyền. Các rạn san hô - xương sống nuôi dưỡng nguồn cá đại dương - đang bị tàn phá nặng nề.</p>
-            <p>Việc kiểm soát nhiệt độ toàn cầu không tăng quá 1.5°C đang trở nên cấp bách hơn bao giờ hết để tránh kịch bản các điểm sụt đổ khí hậu không thể đảo ngược.</p>
-          </div>
-        `
-      },
-      {
-        id: 3,
-        category: 'tech',
-        categoryName: 'Công nghệ Sinh thái',
-        title: 'Thử nghiệm hệ thống thu giữ carbon trực tiếp từ không khí',
-        summary: 'Các nhà máy công nghệ mới sử dụng phin lọc hóa chất để trực tiếp bóc tách CO2 khỏi không khí và hóa đá chúng sâu dưới lòng đất.',
-        date: '21/05/2026',
-        readTime: '6 phút đọc',
-        gradient: 'from-cyan-600 to-blue-950',
-        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>`,
-        content: `
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">Công nghệ Sinh thái</span>
-              <span class="text-xs text-white/40">21/05/2026 • 6 phút đọc</span>
-            </div>
-            <button onclick="toggleBookmarkInModal(3)" class="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/25 px-2.5 py-1 rounded-lg">
-              <span id="modalBookmarkText">Đã Lưu</span>
-            </button>
-          </div>
-          <h2 class="text-2xl md:text-3xl font-black text-white leading-tight mt-3 mb-6">Thử nghiệm hệ thống thu giữ carbon trực tiếp từ không khí</h2>
-          <div class="h-56 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-950 mb-6 flex items-center justify-center relative overflow-hidden border border-cyan-500/30">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
-          </div>
-          <div class="text-white/80 space-y-4 text-sm md:text-base leading-relaxed">
-            <p class="font-semibold text-white text-base">Công nghệ DAC (Direct Air Capture) đang chuyển dịch nhanh chóng từ phòng thí nghiệm ra quy mô công nghiệp thực tế.</p>
-            <p>Hệ thống bao gồm các tua-bin thu nạp gió lớn đi qua màng hấp phụ CO2 dạng lỏng hoặc rắn. Sau đó, carbon tinh khiết thu được sẽ được hòa tan vào nước và bơm xuống lòng đất đá bazan của núi lửa để khoáng hóa thành đá chỉ trong vòng 2 năm.</p>
-            <p>Phương pháp này cho phép loại bỏ chủ động carbon đã thải ra trước đó, hỗ trợ đắc lực cùng với việc trồng rừng và cắt giảm phát thải trực tiếp.</p>
-          </div>
-        `
-      },
-      {
-        id: 4,
-        category: 'life',
-        categoryName: 'Sống Bền vững',
-        title: 'Giải pháp zero-waste trong mua sắm gia đình lên ngôi',
-        summary: 'Người dùng thành thị đang tích cực chuyển dịch sang sử dụng các túi vải, bình thủy tinh tái chế và mua hàng đong đầy giảm bao bì.',
-        date: '18/05/2026',
-        readTime: '3 phút đọc',
-        gradient: 'from-teal-600 to-emerald-950',
-        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-        content: `
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-teal-400 uppercase tracking-widest px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20">Sống Bền vững</span>
-              <span class="text-xs text-white/40">18/05/2026 • 3 phút đọc</span>
-            </div>
-            <button onclick="toggleBookmarkInModal(4)" class="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/25 px-2.5 py-1 rounded-lg">
-              <span id="modalBookmarkText">Đã Lưu</span>
-            </button>
-          </div>
-          <h2 class="text-2xl md:text-3xl font-black text-white leading-tight mt-3 mb-6">Giải pháp zero-waste trong mua sắm gia đình lên ngôi</h2>
-          <div class="h-56 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-950 mb-6 flex items-center justify-center relative overflow-hidden border border-teal-500/30">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div class="text-white/80 space-y-4 text-sm md:text-base leading-relaxed">
-            <p class="font-semibold text-white text-base">Thói quen không bao bì (zero-packaging refill) đang chuyển đổi tích cực nhận thức mua sắm của các bà nội trợ đô thị.</p>
-            <p>Các cửa hàng bán lẻ đong đầy chất tẩy rửa hữu cơ, gia vị và ngũ cốc vào bình người mua mang theo ngày càng xuất hiện nhiều. Phương thức này loại bỏ hoàn toàn các loại chai nhựa dùng một lần vốn mất hàng thế kỷ để phân hủy.</p>
-            <p>Mỗi bước chuyển đổi nhỏ từ việc từ chối một túi nilon tại siêu thị đến phân loại rác hữu cơ tại bếp gia đình đều góp phần trực tiếp làm sạch hệ thống cống rãnh đô thị.</p>
-          </div>
-        `
-      }
-    ];
+        </div>
 
-    // Bookmarked articles tracking array
-    const bookmarkedIds = [];
-    let currentCategory = 'all';
-
-    // Render Filters
-    function renderFilters() {
-      const CATEGORIES = [
-        { id: 'all', name: 'Tất cả' },
-        { id: 'energy', name: 'Năng lượng Xanh' },
-        { id: 'climate', name: 'Biến đổi Khí hậu' },
-        { id: 'tech', name: 'Công nghệ Sinh thái' },
-        { id: 'life', name: 'Sống Bền vững' },
-        { id: 'bookmarks', name: `Đã lưu (${bookmarkedIds.length})` }
-      ];
-
-      const wrap = document.getElementById('categoryFilters');
-      wrap.innerHTML = '';
-      CATEGORIES.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat.name;
-        btn.className = `px-4 py-2 text-xs md:text-sm font-semibold rounded-xl transition-all ${
-          currentCategory === cat.id 
-            ? 'bg-gradient-to-r from-green-400 to-green-600 text-white shadow-lg shadow-green-500/25' 
-            : 'text-white/70 hover:text-white hover:bg-white/10'
-        }`;
-        btn.onclick = () => {
-          currentCategory = cat.id;
-          renderFilters();
-          filterNews();
-        };
-        wrap.appendChild(btn);
-      });
-    }
-
-    // Filter and Render News Grid
-    function filterNews() {
-      const searchVal = document.getElementById('searchInput').value.toLowerCase();
-      const grid = document.getElementById('newsGrid');
-      grid.innerHTML = '';
-
-      const filtered = ARTICLES.filter(art => {
-        let matchesCategory = false;
-        if (currentCategory === 'all') {
-          matchesCategory = true;
-        } else if (currentCategory === 'bookmarks') {
-          matchesCategory = bookmarkedIds.includes(art.id);
-        } else {
-          matchesCategory = art.category === currentCategory;
-        }
-        const matchesSearch = art.title.toLowerCase().includes(searchVal) || art.summary.toLowerCase().includes(searchVal);
-        return matchesCategory && matchesSearch;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-12">
-            <p class="text-white/40 font-medium">Không tìm thấy tin tức phù hợp.</p>
+        <div>
+          <div class="site-footer__label">Liên kết nhanh</div>
+          <div class="site-footer__links">
+            <a class="site-footer__link" href="index.html">Trang chủ</a>
+            <a class="site-footer__link" href="dashboard.html">Bảng điều khiển</a>
+            <a class="site-footer__link" href="calculator.html">Công cụ</a>
+            <a class="site-footer__link" href="news.html">Tin tức</a>
+            <a class="site-footer__link" href="community.html">Cộng đồng</a>
+            <a class="site-footer__link" href="login.html">Đăng nhập</a>
           </div>
-        `;
-        return;
-      }
+        </div>
 
-      filtered.forEach(art => {
-        const isBookmarked = bookmarkedIds.includes(art.id);
-        const card = document.createElement('div');
-        card.className = 'glass-card p-5 flex flex-col gap-4 cyber-border-box relative overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1';
-        card.onclick = () => openModal(art.id);
-        card.innerHTML = `
-          <div class="hud-corner hud-corner-tl"></div>
-          <div class="hud-corner hud-corner-tr"></div>
-          <div class="hud-corner hud-corner-bl"></div>
-          <div class="hud-corner hud-corner-br"></div>
-          
-          <!-- Gradient Image Header -->
-          <div class="h-40 rounded-xl bg-gradient-to-br ${art.gradient} flex items-center justify-center relative overflow-hidden border border-white/5">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px]"></div>
-            ${art.icon}
-            
-            <!-- Bookmark Button -->
-            <button onclick="toggleBookmark(event, ${art.id})" class="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-black/50 border border-white/10 text-white hover:scale-105 active:scale-95 transition-all z-10">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="${isBookmarked ? '#4ade80' : 'none'}" stroke="${isBookmarked ? '#4ade80' : 'currentColor'}" stroke-width="2.5">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </button>
+        <div>
+          <div class="site-footer__label">Liên hệ & Kết nối</div>
+          <div class="site-footer__meta">
+            <div><strong>Email:</strong> baolhg.25ns@vku.udn.vn</div>
+            <div><strong>Điện thoại:</strong> 0374571549</div>
+            <div><strong>Địa chỉ:</strong> 470 Đường Trần Đại Nghĩa, Phường Ngũ Hành Sơn, Thành phố Đà Nẵng</div>
           </div>
-          
-          <div class="flex items-center justify-between text-[0.70rem] text-white/40 font-semibold uppercase tracking-wider">
-            <span>${art.categoryName}</span>
-            <span>${art.date}</span>
+          <div class="site-footer__label" style="margin-top: 20px;">Mạng xã hội</div>
+          <div class="site-footer__social">
+            <span class="site-footer__badge">Facebook</span>
+            <span class="site-footer__badge">Instagram</span>
+            <span class="site-footer__badge">YouTube</span>
+            <span class="site-footer__badge">TikTok</span>
           </div>
-          
-          <h3 class="text-base font-black text-white leading-snug flex-grow hover:text-green-400 transition-colors">
-            ${art.title}
-          </h3>
-          
-          <p class="text-xs text-white/60 leading-relaxed line-clamp-2">
-            ${art.summary}
-          </p>
-          
-          <div class="flex items-center justify-between mt-2 pt-3 border-t border-white/10">
-            <span class="text-[0.70rem] text-white/40">${art.readTime}</span>
-            <span class="text-xs text-green-400 font-bold flex items-center gap-1 hover:gap-2 transition-all">Đọc bài →</span>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
+        </div>
+      </div>
 
-    // Toggle Bookmarks
-    function toggleBookmark(e, id) {
-      if (e) e.stopPropagation(); // Prevent card details click
-      const idx = bookmarkedIds.indexOf(id);
-      if (idx > -1) {
-        bookmarkedIds.splice(idx, 1);
-      } else {
-        bookmarkedIds.push(id);
-      }
-      renderFilters();
-      filterNews();
-    }
-
-    function toggleBookmarkInModal(id) {
-      toggleBookmark(null, id);
-      // Update modal button state text
-      const isBookmarked = bookmarkedIds.includes(id);
-      const btnText = document.getElementById('modalBookmarkText');
-      if (btnText) {
-        btnText.textContent = isBookmarked ? 'Đã Lưu' : 'Lưu Tin';
-      }
-    }
-
-    // Modal Control
-    function openModal(id) {
-      const art = ARTICLES.find(a => a.id === id);
-      if (!art) return;
-      document.getElementById('modalBody').innerHTML = art.content;
-      
-      // Sync modal bookmark text
-      const isBookmarked = bookmarkedIds.includes(id);
-      const btnText = document.getElementById('modalBookmarkText');
-      if (btnText) {
-        btnText.textContent = isBookmarked ? 'Đã Lưu' : 'Lưu Tin';
-      }
-
-      document.getElementById('newsModal').classList.add('active');
-    }
-
-    function closeModalDirect() {
-      document.getElementById('newsModal').classList.remove('active');
-    }
-
-    function closeModal(e) {
-      if (e.target.id === 'newsModal') {
-        closeModalDirect();
-      }
-    }
-
-    // Document listener for ESC key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModalDirect();
-    });
-
-    // Init Page elements
-    window.addEventListener('DOMContentLoaded', () => {
-      renderFilters();
-      filterNews();
-    });
-  </script>
+      <div class="site-footer__bottom">
+        <div>© 2026 EcoImpact. All rights reserved.</div>
+        <div class="site-footer__policy">
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Hỗ trợ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- 3D Background -->
   <script src="js/bg3d.js?v=4.0"></script>
