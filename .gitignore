@@ -7,3 +7,10 @@ Thumbs.db
 
 # Node modules (if any)
 node_modules/
+
+# Tai lieu on tap (chi luu local)
+NGUOI_A.md
+NGUOI_B.md
+TOM_TAT_HOC_CODE.md
+HUONG_DAN_CHI_TIET_CODE.md
+scratch/
