@@ -645,7 +645,7 @@ body {
   border-radius: 10px;
   cursor: default;
   background-color: rgba(10, 20, 14, 0.85);
-  background-image: url('images/world-map.svg');
+  background-image: url('images/world-map.svg?v=1.2');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
