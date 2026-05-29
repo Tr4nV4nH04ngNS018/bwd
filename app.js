@@ -834,6 +834,15 @@
       let activeTemps = null;
       let hoveredIndex = null;
 
+      // Load real SVG world map background
+      const mapImage = new Image();
+      let mapImageLoaded = false;
+      mapImage.onload = () => {
+        mapImageLoaded = true;
+        drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
+      };
+      mapImage.src = 'images/world-map.svg';
+
       // Initialize chips text immediately with names and fallback values
       const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
       const names = ['New York', 'Tokyo', 'Sydney'];
@@ -842,6 +851,22 @@
         if (chipEls[i]) {
           chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${names[i]}:</span>${defaultTemps[i]}°C`;
         }
+      }
+
+      // Projection helper for simple-world-map.svg
+      // SVG viewBox: 30.767 241.591 784.077 458.627
+      function projectCoords(lat, lon, W, H) {
+        // Horizontal mapping
+        const x_svg = 405.1 + 2.204 * lon;
+        const x = ((x_svg - 30.767) / 784.077) * W;
+
+        // Vertical mapping (Mercator)
+        const latRad = lat * Math.PI / 180;
+        const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+        const y_svg = 520.9 - 154.3 * mercN;
+        const y = ((y_svg - 241.591) / 458.627) * H;
+
+        return { x, y };
       }
 
       function drawWorldHeatmap(capitalTemps, capitals, hoveredIdx) {
@@ -859,99 +884,14 @@
         wc.height = H * dpr;
         ctx.scale(dpr, dpr);
 
-        // Dark background
+        // Clear and draw background
         ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
         ctx.fillRect(0, 0, W, H);
 
-        // Simplified continent outlines in geographic coordinates (lat, lon)
-        const continentsRaw = [
-          // North America
-          [
-            [70, -165], [72, -140], [70, -100], [75, -80], [70, -60], 
-            [50, -50], [45, -60], [30, -80], [25, -80], [15, -90], 
-            [8, -80], [10, -85], [16, -100], [20, -105], [25, -110], 
-            [32, -118], [40, -124], [48, -125], [55, -130], [60, -140], [65, -165]
-          ],
-          // South America
-          [
-            [12, -72], [10, -62], [5, -50], [-5, -35], [-10, -35], 
-            [-20, -40], [-35, -50], [-45, -65], [-55, -70], [-50, -75], 
-            [-40, -75], [-30, -72], [-20, -70], [-10, -75], [-5, -80], 
-            [0, -80], [5, -77], [9, -80]
-          ],
-          // Europe
-          [
-            [71, 20], [70, 30], [65, 35], [60, 40], [50, 35],
-            [45, 25], [40, 15], [36, 15], [36, -5], [43, -10],
-            [50, -5], [55, 5], [60, 5], [65, 10]
-          ],
-          // Africa
-          [
-            [35, -5], [35, 15], [30, 32], [25, 34], [15, 40], 
-            [10, 45], [0, 40], [-10, 40], [-20, 35], [-30, 30], 
-            [-34, 20], [-34, 18], [-20, 12], [-10, 8], [0, 10], 
-            [5, 0], [10, -13], [15, -17], [20, -15], [30, -10]
-          ],
-          // Asia
-          [
-            [75, 60], [77, 95], [75, 110], [75, 140], [70, 170], 
-            [60, 180], [50, 155], [35, 140], [22, 115], [15, 110], 
-            [10, 105], [5, 95], [10, 80], [20, 70], [25, 60], 
-            [15, 50], [12, 45], [25, 35], [30, 35], [40, 40], 
-            [50, 45], [60, 50]
-          ],
-          // Australia
-          [
-            [-11, 131], [-11, 136], [-10, 142], [-15, 145], [-25, 153], 
-            [-35, 150], [-38, 145], [-35, 138], [-35, 118], [-30, 115], 
-            [-22, 114], [-20, 120]
-          ],
-          // Greenland
-          [
-            [80, -60], [82, -40], [80, -20], [70, -20], [60, -45], [70, -60]
-          ],
-          // Great Britain
-          [
-            [59, -5], [59, -1], [54, -1], [50, -5], [52, -6], [56, -6]
-          ],
-          // Japan
-          [
-            [45, 145], [40, 140], [35, 135], [31, 130], [32, 132], [36, 138], [40, 142]
-          ],
-          // Madagascar
-          [
-            [-12, 49], [-16, 50], [-25, 47], [-25, 43], [-15, 45]
-          ],
-          // Iceland
-          [
-            [66, -24], [66, -13], [63, -15], [63, -22]
-          ],
-          // New Zealand
-          [
-            [-34, 173], [-37, 176], [-41, 175], [-46, 168], [-46, 166], [-41, 172], [-35, 173]
-          ]
-        ];
-
-        // Draw continents
-        ctx.strokeStyle = 'rgba(74, 222, 128, 0.15)';
-        ctx.fillStyle = 'rgba(74, 222, 128, 0.06)';
-        ctx.lineWidth = 1;
-        continentsRaw.forEach(pts => {
-          ctx.beginPath();
-          pts.forEach((p, i) => {
-            const lat = p[0], lon = p[1];
-            // Project using the exact same Mercator projection as the dots
-            const x = ((lon + 180) / 360) * W;
-            const latRad = lat * Math.PI / 180;
-            const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-            const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
-            
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-          });
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        });
+        // Draw the real SVG world map background
+        if (mapImageLoaded) {
+          ctx.drawImage(mapImage, 0, 0, W, H);
+        }
 
         // Draw grid lines
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
@@ -984,11 +924,8 @@
         displayCapitals.forEach((cap, idx) => {
           const temp = displayTemps[idx];
           if (temp === null || temp === undefined) return;
-          // Mercator-ish projection
-          const x = ((cap.lon + 180) / 360) * W;
-          const latRad = cap.lat * Math.PI / 180;
-          const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-          const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+          
+          const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
           if (y < 0 || y > H || x < 0 || x > W) return;
 
           const color = tempColor(temp);
@@ -1018,10 +955,7 @@
         sampleCities.forEach((city) => {
           const chip = document.getElementById(city.id);
           if (!chip) return;
-          const x = ((city.lon + 180) / 360) * W;
-          const latRad = city.lat * Math.PI / 180;
-          const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-          const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+          const { x, y } = projectCoords(city.lat, city.lon, W, H);
 
           // Align the CSS coordinates exactly over the dots
           chip.style.left = `${canvasLeft + x}px`;
@@ -1044,10 +978,7 @@
           const cap = displayCapitals[hoveredIdx];
           const temp = displayTemps[hoveredIdx];
           if (cap && temp !== null && temp !== undefined) {
-            const x = ((cap.lon + 180) / 360) * W;
-            const latRad = cap.lat * Math.PI / 180;
-            const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-            const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+            const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
 
             // Draw a pulsing halo ring
             ctx.strokeStyle = '#ffffff';
@@ -1171,11 +1102,7 @@
             const temp = displayTemps[idx];
             if (temp === null || temp === undefined) return;
 
-            const x = ((cap.lon + 180) / 360) * W;
-            const latRad = cap.lat * Math.PI / 180;
-            const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-            const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
-
+            const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
             const dist = Math.hypot(mouseX - x, mouseY - y);
             if (dist < minDist) {
               minDist = dist;
@@ -1199,11 +1126,7 @@
               const cap = displayCapitals[hoveredIndex];
               const temp = displayTemps[hoveredIndex];
 
-              const x = ((cap.lon + 180) / 360) * W;
-              const latRad = cap.lat * Math.PI / 180;
-              const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-              const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
-
+              const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
               const canvasLeft = wc.offsetLeft;
               const canvasTop = wc.offsetTop;
 
