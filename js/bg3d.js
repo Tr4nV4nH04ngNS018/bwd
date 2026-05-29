@@ -241,8 +241,14 @@
 
 
     earthGroup.add(loadedEarth);
+    if (typeof window.triggerPageLoaded === 'function') {
+      window.triggerPageLoaded();
+    }
   }, undefined, function (error) {
     console.error('Error loading earth.glb:', error);
+    if (typeof window.triggerPageLoaded === 'function') {
+      window.triggerPageLoaded();
+    }
   });
 
   /* ══════════════════════════════════════════════

@@ -413,7 +413,10 @@
     initForgotPasswordPage();
   }
 
-  function hideLoadingScreen() {
+  window.ecoImpactLoaded = false;
+  window.triggerPageLoaded = function () {
+    if (window.ecoImpactLoaded) return;
+    window.ecoImpactLoaded = true;
     const loader = document.getElementById('loading-screen');
     if (loader && !loader.classList.contains('fade-out')) {
       loader.classList.add('fade-out');
@@ -421,9 +424,11 @@
         loader.remove();
       }, 600);
     }
-  }
-  window.addEventListener('load', hideLoadingScreen);
-  setTimeout(hideLoadingScreen, 4000);
+  };
+
+  // Auth pages have no 3D elements, trigger on window load immediately
+  window.addEventListener('load', window.triggerPageLoaded);
+  setTimeout(window.triggerPageLoaded, 4000);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

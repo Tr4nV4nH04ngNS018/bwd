@@ -1199,7 +1199,10 @@
     initDashboardPage();
   }
 
-  function hideLoadingScreen() {
+  window.ecoImpactLoaded = false;
+  window.triggerPageLoaded = function () {
+    if (window.ecoImpactLoaded) return;
+    window.ecoImpactLoaded = true;
     const loader = document.getElementById('loading-screen');
     if (loader && !loader.classList.contains('fade-out')) {
       loader.classList.add('fade-out');
@@ -1207,9 +1210,24 @@
         loader.remove();
       }, 600);
     }
-  }
-  window.addEventListener('load', hideLoadingScreen);
-  setTimeout(hideLoadingScreen, 4000);
+  };
+
+  // Safety fallback timeout (6 seconds)
+  setTimeout(window.triggerPageLoaded, 6000);
+
+  // Trigger load immediately if THREE or 3D container is not present
+  window.addEventListener('load', () => {
+    if (typeof THREE === 'undefined') {
+      window.triggerPageLoaded();
+    } else {
+      setTimeout(() => {
+        const hasBg3D = document.getElementById('bg3d') || document.getElementById('orbContainer');
+        if (!hasBg3D) {
+          window.triggerPageLoaded();
+        }
+      }, 100);
+    }
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

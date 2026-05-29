@@ -1116,6 +1116,15 @@ new THREE.GLTFLoader().load('./juan.glb', function(gltf) {
   orbPivot.add(orbEarth);
   orbControls.target.set(0, 0, 0);
   orbControls.update();
+  
+  if (typeof window.triggerPageLoaded === 'function') {
+    window.triggerPageLoaded();
+  }
+}, undefined, function (error) {
+  console.error('Error loading juan.glb:', error);
+  if (typeof window.triggerPageLoaded === 'function') {
+    window.triggerPageLoaded();
+  }
 });
  
 const orbClock = new THREE.Clock();
