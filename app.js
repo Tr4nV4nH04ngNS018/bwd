@@ -689,7 +689,25 @@
       { api: 'Africa', label: 'C. Phi', color: 'rgba(239, 68, 68, 0.85)' }
     ];
 
-    const CAPITALS_API_URL = 'https://restcountries.com/v3.1/all?fields=name,capital,capitalInfo,latlng,region';
+    const STATIC_FALLBACK_CAPITALS = [
+      { label: 'Hà Nội', country: 'Việt Nam', region: 'Asia', lat: 21.03, lon: 105.85, temp: 28.5 },
+      { label: 'Tokyo', country: 'Nhật Bản', region: 'Asia', lat: 35.68, lon: 139.69, temp: 18.2 },
+      { label: 'Washington D.C.', country: 'Hoa Kỳ', region: 'Americas', lat: 38.90, lon: -77.04, temp: 15.5 },
+      { label: 'London', country: 'Vương quốc Anh', region: 'Europe', lat: 51.51, lon: -0.13, temp: 12.0 },
+      { label: 'Sydney', country: 'Úc', region: 'Oceania', lat: -33.87, lon: 151.21, temp: 20.1 },
+      { label: 'Cairo', country: 'Ai Cập', region: 'Africa', lat: 30.04, lon: 31.24, temp: 26.0 },
+      { label: 'Brasília', country: 'Brazil', region: 'Americas', lat: -15.78, lon: -47.93, temp: 22.4 },
+      { label: 'Ottawa', country: 'Canada', region: 'Americas', lat: 45.42, lon: -75.70, temp: 8.5 },
+      { label: 'Moskva', country: 'Nga', region: 'Europe', lat: 55.75, lon: 37.62, temp: 5.0 },
+      { label: 'Bắc Kinh', country: 'Trung Quốc', region: 'Asia', lat: 39.90, lon: 116.41, temp: 16.5 },
+      { label: 'New Delhi', country: 'Ấn Độ', region: 'Asia', lat: 28.61, lon: 77.21, temp: 32.0 },
+      { label: 'Pretoria', country: 'Nam Phi', region: 'Africa', lat: -25.75, lon: 28.19, temp: 19.0 },
+      { label: 'Paris', country: 'Pháp', region: 'Europe', lat: 48.86, lon: 2.35, temp: 14.0 },
+      { label: 'Buenos Aires', country: 'Argentina', region: 'Americas', lat: -34.60, lon: -58.38, temp: 17.5 },
+      { label: 'Nairobi', country: 'Kenya', region: 'Africa', lat: -1.29, lon: 36.82, temp: 21.0 }
+    ];
+
+    const CAPITALS_API_URL = 'https://restcountries.com/v3.1/all?fields=name,capital,capitalInfo,latlng,region,translations';
     const OPEN_METEO_URL = 'https://api.open-meteo.com/v1/forecast';
 
     function getCapitalLocations(countries) {
@@ -707,6 +725,7 @@
 
         return [{
           label: capitalName,
+          country: country.translations?.vie?.common || country.name?.common || '',
           region: country.region || 'Unknown',
           lat: coords[0],
           lon: coords[1]
@@ -810,17 +829,35 @@
       });
 
 
-      // ─── World Heatmap on #worldCanvas ───
-      function drawWorldHeatmap(capitalTemps, capitals) {
+      // ─── World Heatmap State & Logic ───
+      let activeCapitals = null;
+      let activeTemps = null;
+      let hoveredIndex = null;
+
+      // Initialize chips text immediately with names and fallback values
+      const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
+      const names = ['New York', 'Tokyo', 'Sydney'];
+      const defaultTemps = [15.5, 18.2, 20.1];
+      for (let i = 0; i < chipEls.length; i++) {
+        if (chipEls[i]) {
+          chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${names[i]}:</span>${defaultTemps[i]}°C`;
+        }
+      }
+
+      function drawWorldHeatmap(capitalTemps, capitals, hoveredIdx) {
         const wc = document.getElementById('worldCanvas');
         if (!wc) return;
         const ctx = wc.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
         const rect = wc.getBoundingClientRect();
-        wc.width = rect.width * dpr;
-        wc.height = rect.height * dpr;
+        
+        // Safety fallback for container dimensions
+        const W = rect.width || wc.clientWidth || 300;
+        const H = rect.height || wc.clientHeight || 180;
+        
+        wc.width = W * dpr;
+        wc.height = H * dpr;
         ctx.scale(dpr, dpr);
-        const W = rect.width, H = rect.height;
 
         // Dark background
         ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
@@ -867,7 +904,7 @@
           ctx.beginPath(); ctx.moveTo(W * i / 8, 0); ctx.lineTo(W * i / 8, H); ctx.stroke();
         }
 
-        // Temperature color
+        // Temperature color helper
         function tempColor(t) {
           if (t <= 0) return 'rgba(96, 165, 250, 0.8)';
           if (t <= 10) return 'rgba(74, 222, 128, 0.7)';
@@ -876,31 +913,96 @@
           return 'rgba(239, 68, 68, 0.85)';
         }
 
-        // Plot temperature dots from real data
-        if (capitals && capitalTemps) {
-          capitals.forEach((cap, idx) => {
-            const temp = capitalTemps[idx];
-            if (temp === null || temp === undefined) return;
-            // Mercator-ish projection
+        // Handle Fallbacks
+        let displayCapitals = capitals;
+        let displayTemps = capitalTemps;
+        if (!displayCapitals || !displayTemps) {
+          displayCapitals = STATIC_FALLBACK_CAPITALS;
+          displayTemps = STATIC_FALLBACK_CAPITALS.map(c => c.temp);
+        }
+
+        // Plot temperature dots from data
+        displayCapitals.forEach((cap, idx) => {
+          const temp = displayTemps[idx];
+          if (temp === null || temp === undefined) return;
+          // Mercator-ish projection
+          const x = ((cap.lon + 180) / 360) * W;
+          const latRad = cap.lat * Math.PI / 180;
+          const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+          const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+          if (y < 0 || y > H || x < 0 || x > W) return;
+
+          const color = tempColor(temp);
+          // Glow effect
+          const grd = ctx.createRadialGradient(x, y, 0, x, y, 8);
+          grd.addColorStop(0, color);
+          grd.addColorStop(1, 'transparent');
+          ctx.fillStyle = grd;
+          ctx.fillRect(x - 8, y - 8, 16, 16);
+          // Dot
+          ctx.beginPath();
+          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.fill();
+        });
+
+        // Position the 3 highlight chips dynamically
+        const sampleCities = [
+          { lat: 40.71, lon: -74.01, id: 'tempChip1' },
+          { lat: 35.68, lon: 139.69, id: 'tempChip2' },
+          { lat: -33.87, lon: 151.21, id: 'tempChip3' }
+        ];
+
+        const canvasLeft = wc.offsetLeft;
+        const canvasTop = wc.offsetTop;
+
+        sampleCities.forEach((city) => {
+          const chip = document.getElementById(city.id);
+          if (!chip) return;
+          const x = ((city.lon + 180) / 360) * W;
+          const latRad = city.lat * Math.PI / 180;
+          const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+          const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+
+          // Align the CSS coordinates exactly over the dots
+          chip.style.left = `${canvasLeft + x}px`;
+          chip.style.top = `${canvasTop + y}px`;
+          chip.style.display = 'block';
+
+          // Draw dotted connector line from city to chip
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x, y - 10);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        });
+
+        // Draw hover halo if hovered
+        if (hoveredIdx !== null && hoveredIdx !== undefined) {
+          const cap = displayCapitals[hoveredIdx];
+          const temp = displayTemps[hoveredIdx];
+          if (cap && temp !== null && temp !== undefined) {
             const x = ((cap.lon + 180) / 360) * W;
             const latRad = cap.lat * Math.PI / 180;
             const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
             const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
-            if (y < 0 || y > H || x < 0 || x > W) return;
 
-            const color = tempColor(temp);
-            // Glow
-            const grd = ctx.createRadialGradient(x, y, 0, x, y, 8);
-            grd.addColorStop(0, color);
-            grd.addColorStop(1, 'transparent');
-            ctx.fillStyle = grd;
-            ctx.fillRect(x - 8, y - 8, 16, 16);
-            // Dot
+            // Draw a pulsing halo ring
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x, y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = color;
-            ctx.fill();
-          });
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(74, 222, 128, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.stroke();
+          }
         }
       }
 
@@ -938,22 +1040,25 @@
           realtimeChart.data.datasets[0].data = regionTemps.map((value) => value !== null ? parseFloat(value.toFixed(1)) : 0);
           realtimeChart.update();
 
-          // Draw world heatmap with real data
+          // Save loaded data to active variables and redraw map
+          activeCapitals = capitals;
+          activeTemps = capitalTemps;
           drawWorldHeatmap(capitalTemps, capitals);
 
-          // Update temp chips with sample cities
+          // Update temp chips with sample cities and names
           const sampleCities = [
             { lat: 40.71, lon: -74.01 }, // New York
             { lat: 35.68, lon: 139.69 }, // Tokyo
             { lat: -33.87, lon: 151.21 } // Sydney
           ];
-          const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
           for (let i = 0; i < sampleCities.length; i++) {
             try {
               const r = await fetch(OPEN_METEO_URL + '?latitude=' + sampleCities[i].lat + '&longitude=' + sampleCities[i].lon + '&current=temperature_2m');
               if (r.ok) {
                 const j = await r.json();
-                if (j && j.current && chipEls[i]) chipEls[i].textContent = j.current.temperature_2m.toFixed(1) + '°C';
+                if (j && j.current && chipEls[i]) {
+                  chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${names[i]}:</span>${j.current.temperature_2m.toFixed(1)}°C`;
+                }
               }
             } catch(e) { /* silent */ }
           }
@@ -975,6 +1080,8 @@
           }
         } catch (error) {
           console.error('API Error - Falling back to local data:', error);
+          activeCapitals = null;
+          activeTemps = null;
           drawWorldHeatmap(null, null);
           const fallbackTemp = FALLBACK_DATA.globalTemp.toFixed(1) + '°C';
           document.getElementById('valGlobalTemp').innerText = fallbackTemp;
@@ -983,6 +1090,108 @@
           if (valTempUpdatedFb) valTempUpdatedFb.textContent = 'Không lấy được dữ liệu live, đang dùng dữ liệu dự phòng';
         }
       }
+
+      // Add Mouse Events on worldCanvas
+      const wc = document.getElementById('worldCanvas');
+      if (wc) {
+        wc.addEventListener('mousemove', (e) => {
+          const rect = wc.getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+
+          const displayCapitals = activeCapitals || STATIC_FALLBACK_CAPITALS;
+          const displayTemps = activeTemps || STATIC_FALLBACK_CAPITALS.map(c => c.temp);
+
+          let closestIdx = null;
+          let minDist = 12; // 12px hover radius limit
+
+          const W = rect.width || wc.clientWidth || 300;
+          const H = rect.height || wc.clientHeight || 180;
+
+          displayCapitals.forEach((cap, idx) => {
+            const temp = displayTemps[idx];
+            if (temp === null || temp === undefined) return;
+
+            const x = ((cap.lon + 180) / 360) * W;
+            const latRad = cap.lat * Math.PI / 180;
+            const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+            const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+
+            const dist = Math.hypot(mouseX - x, mouseY - y);
+            if (dist < minDist) {
+              minDist = dist;
+              closestIdx = idx;
+            }
+          });
+
+          if (closestIdx !== hoveredIndex) {
+            hoveredIndex = closestIdx;
+            drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
+
+            let tooltip = document.getElementById('mapTooltip');
+            if (!tooltip) {
+              tooltip = document.createElement('div');
+              tooltip.id = 'mapTooltip';
+              tooltip.className = 'map-tooltip';
+              wc.parentElement.appendChild(tooltip);
+            }
+
+            if (hoveredIndex !== null) {
+              const cap = displayCapitals[hoveredIndex];
+              const temp = displayTemps[hoveredIndex];
+
+              const x = ((cap.lon + 180) / 360) * W;
+              const latRad = cap.lat * Math.PI / 180;
+              const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+              const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+
+              const canvasLeft = wc.offsetLeft;
+              const canvasTop = wc.offsetTop;
+
+              tooltip.innerHTML = `
+                <div style="font-weight: 700; color: #3ddc84; font-size: 0.75rem;">${cap.label}</div>
+                <div style="font-size: 0.65rem; color: rgba(255, 255, 255, 0.6); margin-top: 1px;">${cap.country || cap.region}</div>
+                <div style="font-size: 0.8rem; font-weight: 800; margin-top: 4px; color: #fff;">${temp.toFixed(1)}°C</div>
+              `;
+
+              tooltip.style.left = `${canvasLeft + x}px`;
+              tooltip.style.top = `${canvasTop + y}px`;
+              tooltip.style.opacity = '1';
+              tooltip.style.visibility = 'visible';
+              tooltip.style.transform = 'translate(-50%, -100%) scale(1)';
+              wc.style.cursor = 'pointer';
+            } else {
+              tooltip.style.opacity = '0';
+              tooltip.style.visibility = 'hidden';
+              tooltip.style.transform = 'translate(-50%, -100%) scale(0.9)';
+              wc.style.cursor = 'default';
+            }
+          }
+        });
+
+        wc.addEventListener('mouseleave', () => {
+          if (hoveredIndex !== null) {
+            hoveredIndex = null;
+            drawWorldHeatmap(activeTemps, activeCapitals, null);
+            const tooltip = document.getElementById('mapTooltip');
+            if (tooltip) {
+              tooltip.style.opacity = '0';
+              tooltip.style.visibility = 'hidden';
+              tooltip.style.transform = 'translate(-50%, -100%) scale(0.9)';
+            }
+            wc.style.cursor = 'default';
+          }
+        });
+      }
+
+      // Handle window resize dynamically
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
+        }, 100);
+      });
 
       await refreshRealtimeData();
       setInterval(refreshRealtimeData, 10 * 60 * 1000);
