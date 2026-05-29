@@ -493,7 +493,8 @@
       document.getElementById('valGlobalTemp').textContent = `${data.globalTemp.toFixed(1)}°C`;
       const tempSign = data.tempChange > 0 ? '+' : '';
       document.getElementById('valTempChange').textContent = `(${tempSign}${data.tempChange.toFixed(2)}°C)`;
-      document.getElementById('valTempUpdated').textContent = `Cập nhật lúc ${updatedAt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+      const valTempUpdated = document.getElementById('valTempUpdated');
+      if (valTempUpdated) valTempUpdated.textContent = `Cập nhật lúc ${updatedAt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
 
       document.getElementById('valCo2').textContent = data.co2.toFixed(1);
       const aqiPercent = Math.min(100, Math.round(((data.aqi - 1) / 4) * 100));
@@ -721,7 +722,7 @@
         const batchTemps = await Promise.all(batch.map(async (location) => {
           const url = OPEN_METEO_URL + '?latitude=' + location.lat + '&longitude=' + location.lon + '&current=temperature_2m';
           try {
-            const response = await fetch('/api/proxy?url=' + encodeURIComponent(url));
+            const response = await fetch(url);
             if (!response.ok) return null;
             const json = await response.json();
             return json && json.current ? json.current.temperature_2m : null;
@@ -810,7 +811,7 @@
 
       async function refreshRealtimeData() {
         try {
-          const countriesRes = await fetch('/api/proxy?url=' + encodeURIComponent(CAPITALS_API_URL));
+          const countriesRes = await fetch(CAPITALS_API_URL);
           if (!countriesRes.ok) {
             throw new Error('Failed to load capital data');
           }
@@ -847,9 +848,10 @@
           const globalAvg = validCapitalTemps.length ? (validCapitalTemps.reduce((a, b) => a + b, 0) / validCapitalTemps.length) : FALLBACK_DATA.globalTemp;
           document.getElementById('valGlobalTemp').innerText = parseFloat(globalAvg.toFixed(1)) + '°C';
           document.getElementById('valTempChange').innerText = '(Live API)';
-          document.getElementById('valTempUpdated').textContent = 'Cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          const valTempUpdatedEl = document.getElementById('valTempUpdated');
+          if (valTempUpdatedEl) valTempUpdatedEl.textContent = 'Cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-          const aqiRes = await fetch('/api/proxy?url=' + encodeURIComponent('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=21.02&longitude=105.83&current=european_aqi'));
+          const aqiRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=21.02&longitude=105.83&current=european_aqi');
           const aqiData = await aqiRes.json();
           if (aqiData && aqiData.current && aqiData.current.european_aqi) {
             const aqi = aqiData.current.european_aqi;
@@ -862,7 +864,8 @@
           const fallbackTemp = FALLBACK_DATA.globalTemp.toFixed(1) + '°C';
           document.getElementById('valGlobalTemp').innerText = fallbackTemp;
           document.getElementById('valTempChange').innerText = '(Dữ liệu dự phòng)';
-          document.getElementById('valTempUpdated').textContent = 'Không lấy được dữ liệu live, đang dùng dữ liệu dự phòng';
+          const valTempUpdatedFb = document.getElementById('valTempUpdated');
+          if (valTempUpdatedFb) valTempUpdatedFb.textContent = 'Không lấy được dữ liệu live, đang dùng dữ liệu dự phòng';
         }
       }
 
