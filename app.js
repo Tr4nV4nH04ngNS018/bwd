@@ -844,20 +844,55 @@
         }
       }
 
-      // Projection helper for simple-world-map.svg
-      // SVG viewBox: 30.767 241.591 784.077 458.627
+      // Projection helper calibrated specifically for images/world-map.svg
       function projectCoords(lat, lon, W, H) {
-        // Horizontal mapping
-        const x_svg = 405.1 + 2.204 * lon;
-        const x = ((x_svg - 30.767) / 784.077) * W;
+        // Piecewise linear control points for X (longitude)
+        const xPts = [
+          [-180, 0.0],
+          [-125, 0.144], // Vancouver/West US
+          [-74, 0.269],  // New York/East US
+          [0, 0.472],    // London/Prime Meridian
+          [73, 0.720],   // India (Mumbai)
+          [106, 0.801],  // Hanoi/Vietnam
+          [140, 0.870],  // Tokyo/Japan
+          [180, 1.0]
+        ];
+        
+        let xPct = (lon + 180) / 360;
+        for (let i = 0; i < xPts.length - 1; i++) {
+          const p1 = xPts[i], p2 = xPts[i+1];
+          if (lon >= p1[0] && lon <= p2[0]) {
+            const t = (lon - p1[0]) / (p2[0] - p1[0]);
+            xPct = p1[1] + t * (p2[1] - p1[1]);
+            break;
+          }
+        }
 
-        // Vertical mapping (Mercator)
-        const latRad = lat * Math.PI / 180;
-        const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-        const y_svg = 520.9 - 154.3 * mercN;
-        const y = ((y_svg - 241.591) / 458.627) * H;
+        // Piecewise linear control points for Y (latitude)
+        const yPts = [
+          [-90, 1.0],
+          [-33.87, 0.821], // Sydney
+          [0, 0.609],      // Equator
+          [21.03, 0.472],  // Hanoi
+          [35.68, 0.385],  // Tokyo
+          [40.71, 0.345],  // New York
+          [90, 0.0]
+        ];
 
-        return { x, y };
+        let yPct = (90 - lat) / 180;
+        for (let i = 0; i < yPts.length - 1; i++) {
+          const p1 = yPts[i], p2 = yPts[i+1];
+          if (lat >= p1[0] && lat <= p2[0]) {
+            const t = (lat - p1[0]) / (p2[0] - p1[0]);
+            yPct = p1[1] + t * (p2[1] - p1[1]);
+            break;
+          }
+        }
+
+        return {
+          x: xPct * W,
+          y: yPct * H
+        };
       }
 
       function drawWorldHeatmap(capitalTemps, capitals, hoveredIdx) {
