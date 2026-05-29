@@ -1396,5 +1396,118 @@ input[type=range]:active::-webkit-slider-thumb {
   }
 }
 
+/* ─── Premium Loading Screen ─── */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at center, #0d1e13 0%, #060c08 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+}
 
+.loading-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.loader-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loader-logo-svg {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 0 15px rgba(61, 220, 132, 0.6));
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.loader-logo-text {
+  font-family: 'Fraunces', 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+}
+
+.loader-spinner-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.loader-spinner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(0deg, transparent 50%, #3ddc84 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-clockwise 1.2s linear infinite;
+}
+
+.loader-spinner-inner {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(0deg, #22c55e 0%, transparent 50%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-counter-clockwise 1.8s linear infinite;
+}
+
+.loader-text {
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  animation: text-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes spin-clockwise {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter-clockwise {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(61, 220, 132, 0.4));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 25px rgba(61, 220, 132, 0.8));
+  }
+}
+
+@keyframes text-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}

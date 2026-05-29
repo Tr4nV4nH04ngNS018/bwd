@@ -413,6 +413,18 @@
     initForgotPasswordPage();
   }
 
+  function hideLoadingScreen() {
+    const loader = document.getElementById('loading-screen');
+    if (loader && !loader.classList.contains('fade-out')) {
+      loader.classList.add('fade-out');
+      setTimeout(() => {
+        loader.remove();
+      }, 600);
+    }
+  }
+  window.addEventListener('load', hideLoadingScreen);
+  setTimeout(hideLoadingScreen, 4000);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
