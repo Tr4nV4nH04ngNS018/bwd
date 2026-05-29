@@ -830,17 +830,20 @@
 
 
       // ─── World Heatmap State & Logic ───
+      const activeThreeCities = [
+        { label: 'New York', country: 'Hoa Kỳ', region: 'Americas', lat: 40.71, lon: -74.01, temp: 15.5 },
+        { label: 'Hà Nội', country: 'Việt Nam', region: 'Asia', lat: 21.03, lon: 105.85, temp: 28.5 },
+        { label: 'Sydney', country: 'Úc', region: 'Oceania', lat: -33.87, lon: 151.21, temp: 20.1 }
+      ];
       let activeCapitals = null;
       let activeTemps = null;
       let hoveredIndex = null;
 
       // Initialize chips text immediately with names and fallback values
       const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
-      const names = ['New York', 'Tokyo', 'Sydney'];
-      const defaultTemps = [15.5, 18.2, 20.1];
       for (let i = 0; i < chipEls.length; i++) {
         if (chipEls[i]) {
-          chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${names[i]}:</span>${defaultTemps[i]}°C`;
+          chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${activeThreeCities[i].label}:</span>${activeThreeCities[i].temp.toFixed(1)}°C`;
         }
       }
 
@@ -895,7 +898,7 @@
         };
       }
 
-      function drawWorldHeatmap(capitalTemps, capitals, hoveredIdx) {
+      function drawWorldHeatmap(hoveredIdx) {
         const wc = document.getElementById('worldCanvas');
         if (!wc) return;
         const ctx = wc.getContext('2d');
@@ -932,17 +935,9 @@
           return 'rgba(239, 68, 68, 0.85)';
         }
 
-        // Handle Fallbacks
-        let displayCapitals = capitals;
-        let displayTemps = capitalTemps;
-        if (!displayCapitals || !displayTemps) {
-          displayCapitals = STATIC_FALLBACK_CAPITALS;
-          displayTemps = STATIC_FALLBACK_CAPITALS.map(c => c.temp);
-        }
-
-        // Plot temperature dots from data
-        displayCapitals.forEach((cap, idx) => {
-          const temp = displayTemps[idx];
+        // Plot temperature dots from activeThreeCities
+        activeThreeCities.forEach((cap, idx) => {
+          const temp = cap.temp;
           if (temp === null || temp === undefined) return;
           
           const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
@@ -963,17 +958,12 @@
         });
 
         // Position the 3 highlight chips dynamically
-        const sampleCities = [
-          { lat: 40.71, lon: -74.01, id: 'tempChip1' },
-          { lat: 35.68, lon: 139.69, id: 'tempChip2' },
-          { lat: -33.87, lon: 151.21, id: 'tempChip3' }
-        ];
-
         const canvasLeft = wc.offsetLeft;
         const canvasTop = wc.offsetTop;
 
-        sampleCities.forEach((city) => {
-          const chip = document.getElementById(city.id);
+        activeThreeCities.forEach((city, idx) => {
+          const chipId = `tempChip${idx + 1}`;
+          const chip = document.getElementById(chipId);
           if (!chip) return;
           const { x, y } = projectCoords(city.lat, city.lon, W, H);
 
@@ -995,8 +985,8 @@
 
         // Draw hover halo if hovered
         if (hoveredIdx !== null && hoveredIdx !== undefined) {
-          const cap = displayCapitals[hoveredIdx];
-          const temp = displayTemps[hoveredIdx];
+          const cap = activeThreeCities[hoveredIdx];
+          const temp = cap.temp;
           if (cap && temp !== null && temp !== undefined) {
             const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
 
@@ -1017,7 +1007,7 @@
       }
 
       // Initial draw (empty map)
-      drawWorldHeatmap(null, null);
+      drawWorldHeatmap(null);
 
       async function refreshRealtimeData() {
         try {
@@ -1050,28 +1040,30 @@
           realtimeChart.data.datasets[0].data = regionTemps.map((value) => value !== null ? parseFloat(value.toFixed(1)) : 0);
           realtimeChart.update();
 
+          // Fetch live temperatures for the 3 target cities
+          for (let i = 0; i < activeThreeCities.length; i++) {
+            const city = activeThreeCities[i];
+            try {
+              const r = await fetch(OPEN_METEO_URL + '?latitude=' + city.lat + '&longitude=' + city.lon + '&current=temperature_2m');
+              if (r.ok) {
+                const j = await r.json();
+                if (j && j.current) {
+                  const liveTemp = j.current.temperature_2m;
+                  city.temp = liveTemp;
+                  if (chipEls[i]) {
+                    chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${city.label}:</span>${liveTemp.toFixed(1)}°C`;
+                  }
+                }
+              }
+            } catch (e) {
+              console.warn(`Lỗi tải nhiệt độ cho ${city.label}:`, e);
+            }
+          }
+
           // Save loaded data to active variables and redraw map
           activeCapitals = capitals;
           activeTemps = capitalTemps;
-          drawWorldHeatmap(capitalTemps, capitals);
-
-          // Update temp chips with sample cities and names
-          const sampleCities = [
-            { lat: 40.71, lon: -74.01 }, // New York
-            { lat: 35.68, lon: 139.69 }, // Tokyo
-            { lat: -33.87, lon: 151.21 } // Sydney
-          ];
-          for (let i = 0; i < sampleCities.length; i++) {
-            try {
-              const r = await fetch(OPEN_METEO_URL + '?latitude=' + sampleCities[i].lat + '&longitude=' + sampleCities[i].lon + '&current=temperature_2m');
-              if (r.ok) {
-                const j = await r.json();
-                if (j && j.current && chipEls[i]) {
-                  chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${names[i]}:</span>${j.current.temperature_2m.toFixed(1)}°C`;
-                }
-              }
-            } catch(e) { /* silent */ }
-          }
+          drawWorldHeatmap(hoveredIndex);
 
           const validCapitalTemps = capitalTemps.filter((value) => value !== null && value !== undefined);
           const globalAvg = validCapitalTemps.length ? (validCapitalTemps.reduce((a, b) => a + b, 0) / validCapitalTemps.length) : FALLBACK_DATA.globalTemp;
@@ -1109,17 +1101,14 @@
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
 
-          const displayCapitals = activeCapitals || STATIC_FALLBACK_CAPITALS;
-          const displayTemps = activeTemps || STATIC_FALLBACK_CAPITALS.map(c => c.temp);
-
           let closestIdx = null;
-          let minDist = 12; // 12px hover radius limit
+          let minDist = 16; // 16px hover radius limit for better UX
 
           const W = rect.width || wc.clientWidth || 300;
           const H = rect.height || wc.clientHeight || 180;
 
-          displayCapitals.forEach((cap, idx) => {
-            const temp = displayTemps[idx];
+          activeThreeCities.forEach((cap, idx) => {
+            const temp = cap.temp;
             if (temp === null || temp === undefined) return;
 
             const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
@@ -1132,7 +1121,7 @@
 
           if (closestIdx !== hoveredIndex) {
             hoveredIndex = closestIdx;
-            drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
+            drawWorldHeatmap(hoveredIndex);
 
             let tooltip = document.getElementById('mapTooltip');
             if (!tooltip) {
@@ -1143,8 +1132,8 @@
             }
 
             if (hoveredIndex !== null) {
-              const cap = displayCapitals[hoveredIndex];
-              const temp = displayTemps[hoveredIndex];
+              const cap = activeThreeCities[hoveredIndex];
+              const temp = cap.temp;
 
               const { x, y } = projectCoords(cap.lat, cap.lon, W, H);
               const canvasLeft = wc.offsetLeft;
@@ -1174,7 +1163,7 @@
         wc.addEventListener('mouseleave', () => {
           if (hoveredIndex !== null) {
             hoveredIndex = null;
-            drawWorldHeatmap(activeTemps, activeCapitals, null);
+            drawWorldHeatmap(null);
             const tooltip = document.getElementById('mapTooltip');
             if (tooltip) {
               tooltip.style.opacity = '0';
@@ -1191,7 +1180,7 @@
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-          drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
+          drawWorldHeatmap(hoveredIndex);
         }, 100);
       });
 
