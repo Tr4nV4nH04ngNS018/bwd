@@ -653,6 +653,8 @@ body {
 .card-1 { animation: fadeUp 0.7s 0.10s ease both; }
 .card-2 { animation: fadeUp 0.7s 0.22s ease both; }
 .card-3 { animation: fadeUp 0.7s 0.34s ease both; }
+.card-4 { animation: fadeUp 0.7s 0.46s ease both; }
+.card-5 { animation: fadeUp 0.7s 0.58s ease both; }
 
 .mini-bar-group {
   display: flex; align-items: flex-end; gap: 5px; height: 60px;
