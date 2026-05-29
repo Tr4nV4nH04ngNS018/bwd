@@ -809,18 +809,112 @@
         }
       });
 
+
+      // ─── World Heatmap on #worldCanvas ───
+      function drawWorldHeatmap(capitalTemps, capitals) {
+        const wc = document.getElementById('worldCanvas');
+        if (!wc) return;
+        const ctx = wc.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = wc.getBoundingClientRect();
+        wc.width = rect.width * dpr;
+        wc.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        const W = rect.width, H = rect.height;
+
+        // Dark background
+        ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
+        ctx.fillRect(0, 0, W, H);
+
+        // Simplified continent outlines (normalized 0-1 coords)
+        const continents = [
+          // North America
+          [[0.08,0.18],[0.12,0.12],[0.18,0.10],[0.22,0.14],[0.24,0.20],[0.22,0.28],[0.18,0.35],[0.14,0.40],[0.16,0.45],[0.20,0.48],[0.18,0.50],[0.12,0.42],[0.08,0.30]],
+          // South America
+          [[0.22,0.52],[0.26,0.50],[0.30,0.55],[0.32,0.60],[0.30,0.70],[0.28,0.78],[0.24,0.85],[0.20,0.82],[0.22,0.72],[0.20,0.62]],
+          // Europe
+          [[0.44,0.12],[0.48,0.10],[0.52,0.12],[0.54,0.18],[0.52,0.24],[0.50,0.28],[0.46,0.32],[0.42,0.30],[0.44,0.22]],
+          // Africa
+          [[0.44,0.34],[0.48,0.32],[0.54,0.34],[0.56,0.42],[0.54,0.55],[0.52,0.65],[0.48,0.72],[0.44,0.68],[0.42,0.55],[0.42,0.42]],
+          // Asia
+          [[0.54,0.10],[0.60,0.08],[0.68,0.10],[0.76,0.14],[0.80,0.20],[0.82,0.28],[0.78,0.34],[0.72,0.38],[0.68,0.42],[0.62,0.44],[0.58,0.40],[0.56,0.34],[0.54,0.24]],
+          // Australia
+          [[0.76,0.60],[0.82,0.58],[0.86,0.62],[0.88,0.68],[0.84,0.74],[0.78,0.72],[0.74,0.66]]
+        ];
+
+        // Draw continents
+        ctx.strokeStyle = 'rgba(74, 222, 128, 0.15)';
+        ctx.fillStyle = 'rgba(74, 222, 128, 0.06)';
+        ctx.lineWidth = 1;
+        continents.forEach(pts => {
+          ctx.beginPath();
+          pts.forEach((p, i) => {
+            const x = p[0] * W, y = p[1] * H;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          });
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        // Draw grid lines
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 0.5;
+        for (let i = 1; i < 6; i++) {
+          ctx.beginPath(); ctx.moveTo(0, H * i / 6); ctx.lineTo(W, H * i / 6); ctx.stroke();
+        }
+        for (let i = 1; i < 8; i++) {
+          ctx.beginPath(); ctx.moveTo(W * i / 8, 0); ctx.lineTo(W * i / 8, H); ctx.stroke();
+        }
+
+        // Temperature color
+        function tempColor(t) {
+          if (t <= 0) return 'rgba(96, 165, 250, 0.8)';
+          if (t <= 10) return 'rgba(74, 222, 128, 0.7)';
+          if (t <= 20) return 'rgba(250, 204, 21, 0.7)';
+          if (t <= 30) return 'rgba(251, 146, 60, 0.8)';
+          return 'rgba(239, 68, 68, 0.85)';
+        }
+
+        // Plot temperature dots from real data
+        if (capitals && capitalTemps) {
+          capitals.forEach((cap, idx) => {
+            const temp = capitalTemps[idx];
+            if (temp === null || temp === undefined) return;
+            // Mercator-ish projection
+            const x = ((cap.lon + 180) / 360) * W;
+            const latRad = cap.lat * Math.PI / 180;
+            const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+            const y = (H / 2) - (W * mercN) / (2 * Math.PI) * 0.55;
+            if (y < 0 || y > H || x < 0 || x > W) return;
+
+            const color = tempColor(temp);
+            // Glow
+            const grd = ctx.createRadialGradient(x, y, 0, x, y, 8);
+            grd.addColorStop(0, color);
+            grd.addColorStop(1, 'transparent');
+            ctx.fillStyle = grd;
+            ctx.fillRect(x - 8, y - 8, 16, 16);
+            // Dot
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+          });
+        }
+      }
+
+      // Initial draw (empty map)
+      drawWorldHeatmap(null, null);
+
       async function refreshRealtimeData() {
         try {
           const countriesRes = await fetch(CAPITALS_API_URL);
-          if (!countriesRes.ok) {
-            throw new Error('Failed to load capital data');
-          }
+          if (!countriesRes.ok) throw new Error('Failed to load capital data');
 
           const countries = await countriesRes.json();
           const capitals = getCapitalLocations(countries);
-          if (!capitals.length) {
-            throw new Error('No capital locations found');
-          }
+          if (!capitals.length) throw new Error('No capital locations found');
 
           const regionTempsMap = new Map(REGION_SERIES.map((region) => [region.api, []]));
           const capitalTemps = await fetchTemperaturesForLocations(capitals);
@@ -844,6 +938,26 @@
           realtimeChart.data.datasets[0].data = regionTemps.map((value) => value !== null ? parseFloat(value.toFixed(1)) : 0);
           realtimeChart.update();
 
+          // Draw world heatmap with real data
+          drawWorldHeatmap(capitalTemps, capitals);
+
+          // Update temp chips with sample cities
+          const sampleCities = [
+            { lat: 40.71, lon: -74.01 }, // New York
+            { lat: 35.68, lon: 139.69 }, // Tokyo
+            { lat: -33.87, lon: 151.21 } // Sydney
+          ];
+          const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
+          for (let i = 0; i < sampleCities.length; i++) {
+            try {
+              const r = await fetch(OPEN_METEO_URL + '?latitude=' + sampleCities[i].lat + '&longitude=' + sampleCities[i].lon + '&current=temperature_2m');
+              if (r.ok) {
+                const j = await r.json();
+                if (j && j.current && chipEls[i]) chipEls[i].textContent = j.current.temperature_2m.toFixed(1) + '°C';
+              }
+            } catch(e) { /* silent */ }
+          }
+
           const validCapitalTemps = capitalTemps.filter((value) => value !== null && value !== undefined);
           const globalAvg = validCapitalTemps.length ? (validCapitalTemps.reduce((a, b) => a + b, 0) / validCapitalTemps.length) : FALLBACK_DATA.globalTemp;
           document.getElementById('valGlobalTemp').innerText = parseFloat(globalAvg.toFixed(1)) + '°C';
@@ -861,6 +975,7 @@
           }
         } catch (error) {
           console.error('API Error - Falling back to local data:', error);
+          drawWorldHeatmap(null, null);
           const fallbackTemp = FALLBACK_DATA.globalTemp.toFixed(1) + '°C';
           document.getElementById('valGlobalTemp').innerText = fallbackTemp;
           document.getElementById('valTempChange').innerText = '(Dữ liệu dự phòng)';
