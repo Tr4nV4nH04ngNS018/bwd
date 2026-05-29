@@ -1215,17 +1215,18 @@
   // Safety fallback timeout (6 seconds)
   setTimeout(window.triggerPageLoaded, 6000);
 
-  // Trigger load immediately if THREE or 3D container is not present
+  // Trigger load immediately if THREE is not defined or there are no 3D elements/scripts on the page
   window.addEventListener('load', () => {
     if (typeof THREE === 'undefined') {
       window.triggerPageLoaded();
     } else {
-      setTimeout(() => {
-        const hasBg3D = document.getElementById('bg3d') || document.getElementById('orbContainer');
-        if (!hasBg3D) {
-          window.triggerPageLoaded();
-        }
-      }, 100);
+      const has3D = document.querySelector('script[src*="bg3d.js"]') || 
+                    document.querySelector('script[src*="universeBg.js"]') || 
+                    document.getElementById('orbContainer') ||
+                    document.getElementById('bg3d');
+      if (!has3D) {
+        window.triggerPageLoaded();
+      }
     }
   });
 
