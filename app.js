@@ -834,15 +834,6 @@
       let activeTemps = null;
       let hoveredIndex = null;
 
-      // Load real SVG world map background
-      const mapImage = new Image();
-      let mapImageLoaded = false;
-      mapImage.onload = () => {
-        mapImageLoaded = true;
-        drawWorldHeatmap(activeTemps, activeCapitals, hoveredIndex);
-      };
-      mapImage.src = 'images/world-map.svg';
-
       // Initialize chips text immediately with names and fallback values
       const chipEls = [document.getElementById('tempChip1'), document.getElementById('tempChip2'), document.getElementById('tempChip3')];
       const names = ['New York', 'Tokyo', 'Sydney'];
@@ -884,14 +875,8 @@
         wc.height = H * dpr;
         ctx.scale(dpr, dpr);
 
-        // Clear and draw background
-        ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
-        ctx.fillRect(0, 0, W, H);
-
-        // Draw the real SVG world map background
-        if (mapImageLoaded) {
-          ctx.drawImage(mapImage, 0, 0, W, H);
-        }
+        // Clear canvas to expose native CSS background SVG map
+        ctx.clearRect(0, 0, W, H);
 
         // Draw grid lines
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';

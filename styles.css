@@ -639,7 +639,17 @@ body {
   color: #86efac; letter-spacing: 0.05em;
 }
 
-#worldCanvas { width: 100%; height: 180px; border-radius: 10px; cursor: default; }
+#worldCanvas {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  cursor: default;
+  background-color: rgba(10, 20, 14, 0.85);
+  background-image: url('images/world-map.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
 
 .temp-chip {
   position: absolute;
