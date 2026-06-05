@@ -7,6 +7,7 @@
   <title>EcoImpact — Dashboard</title>
 
   <script src="app.js"></script>
+  <script src="js/dashboard.js" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
@@ -35,12 +36,7 @@
   <div id="loading-screen" class="loading-screen">
     <div class="loading-container">
       <div class="loader-logo">
-        <svg class="loader-logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
-          <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
-          <path d="M32 22C31 29 29 35 26 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.78"/>
-          <path d="M32 22C36 28 38 35 40 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.42"/>
-        </svg>
+        <img src="images/logo.svg" alt="EcoImpact Logo" class="loader-logo-svg" />
         <span class="loader-logo-text">EcoImpact</span>
       </div>
       <div class="loader-spinner-wrapper">
@@ -58,11 +54,7 @@
 ════════════════════════════════════════════ -->
 <nav class="navbar glass-nav flex items-center justify-between">
   <div class="flex items-center gap-2">
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1.5"/>
-      <path d="M13 6 C8 9, 6 14, 9 18 C11 21, 15 21, 17 18 C20 14, 18 9, 13 6Z" fill="#22c55e" opacity="0.85"/>
-      <path d="M13 8 C13 12, 10 16, 13 20" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
-    </svg>
+    <img src="images/logo.svg" alt="EcoImpact Logo" class="w-[26px] h-[26px]" />
     <span class="text-white font-bold text-[0.98rem] tracking-tight">
       EcoImpact
     </span>
@@ -582,12 +574,7 @@
     <div class="site-footer__panel">
       <div class="site-footer__grid">
         <div class="site-footer__brand">
-          <svg class="site-footer__logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
-            <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
-            <path d="M32 22C31 29 29 35 26 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.78"/>
-            <path d="M32 22C36 28 38 35 40 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.42"/>
-          </svg>
+          <img src="images/logo.svg" alt="EcoImpact Logo" class="site-footer__logo" aria-hidden="true" />
           <div>
             <div class="site-footer__title">EcoImpact</div>
             <p class="site-footer__text">Nền tảng theo dõi, học hỏi và giảm thiểu tác động môi trường từ những thói quen nhỏ mỗi ngày.</p>
@@ -615,10 +602,10 @@
           </div>
           <div class="site-footer__label" style="margin-top: 20px;">Mạng xã hội</div>
           <div class="site-footer__social">
-            <span class="site-footer__badge">Facebook</span>
-            <span class="site-footer__badge">Instagram</span>
-            <span class="site-footer__badge">YouTube</span>
-            <span class="site-footer__badge">TikTok</span>
+            <a class="site-footer__badge" href="https://www.facebook.com/g.bao007/" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a class="site-footer__badge" href="https://www.instagram.com/lee_baor07/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a class="site-footer__badge" href="https://www.youtube.com/@KeHuyDietRankDong" target="_blank" rel="noopener noreferrer">YouTube</a>
+            <a class="site-footer__badge" href="https://www.tiktok.com/@_im.gbao" target="_blank" rel="noopener noreferrer">TikTok</a>
           </div>
         </div>
       </div>

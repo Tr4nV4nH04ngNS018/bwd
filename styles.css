@@ -276,7 +276,7 @@ body {
   transform: translateX(-50%);
   width: 100vw;
   height: calc(100% + 200px);
-  background: url('mucdich.png') center top / cover no-repeat;
+  background: url('images/mucdich.png') center top / cover no-repeat;
   z-index: -1;
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 300px), transparent 100%);
@@ -1339,7 +1339,19 @@ input[type=range]:active::-webkit-slider-thumb {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.site-footer__badge:hover {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border-color: #4ade80;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
+}
+
 
 .site-footer__bottom {
   display: flex;

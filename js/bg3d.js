@@ -140,7 +140,7 @@
   let loadedEarth = null;
   let mixer = null; // Thêm mixer để chạy animation
 
-  loader.load('./caytrangchu.glb', function (gltf) {
+  loader.load('./models/caytrangchu.glb', function (gltf) {
     loadedEarth = gltf.scene;
     
     // Center and scale the model
