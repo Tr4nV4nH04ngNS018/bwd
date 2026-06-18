@@ -18,7 +18,7 @@
 
 ---
 
-## 💻 PHẦN 2: KỊCH BẢN THUYẾT TRÌNH DEMO TRỰC QUAN (Thời gian gợi ý: 5 phút)
+## 💻 PHẦN 2: KỊCH BẢN THUYẾT TRÌNH DEMO TRỰC QUAN & CÔNG NGHỆ ÁP DỤNG (Thời gian gợi ý: 5 phút)
 
 *Khi thuyết trình phần này, bạn hãy thao tác trực tiếp trên trình duyệt theo từng bước dưới đây để dẫn dắt giảng viên:*
 
@@ -27,18 +27,46 @@
 * **Mô tả cho Thầy Cô:** 
   > *"Tại Trang chủ, em xây dựng một mô hình 3D **Cây Sự Sống (Life Tree)** ở trung tâm nền. Khi người dùng ở đầu trang, bầu không khí bao quanh âm u đầy khói bụi, mưa axit rơi dày đặc (sử dụng hệ thống hạt 3D). Nhưng khi người dùng cuộn trang xuống, camera sẽ Lerp mượt mà (smooth camera Lerp), bầu trời dần quang đãng, mưa axit tắt đi, thảm cỏ xanh mướt uốn lượn theo chiều gió dưới chân cây mọc lan tỏa ra. Đây là ẩn dụ nghệ thuật về việc hành động của con người giúp phục hồi tự nhiên."*
 * **Điểm nhấn thiết kế:** Bento Grid bố trí bất đối xứng kết hợp **Glassmorphism (Kính mờ)** và các góc bo cơ khí **Futuristic HUD** tạo giao diện như một trạm điều khiển khoa học công nghệ cao.
+* **🛠️ Công nghệ sử dụng trong Hồi 1:**
+  * **Three.js (WebGL Engine) & GLTFLoader:** Tải và quản lý mô hình `caytrangchu.glb` (Cây Sự Sống) và mô hình Trái Đất.
+  * **Three.js Post-processing (UnrealBloomPass):** Xử lý hiệu ứng Bloom phát quang cho cây xanh và các tia sáng God Rays.
+  * **Toán học uốn ngọn cỏ Parabol:** Lập trình chuyển động cỏ đu đưa tự nhiên theo chiều gió và mọc lan tỏa theo bán kính.
+  * **Camera Lerp (Tuyến tính hóa):** Tính toán khoảng cách cuộn trang (scroll progress) đồng bộ với ma trận camera của Three.js để di chuyển ống kính mượt mà theo kịch bản cuộn chuột.
+  * **HTML5 Canvas 2D API:** Dùng để tự vẽ đồ thị thu nhỏ (Sparklines) động màu xanh lá tại các Bento card thống kê ngoài trang chủ.
 
 ### Hồi 2: Công cụ tính (calculator.html) – Kịch bản "Thảm họa Trái Đất"
 * **Thao tác:** Thay đổi các thanh trượt (Đi lại, Nhựa, Điện năng) và xem Trái Đất 3D phản ứng.
 * **Mô tả cho Thầy Cô:**
   > *"Đây là trang Công cụ đo Carbon. Phía bên phải là quả địa cầu 3D tương tác. Nếu người dùng chọn lối sống lãng phí (kéo thanh trượt lên cao), Trái Đất sẽ lập tức chuyển sang trạng thái ô nhiễm: dung nham phun trào từ lòng đất, các vòi rồng lốc xoáy quét qua bề mặt, và sấm sét đánh ngẫu nhiên tạo ánh sáng chớp giật gián đoạn.
   > Ngược lại, nếu người dùng kéo giảm lượng tiêu thụ, Trái Đất sẽ khôi phục lại màu xanh lục bảo trong lành. Kết quả carbon được quy đổi ra số lượng cây xanh cần trồng tương ứng để bù đắp, mang lại cái nhìn trực quan nhất."*
+* **🛠️ Công nghệ sử dụng trong Hồi 2:**
+  * **Three.js & GLTFLoader:** Render quả địa cầu xoay động (`earth.glb`).
+  * **Particle Systems (Hệ thống hạt):** Xây dựng vòi rồng lốc xoáy (bằng logic toán học hàm lượng giác xoắn ốc phễu) và hệ dung nham phun trào (các hạt di chuyển chịu tác động của lực hút trọng lực giả lập).
+  * **Custom Lightning Generator (Tạo tia sét):** Lập trình đường gấp khúc ngẫu nhiên kết hợp thay đổi cường độ `PointLight` để tạo hiệu ứng sét đánh chớp sáng sinh động.
+  * **HTML5 Range Inputs & JS Event Listeners:** Lắng nghe sự thay đổi thanh trượt trong DOM, chuyển đổi dữ liệu và đồng bộ với tốc độ hạt, màu sắc của bầu khí quyển Trái Đất.
 
 ### Hồi 3: Bảng điều khiển (dashboard.html) – Kịch bản "Live Data & Heatmap"
 * **Thao tác:** Chỉ vào các biểu đồ nhiệt độ các châu lục và bản đồ nhiệt phẳng ở trung tâm.
 * **Mô tả cho Thầy Cô:**
   > *"Trang Dashboard hoạt động như một trung tâm kiểm soát dữ liệu khí hậu toàn cầu. Em đã tích hợp trực tiếp các API của các tổ chức uy tín (như Global Warming, Open-Meteo) để lấy nồng độ CO₂ (ppm) và chất lượng không khí AQI thời gian thực.
   > Đặc biệt, em tự viết thuật toán vẽ bản đồ nhiệt (Heatmap) trên Canvas 2D. Thuật toán này tự động đọc dữ liệu tọa độ nhiệt độ từ API, tính toán nội suy Mercator và phủ các điểm nhiệt tỏa màu (Cam-Nóng, Xanh-Lạnh) trực tiếp lên bản đồ phẳng thế giới, giúp theo dõi sự nóng lên toàn cầu một cách trực quan mà không phụ thuộc vào thư viện bản đồ nặng nề."*
+* **🛠️ Công nghệ sử dụng trong Hồi 3:**
+  * **Fetch API (Async/Await):** Gọi API bất đồng bộ từ client để cập nhật dữ liệu liên tục không gây đứng trang.
+  * **Chart.js:** Vẽ các biểu đồ cột và biểu đồ đường chất lượng cao, có responsive.
+  * **Mercator Projection (Phép chiếu Mercator) & Canvas 2D:** Chuyển đổi cặp tọa độ Địa lý (Kinh độ/Vĩ độ) thành pixel vẽ trên ảnh nền SVG bản đồ phẳng để tạo Heatmap.
+  * **PowerShell CORS Proxy Cache:** Sử dụng proxy local (`serve.ps1`) để tải dữ liệu khi API gốc chặn chính sách chia sẻ tài nguyên nguồn gốc chéo (CORS).
+
+### Hồi 4: Xác thực & Quản lý Giao diện (auth.js, app.js, community.html)
+* **Thao tác:** Di chuột lên góc phải hiển thị menu dropdown tài khoản "Admin Test". Click đăng xuất.
+* **Mô tả cho Thầy Cô:**
+  > *"Để tối ưu hóa trải nghiệm người dùng, em đã xây dựng hệ thống **Mock Authentication** (Đăng ký, Đăng nhập, Quên MK gửi mã OTP giả lập).
+  > Đặc biệt, hệ thống giao diện HUD Glassmorphism được thiết kế tỉ mỉ. Như menu cá nhân dropdown ở góc phải màn hình, em lập trình động bằng JavaScript, tính toán vị trí nút qua `getBoundingClientRect()` để căn chỉnh tuyệt đối ở mọi thiết bị, đồng thời tạo bộ lọc làm mờ hậu cảnh, viền phát quang xanh lá và hiệu ứng chuyển dịch micro-interactions mượt mà khi di chuột qua."*
+* **🛠️ Công nghệ sử dụng trong Hồi 4:**
+  * **Web Storage API (localStorage):** Lưu trữ database tài khoản dạng mảng JSON (`mock_users_v1`) và phiên đăng nhập (`current_user`).
+  * **Dynamic DOM & JS Event Listeners:** Tự động tạo và chèn HTML cho dropdown menu, xử lý đóng mở thông minh bằng cách lắng nghe sự kiện click ngoài (click-outside) kết hợp `setTimeout` để tránh lỗi đè sự kiện nổi bọt.
+  * **CSS Keyframes Animation:** Thiết kế hiệu ứng chuyển động trượt mờ dần (Fade-in & Slide-down) khi menu mở ra.
+  * **Regex (Biểu thức chính quy) & Validation:** Ràng buộc định dạng Email và độ dài mật khẩu khi Đăng ký/Đăng nhập.
+
 
 ---
 
