@@ -1702,3 +1702,83 @@ input[type=range]:active::-webkit-slider-thumb {
   margin-top: 8px;
 }
 
+/* ── Custom Green Club Cards for community.html ── */
+.club-card {
+  background: linear-gradient(135deg, rgba(16, 28, 22, 0.82) 0%, rgba(9, 18, 14, 0.90) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(74, 222, 128, 0.18);
+  border-radius: 16px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.club-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.12), transparent 75%);
+  opacity: 0.6;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.club-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(74, 222, 128, 0.45);
+  box-shadow: 0 15px 35px rgba(74, 222, 128, 0.15), 
+              0 0 25px rgba(74, 222, 128, 0.08);
+  background: linear-gradient(135deg, rgba(20, 35, 27, 0.88) 0%, rgba(10, 22, 17, 0.94) 100%);
+}
+
+.club-card:hover::before {
+  opacity: 1;
+}
+
+.club-card-tag {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: #4ade80;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.68rem;
+  transition: all 0.3s;
+}
+
+.club-card:hover .club-card-tag {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.4);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.15);
+}
+
+.club-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: #4ade80;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.club-card-link:hover {
+  background: #4ade80;
+  color: #050706;
+  border-color: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+  transform: translateY(-1px);
+}
+
+
