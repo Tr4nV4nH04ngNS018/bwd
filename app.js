@@ -121,31 +121,38 @@
         return;
       }
 
+      const rect = btn.getBoundingClientRect();
+
       // Tạo phần tử DOM cho dropdown menu
       menu = document.createElement('div');
       menu.id = 'auth-dropdown-menu';
       menu.style.cssText = `
         position: absolute;
-        top: ${btn.offsetTop + btn.offsetHeight + 8}px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        min-width: 200px;
+        top: ${rect.bottom + window.scrollY + 8}px;
+        left: ${Math.max(10, rect.right + window.scrollX - 220)}px;
+        width: 220px;
+        background: rgba(10, 20, 14, 0.85);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(74, 222, 128, 0.15);
         z-index: 1000;
         overflow: hidden;
+        animation: navDropdownFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Be Vietnam Pro', sans-serif;
       `;
 
       // Nội dung HTML của dropdown menu
       menu.innerHTML = `
-        <div style="padding: 12px 16px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); color: #333; font-size: 14px;">
-          <div style="font-weight: 600; margin-bottom: 4px;">${user.fullname}</div>
-          <div style="color: #666; font-size: 12px;">${user.email}</div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #fff;">
+          <div style="font-weight: 700; font-size: 14px; margin-bottom: 3px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.fullname}</div>
+          <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${user.email}</div>
         </div>
-        <a href="dashboard.html" style="display: block; padding: 10px 16px; color: #0d1b0f; text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); transition: background 0.2s;">
+        <a href="dashboard.html" class="dropdown-item" style="display: block; padding: 12px 18px; color: rgba(255, 255, 255, 0.85); text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;">
           Bảng điều khiển
         </a>
-        <a href="#" id="logout-btn" style="display: block; padding: 10px 16px; color: #d32f2f; text-decoration: none; font-size: 14px; transition: background 0.2s;">
+        <a href="#" id="logout-btn" class="dropdown-item" style="display: block; padding: 12px 18px; color: #ef4444; text-decoration: none; font-size: 14px; transition: all 0.2s ease;">
           Đăng xuất
         </a>
       `;
@@ -160,12 +167,20 @@
       });
 
       // Đóng menu khi nhấn ra ngoài (click outside pattern)
-      // { once: true }: Chỉ lắng nghe 1 lần rồi tự hủy
-      document.addEventListener('click', function (event) {
-        if (event.target !== btn && !menu.contains(event.target)) {
-          menu.remove(); // Xóa menu nếu nhấn ngoài
-        }
-      }, { once: true });
+      setTimeout(() => {
+        const handleOutsideClick = function (event) {
+          // Nếu menu đã bị xóa khỏi DOM bởi hành động khác (ví dụ: click lại nút để đóng)
+          if (!document.getElementById('auth-dropdown-menu')) {
+            document.removeEventListener('click', handleOutsideClick);
+            return;
+          }
+          if (!btn.contains(event.target) && !menu.contains(event.target)) {
+            menu.remove();
+            document.removeEventListener('click', handleOutsideClick);
+          }
+        };
+        document.addEventListener('click', handleOutsideClick);
+      }, 0);
     }
   }
 

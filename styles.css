@@ -1799,4 +1799,30 @@ input[type=range]:active::-webkit-slider-thumb {
   transform: translateY(-1px);
 }
 
+/* ── Auth Dropdown Menu ────────────────── */
+.dropdown-item {
+  transition: all 0.2s ease;
+}
+.dropdown-item:hover {
+  background: rgba(74, 222, 128, 0.15) !important;
+  color: #4ade80 !important;
+  padding-left: 22px !important; /* Micro-interaction slide right effect */
+}
+#logout-btn.dropdown-item:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+}
+
+@keyframes navDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
