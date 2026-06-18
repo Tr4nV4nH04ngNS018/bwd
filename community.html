@@ -112,7 +112,7 @@
   <!-- ═══════════════════════════════════════════
        MAIN CONTENT
   ═══════════════════════════════════════════ -->
-  <main class="flex-1 mt-[90px] w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 relative z-10 flex flex-col gap-10">
+  <main class="flex-1 mt-[90px] w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 relative z-10 flex flex-col gap-8">
     
     <!-- Hero Header -->
     <div class="glass-card p-8 md:p-10 cyber-border-box relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
@@ -123,394 +123,171 @@
       
       <div class="max-w-2xl">
         <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
-          Cộng đồng <span class="text-green-400 font-extrabold">EcoImpact</span>
+          Mạng lưới <span class="text-green-400 font-extrabold">Cộng đồng Xanh</span>
         </h1>
         <p class="text-sm md:text-base text-white/70 leading-relaxed">
-          Nơi kết nối những trái tim xanh, tham gia các chiến dịch tình nguyện thực tế, chia sẻ kiến thức sống bền vững và cùng nhau xây dựng một tương lai xanh hơn.
+          Kết nối trực tiếp với các câu lạc bộ, hội nhóm tình nguyện và tổ chức hoạt động vì môi trường uy tín hàng đầu tại Việt Nam. Hãy tham gia hành động thực tế ngay hôm nay!
         </p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        <a href="#volunteer-groups" class="btn-report text-center text-sm py-3 px-6 rounded-lg font-bold" style="text-decoration:none;">Tìm Hội Nhóm</a>
-        <a href="#discussion-forum" class="btn-login text-center text-sm py-3 px-6 rounded-lg font-bold" style="text-decoration:none;">Tham Gia Thảo Luận</a>
-      </div>
     </div>
 
-    <!-- Section: Volunteer Groups -->
-    <div id="volunteer-groups" class="flex flex-col gap-4 scroll-mt-24">
-      <div>
-        <h2 class="text-xl font-bold text-white tracking-wide">Hội Nhóm Tình Nguyện Môi Trường</h2>
-        <p class="text-xs text-white/50">Tham gia cùng các tổ chức xanh uy tín hàng đầu tại Việt Nam</p>
-      </div>
+    <!-- Grid: Volunteer Groups & Green Clubs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Group 1 -->
-        <div class="glass-inner p-5 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 transition duration-300 rounded-xl group relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-green-500/10 border border-green-500/30 text-green-400">Bảo tồn</span>
-            <span class="text-xs text-white/40 flex items-center gap-1">📍 Đà Nẵng</span>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1">GreenViet</h3>
-            <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
-              Tổ chức bảo tồn đa dạng sinh học hàng đầu, nổi tiếng với các chiến dịch bảo vệ Voọc chà vá chân nâu tại bán đảo Sơn Trà.
-            </p>
-          </div>
-          <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
-            <span>👥 12K+ thành viên</span>
-            <a href="http://greenviet.org/" target="_blank" class="text-green-400 font-bold hover:underline">Ghé thăm →</a>
-          </div>
+      <!-- Card 1: Sài Gòn Xanh -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-green-500/10 border border-green-500/30 text-green-400">Dọn kênh rạch</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 TP. HCM</span>
         </div>
-
-        <!-- Group 2 -->
-        <div class="glass-inner p-5 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 transition duration-300 rounded-xl group relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">Dọn rác</span>
-            <span class="text-xs text-white/40 flex items-center gap-1">📍 Toàn quốc</span>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1">Let's Do It! Vietnam</h3>
-            <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
-              Thành viên của phong trào làm sạch toàn cầu, chuyên tổ chức Ngày hội dọn rác quốc tế thu hút hàng ngàn tình nguyện viên.
-            </p>
-          </div>
-          <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
-            <span>👥 45K+ thành viên</span>
-            <a href="https://www.facebook.com/LetsDoItVietnam/" target="_blank" class="text-green-400 font-bold hover:underline">Ghé thăm →</a>
-          </div>
-        </div>
-
-        <!-- Group 3 -->
-        <div class="glass-inner p-5 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 transition duration-300 rounded-xl group relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-purple-500/10 border border-purple-500/30 text-purple-400">Sống xanh</span>
-            <span class="text-xs text-white/40 flex items-center gap-1">📍 TP. HCM</span>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1">Saigon Compass</h3>
-            <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
-              Cộng đồng kết nối hành động vì môi trường, chuyên giáo dục lối sống xanh, tổ chức trồng rừng và tour sinh thái giáo dục.
-            </p>
-          </div>
-          <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
-            <span>👥 8K+ thành viên</span>
-            <a href="https://www.facebook.com/SaigonCompass/" target="_blank" class="text-green-400 font-bold hover:underline">Ghé thăm →</a>
-          </div>
-        </div>
-
-        <!-- Group 4 -->
-        <div class="glass-inner p-5 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 transition duration-300 rounded-xl group relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-orange-500/10 border border-orange-500/30 text-orange-400">Tình nguyện</span>
-            <span class="text-xs text-white/40 flex items-center gap-1">📍 Toàn quốc</span>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1">Trash Hero Vietnam</h3>
-            <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
-              Hoạt động dọn dẹp cuối tuần thường xuyên tại nhiều địa phương, bán bình nước inox chống rác thải nhựa một lần.
-            </p>
-          </div>
-          <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
-            <span>👥 15K+ thành viên</span>
-            <a href="https://trashhero.org/our-chapters/vietnam/" target="_blank" class="text-green-400 font-bold hover:underline">Ghé thăm →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section: Forum & Challenges -->
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
-      
-      <!-- Left Column: Discussion Forum -->
-      <div id="discussion-forum" class="flex flex-col gap-4 scroll-mt-24">
         <div>
-          <h2 class="text-xl font-bold text-white tracking-wide">Diễn Đàn Thảo Luận Xanh</h2>
-          <p class="text-xs text-white/50">Chia sẻ ý tưởng, câu chuyện và những mẹo bảo vệ môi trường của bạn</p>
+          <div class="text-2xl mb-2">🛶</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Sài Gòn Xanh</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Nhóm bạn trẻ tình nguyện nổi tiếng chuyên dọn dẹp các con kênh, rạch bị ô nhiễm rác thải cực nặng, hồi sinh dòng chảy sạch tại TP. HCM.
+          </p>
         </div>
-
-        <!-- Form đăng bài mới -->
-        <div class="glass-inner p-5 flex flex-col gap-4 border border-white/5 rounded-xl">
-          <div class="flex items-center gap-3">
-            <div id="userAvatar" class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-xs">TV</div>
-            <div>
-              <p id="userName" class="text-xs font-semibold text-white leading-tight">Thành viên ẩn danh</p>
-              <p class="text-[0.6rem] text-white/40">Tạo bài đăng mới</p>
-            </div>
-          </div>
-          
-          <form id="newPostForm" class="flex flex-col gap-3">
-            <div class="grid grid-cols-1 sm:grid-cols-[1fr_180px] gap-2">
-              <input type="text" id="postTitle" placeholder="Tiêu đề bài viết..." required
-                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-green-400" />
-              <select id="postCategory" required
-                class="bg-black/40 border border-white/10 rounded-lg px-2 py-2 text-xs text-white focus:outline-none focus:border-green-400">
-                <option value="Sống xanh">🌱 Sống xanh</option>
-                <option value="Trồng cây">🌳 Trồng cây</option>
-                <option value="Giảm rác thải">♻️ Giảm rác thải</option>
-                <option value="Tiết kiệm điện">⚡ Tiết kiệm điện</option>
-              </select>
-            </div>
-            <textarea id="postContent" placeholder="Nhập nội dung bài viết..." rows="3" required
-              class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-green-400 resize-none"></textarea>
-            
-            <div class="flex justify-between items-center mt-1">
-              <span class="text-[0.65rem] text-white/45 flex items-center gap-1">
-                💬 Hãy chia sẻ văn minh, lịch sự nhé!
-              </span>
-              <button type="submit" class="btn-login text-xs py-2 px-5 rounded-lg font-bold">Chia sẻ bài đăng</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Danh sách bài đăng -->
-        <div id="postsFeed" class="flex flex-col gap-3">
-          <!-- Populated by JS -->
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 100K+ Follower</span>
+          <a href="https://www.tiktok.com/@saigon_xanh" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Tham gia 🔗</a>
         </div>
       </div>
 
-      <!-- Right Column: Green Challenges -->
-      <div id="challenges" class="flex flex-col gap-4">
+      <!-- Card 2: Hà Nội Xanh -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-green-500/10 border border-green-500/30 text-green-400">Làm sạch sông ngòi</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 Hà Nội</span>
+        </div>
         <div>
-          <h2 class="text-xl font-bold text-white tracking-wide">Thử Thách Cộng Đồng</h2>
-          <p class="text-xs text-white/50">Hành động thực tế, nhận huy hiệu danh giá</p>
+          <div class="text-2xl mb-2">🌊</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Hà Nội Xanh</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Biệt đội tình nguyện viên trẻ lăn xả dọn dẹp rác thải, khơi thông các dòng sông, mương ao tù nước đọng ô nhiễm quanh khu vực Hà Nội.
+          </p>
         </div>
-
-        <div class="flex flex-col gap-3">
-          <!-- Challenge 1 -->
-          <div class="glass-inner p-4 flex flex-col gap-3 border border-white/5 rounded-xl">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="px-1.5 py-0.5 rounded text-[0.55rem] font-bold bg-yellow-500/10 border border-yellow-500/35 text-yellow-400">Hàng tuần</span>
-                <h3 class="text-xs font-bold text-white mt-1.5">Nói KHÔNG với túi nilon</h3>
-              </div>
-              <span class="text-xs">🚫🛍️</span>
-            </div>
-            <p class="text-[0.68rem] text-white/60 leading-relaxed">
-              Cam kết không dùng túi nilon dùng 1 lần khi đi mua sắm trong 7 ngày liên tục.
-            </p>
-            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-              <div class="bg-yellow-400 h-full w-[60%]"></div>
-            </div>
-            <div class="flex justify-between items-center text-[0.65rem] text-white/45">
-              <span>Đã hoàn thành 60%</span>
-              <button onclick="joinChallenge('Nói KHÔNG với túi nilon')" class="text-green-400 font-bold hover:underline">Tham gia →</button>
-            </div>
-          </div>
-
-          <!-- Challenge 2 -->
-          <div class="glass-inner p-4 flex flex-col gap-3 border border-white/5 rounded-xl">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="px-1.5 py-0.5 rounded text-[0.55rem] font-bold bg-green-500/10 border border-green-500/35 text-green-400">Đặc biệt</span>
-                <h3 class="text-xs font-bold text-white mt-1.5">Gieo mầm xanh</h3>
-              </div>
-              <span class="text-xs">🌱🌳</span>
-            </div>
-            <p class="text-[0.68rem] text-white/60 leading-relaxed">
-              Trồng ít nhất một chậu cây hoặc một cây xanh thực tế tại nơi ở/nơi làm việc của bạn.
-            </p>
-            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-              <div class="bg-green-400 h-full w-[25%]"></div>
-            </div>
-            <div class="flex justify-between items-center text-[0.65rem] text-white/45">
-              <span>Đã hoàn thành 25%</span>
-              <button onclick="joinChallenge('Gieo mầm xanh')" class="text-green-400 font-bold hover:underline">Tham gia →</button>
-            </div>
-          </div>
-
-          <!-- Challenge 3 -->
-          <div class="glass-inner p-4 flex flex-col gap-3 border border-white/5 rounded-xl">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="px-1.5 py-0.5 rounded text-[0.55rem] font-bold bg-blue-500/10 border border-blue-500/35 text-blue-400">Thường niên</span>
-                <h3 class="text-xs font-bold text-white mt-1.5">Đạp xe vì môi trường</h3>
-              </div>
-              <span class="text-xs">🚴‍♂️💚</span>
-            </div>
-            <p class="text-[0.68rem] text-white/60 leading-relaxed">
-              Thay thế hoàn toàn phương tiện cơ giới bằng xe đạp cho các hành trình dưới 5km trong tuần.
-            </p>
-            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-              <div class="bg-blue-400 h-full w-[0%]"></div>
-            </div>
-            <div class="flex justify-between items-center text-[0.65rem] text-white/45">
-              <span>Chưa bắt đầu</span>
-              <button onclick="joinChallenge('Đạp xe vì môi trường')" class="text-green-400 font-bold hover:underline">Tham gia →</button>
-            </div>
-          </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 40K+ Follower</span>
+          <a href="https://www.tiktok.com/@hanoixanh" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Tham gia 🔗</a>
         </div>
       </div>
+
+      <!-- Card 3: GreenViet -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">Bảo tồn đa dạng</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 Đà Nẵng</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🐒</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">GreenViet</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Tổ chức nghiên cứu bảo tồn đa dạng sinh học nổi bật với các chiến dịch bảo vệ loài Voọc chà vá chân nâu tại bán đảo Sơn Trà.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 15K+ thành viên</span>
+          <a href="http://greenviet.org/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Website 🔗</a>
+        </div>
+      </div>
+
+      <!-- Card 4: Let's Do It! Vietnam -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">Chiến dịch dọn rác</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 Toàn quốc</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🧹</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Let's Do It! Vietnam</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Thành viên chính thức của phong trào World Cleanup Day toàn cầu, chuyên tổ chức Ngày hội dọn rác toàn quốc quy mô lớn.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 45K+ thành viên</span>
+          <a href="https://www.facebook.com/LetsDoItVietnam/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Facebook 🔗</a>
+        </div>
+      </div>
+
+      <!-- Card 5: Saigon Compass -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-purple-500/10 border border-purple-500/30 text-purple-400">Lối sống xanh</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 TP. HCM</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🌲</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Saigon Compass</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Dự án kết nối truyền thông vì môi trường, điều phối các hoạt động trồng rừng, bảo vệ biển và hướng dẫn thực hành Zero Waste.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 10K+ thành viên</span>
+          <a href="https://www.facebook.com/SaigonCompass/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Facebook 🔗</a>
+        </div>
+      </div>
+
+      <!-- Card 6: Trash Hero Vietnam -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-orange-500/10 border border-orange-500/30 text-orange-400">Giảm thiểu nhựa</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 Toàn quốc</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🗑️</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Trash Hero Vietnam</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Hội nhóm dọn dẹp rác thải bãi biển, đường phố vào cuối tuần, lan tỏa trào lưu sử dụng chai inox để hạn chế rác thải nhựa một lần.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 15K+ thành viên</span>
+          <a href="https://trashhero.org/our-chapters/vietnam/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Website 🔗</a>
+        </div>
+      </div>
+
+      <!-- Card 7: Keep Vietnam Clean -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-teal-500/10 border border-teal-500/30 text-teal-400">Trồng cây xanh</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 Hà Nội</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🌳</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">Keep Vietnam Clean</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Tổ chức phi chính phủ phát triển bền vững, nổi tiếng với các hoạt động làm sạch hồ, trồng cây đô thị và giáo dục môi trường học đường.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 18K+ thành viên</span>
+          <a href="https://keepvietnamclean.org/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Website 🔗</a>
+        </div>
+      </div>
+
+      <!-- Card 8: CHANGE Vietnam -->
+      <div class="glass-inner p-6 flex flex-col gap-4 border border-white/5 hover:border-green-400/25 hover:scale-[1.02] transition duration-300 rounded-xl group relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="px-2 py-0.5 rounded text-[0.6rem] font-bold bg-red-500/10 border border-red-500/30 text-red-400">Bảo vệ động vật</span>
+          <span class="text-xs text-white/40 flex items-center gap-1">📍 TP. HCM</span>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">🐘</div>
+          <h3 class="text-base font-bold text-white group-hover:text-green-400 transition mb-1.5">CHANGE Vietnam</h3>
+          <p class="text-xs text-white/60 leading-relaxed min-h-[72px]">
+            Tổ chức môi trường sáng tạo, nổi tiếng với các chiến dịch bảo vệ động vật hoang dã (tê giác, voi) và thúc đẩy sử dụng năng lượng sạch.
+          </p>
+        </div>
+        <div class="flex justify-between items-center text-[0.7rem] text-white/40 border-t border-white/5 pt-3 mt-auto">
+          <span>👥 20K+ thành viên</span>
+          <a href="https://www.changevn.org/" target="_blank" class="text-green-400 font-bold hover:underline flex items-center gap-0.5">Website 🔗</a>
+        </div>
+      </div>
+
     </div>
   </main>
-
-  <script>
-    // Mảng dữ liệu bài viết mẫu
-    const MOCK_POSTS = [
-      {
-        id: 1,
-        author: "Trần Văn Hoàng",
-        category: "Sống xanh",
-        title: "Tự mang hộp nhựa đi mua đồ ăn sáng",
-        content: "Hôm nay mình đã thực hành mang theo hộp thủy tinh và túi vải đi mua xôi. Cô bán xôi ban đầu hơi bất ngờ nhưng sau đó rất vui vẻ ủng hộ và còn cho thêm nhiều xôi nữa. Bớt được một chiếc hộp nhựa xốp và túi nilon thải ra môi trường rồi cả nhà ơi!",
-        likes: 12,
-        liked: false,
-        time: "10 phút trước"
-      },
-      {
-        id: 2,
-        author: "Lê Hoàng Gia Bảo",
-        category: "Giảm rác thải",
-        title: "Chia sẻ mẹo phân loại rác tại căn hộ chung cư",
-        content: "Để phân loại rác hiệu quả tại nhà chung cư nhỏ, mình chia thùng rác làm 3 ngăn: Rác hữu cơ dễ phân hủy (đồ ăn thừa), Rác tái chế (vỏ lon, chai nhựa sạch, bìa carton) và Rác vô cơ còn lại. Vừa sạch sẽ gọn gàng lại giúp ích rất nhiều cho các cô chú lao công.",
-        likes: 8,
-        liked: false,
-        time: "42 phút trước"
-      },
-      {
-        id: 3,
-        author: "Huỳnh Kim Linh",
-        category: "Trồng cây",
-        title: "Khoe ban công ngập tràn sắc xanh của mình",
-        content: "Tranh thủ cuối tuần mình vừa gieo thêm ít hạt giống rau thơm và sen đá ngoài ban công. Cảm giác mỗi sáng thức dậy ngắm chồi non mọc lên cực kỳ yên bình và tiếp thêm nhiều năng lượng tích cực.",
-        likes: 15,
-        liked: false,
-        time: "2 giờ trước"
-      }
-    ];
-
-    // Khởi tạo danh sách bài đăng từ LocalStorage hoặc dữ liệu mẫu
-    function getPosts() {
-      const posts = localStorage.getItem('eco_community_posts');
-      if (posts) {
-        return JSON.parse(posts);
-      } else {
-        localStorage.setItem('eco_community_posts', JSON.stringify(MOCK_POSTS));
-        return MOCK_POSTS;
-      }
-    }
-
-    // Lưu danh sách bài đăng vào LocalStorage
-    function savePosts(posts) {
-      localStorage.setItem('eco_community_posts', JSON.stringify(posts));
-    }
-
-    // Hàm render danh sách bài đăng lên giao diện
-    function renderPosts() {
-      const posts = getPosts();
-      const container = document.getElementById('postsFeed');
-      if (!container) return;
-
-      container.innerHTML = '';
-      posts.forEach(post => {
-        const initials = post.author.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-        const card = document.createElement('div');
-        card.className = 'glass-inner p-4 flex flex-col gap-3 border border-white/5 rounded-xl hover:border-white/10 transition';
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center font-bold text-[0.65rem] text-white/80">${initials}</div>
-              <div>
-                <p class="text-xs font-semibold text-white/95">${post.author}</p>
-                <p class="text-[0.6rem] text-white/40">${post.time}</p>
-              </div>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[0.55rem] font-bold bg-green-500/10 border border-green-500/25 text-green-400">${post.category}</span>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold text-white mb-1.5 leading-snug">${post.title}</h4>
-            <p class="text-[0.7rem] text-white/70 leading-relaxed">${post.content}</p>
-          </div>
-          <div class="flex justify-between items-center text-[0.68rem] border-t border-white/5 pt-2">
-            <button onclick="likePost(${post.id})" class="flex items-center gap-1.5 font-semibold transition ${post.liked ? 'text-green-400' : 'text-white/40 hover:text-white/60'}">
-              💚 <span>Thích (${post.likes})</span>
-            </button>
-            <span class="text-white/30">Chia sẻ 🗣️</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    // Hàm cập nhật trạng thái người dùng hiện tại
-    function updateCurrentUserUI() {
-      const user = localStorage.getItem('current_user');
-      const avatarEl = document.getElementById('userAvatar');
-      const nameEl = document.getElementById('userName');
-
-      if (user) {
-        const u = JSON.parse(user);
-        nameEl.innerText = u.fullname;
-        avatarEl.innerText = u.fullname.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-        avatarEl.style.backgroundColor = 'rgba(74,222,128,0.2)';
-        avatarEl.style.color = '#4ade80';
-      } else {
-        nameEl.innerText = 'Thành viên ẩn danh';
-        avatarEl.innerText = 'TV';
-        avatarEl.style.backgroundColor = 'rgba(255,255,255,0.06)';
-        avatarEl.style.color = 'rgba(255,255,255,0.4)';
-      }
-    }
-
-    // Hàm Thích bài đăng (Like)
-    window.likePost = function(id) {
-      const posts = getPosts();
-      const index = posts.findIndex(p => p.id === id);
-      if (index !== -1) {
-        if (posts[index].liked) {
-          posts[index].likes -= 1;
-          posts[index].liked = false;
-        } else {
-          posts[index].likes += 1;
-          posts[index].liked = true;
-        }
-        savePosts(posts);
-        renderPosts();
-      }
-    }
-
-    // Hàm tham gia thử thách (Join Challenge)
-    window.joinChallenge = function(name) {
-      alert(`🎉 Chúc mừng bạn đã tham gia thử thách "${name}"! Hãy thực hành thói quen xanh và ghi lại số liệu trong mục "Công cụ" nhé.`);
-    }
-
-    // Khởi tạo trang khi tải xong DOM
-    document.addEventListener('DOMContentLoaded', () => {
-      updateCurrentUserUI();
-      renderPosts();
-
-      // Lắng nghe sự kiện đăng bài viết mới
-      const form = document.getElementById('newPostForm');
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const title = document.getElementById('postTitle').value;
-          const category = document.getElementById('postCategory').value;
-          const content = document.getElementById('postContent').value;
-
-          const currentUser = localStorage.getItem('current_user');
-          const author = currentUser ? JSON.parse(currentUser).fullname : 'Thành viên ẩn danh';
-
-          const posts = getPosts();
-          const newPost = {
-            id: Date.now(),
-            author,
-            category,
-            title,
-            content,
-            likes: 0,
-            liked: false,
-            time: "Vừa xong"
-          };
-
-          posts.unshift(newPost); // Thêm lên đầu danh sách
-          savePosts(posts);
-          renderPosts();
-
-          // Reset form sau khi gửi
-          form.reset();
-        });
-      }
-    });
-  </script>
 
   <!-- Footer -->
   <footer class="site-footer">
