@@ -1,13 +1,19 @@
 <!DOCTYPE html>
+<!-- Thẻ gốc xác định ngôn ngữ trang là tiếng Việt -->
 <html lang="vi">
 <head>
+  <!-- Khai báo bảng mã ký tự UTF-8 hỗ trợ tiếng Việt có dấu -->
   <meta charset="UTF-8" />
+  <!-- Cấu hình hiển thị chuẩn Responsive trên mọi kích thước màn hình -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tiêu đề trang hiển thị trên tab trình duyệt -->
   <title>EcoImpact Hero</title>
 
+  <!-- Nhúng logic điều phối dùng chung của hệ thống -->
   <script src="app.js"></script>
+  <!-- Nhúng index.js để quản lý hiệu ứng cuộn cảnh 3D mọc cỏ và camera chuyển động -->
   <script src="js/index.js" defer></script>
-  <!-- Tailwind CSS CDN -->
+  <!-- Nhúng thư viện Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Fonts: Distinctive pairing -->
@@ -41,43 +47,52 @@
     };
   </script>
 
+  <!-- Nhúng CSS tùy biến cho hiệu ứng kính mờ và HUD -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Three.js 3D Background -->
+  <!-- Thư viện đồ họa 3D Three.js dùng để dựng cảnh 3D mọc cỏ dynamic -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Loader để nạp các mô hình 3D định dạng GLB/GLTF từ local -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
+<!-- Thiết lập class page-index để đồng bộ ảnh nền và hiệu ứng tương ứng -->
 <body class="page-index">
-  <!-- Premium Loading Screen -->
+  <!-- Màn hình chờ (Loading Screen) cao cấp hiển thị trong lúc đang tải các mô hình 3D nặng -->
   <div id="loading-screen" class="loading-screen">
     <div class="loading-container">
       <div class="loader-logo">
+        <!-- Logo của EcoImpact dạng SVG -->
         <img src="images/logo.svg" alt="EcoImpact Logo" class="loader-logo-svg" />
         <span class="loader-logo-text">EcoImpact</span>
       </div>
       <div class="loader-spinner-wrapper">
+        <!-- Vòng quay xoay tròn bên ngoài và bên trong ngược chiều nhau -->
         <div class="loader-spinner"></div>
         <div class="loader-spinner-inner"></div>
       </div>
+      <!-- Văn bản hiển thị trạng thái tải tài nguyên -->
       <div class="loader-text">Đang khởi tạo hệ sinh thái...</div>
     </div>
   </div>
+  <!-- Lưới HUD overlay công nghệ cơ khí phủ lên nền trang -->
   <div class="grid-overlay"></div>
+  <!-- Đường quét Radar chạy từ trên xuống dưới tạo cảm giác công nghệ cao -->
   <div class="radar-line"></div>
 
   <!-- ═══════════════════════════════════════════
-       NAVBAR
-  ═══════════════════════════════════════════ -->
+       NAVBAR (Thanh điều hướng chính)
+       ═══════════════════════════════════════════ -->
   <nav class="navbar glass anim-navbar">
-    <!-- Brand -->
+    <!-- Khu vực hiển thị Logo và tên thương hiệu EcoImpact bên trái -->
     <div class="flex items-center gap-2">
       <img src="images/logo.svg" alt="EcoImpact Logo" class="w-[26px] h-[26px]" />
       <span class="text-white font-bold text-[1rem] tracking-tight">EcoImpact</span>
     </div>
 
-    <!-- Nav links -->
+    <!-- Danh sách liên kết điều hướng trên máy tính (sẽ ẩn đi nếu màn hình di động) -->
     <div class="hidden md:flex items-center gap-8">
+      <!-- Đường dẫn về Trang chủ (Trang hiện tại), có class active để tô sáng -->
       <a href="index.html" class="nav-link active">Trang chủ</a>
       <a href="dashboard.html" class="nav-link">Bảng điều khiển</a>
       <a href="calculator.html" class="nav-link">Công cụ</a>
@@ -516,28 +531,43 @@
 
 
 
-  <!-- 3D Background -->
+  <!-- Nhúng các thư viện bổ trợ Three.js phục vụ xử lý đồ họa nền 3D chuyển động -->
+  <!-- OrbitControls: Hỗ trợ điều khiển camera bằng chuột (xoay, zoom, kéo) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- EffectComposer: Bộ quản lý hiệu ứng hậu kỳ (Post-processing) của Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <!-- RenderPass: Pass cơ bản dùng để render lại toàn bộ scene gốc lên Composer -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <!-- UnrealBloomPass: Hiệu ứng phát sáng Bloom neon mờ ảo chất lượng cao -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <!-- ShaderPass: Pass trung gian cho phép chèn bộ lọc shader tự định nghĩa -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <!-- CopyShader: Shader sao chép texture dùng nội bộ cho Composer -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <!-- LuminosityHighPassShader: Bộ lọc độ sáng phục vụ xác định vùng phát sáng cho UnrealBloomPass -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <!-- Script khởi tạo và render cảnh nền 3D (bụi mịn PM2.5, lưới HUD...) đã được viết riêng -->
   <script src="js/bg3d.js?v=4.0"></script>
 
-  <!-- Footer -->
+  <!-- Phần chân trang (Footer) chứa thông tin dự án, địa chỉ, email và mạng xã hội của sinh viên -->
   <footer class="site-footer">
+    <!-- Panel giới hạn độ rộng của footer để căn giữa nội dung gọn gàng -->
     <div class="site-footer__panel">
+      <!-- Bố cục lưới Grid chia làm 3 cột chính trên màn hình máy tính -->
       <div class="site-footer__grid">
+        <!-- Cột 1: Thông tin thương hiệu EcoImpact, Logo SVG phát sáng và đoạn văn giới thiệu ngắn -->
         <div class="site-footer__brand">
+          <!-- Logo SVG thu nhỏ của EcoImpact -->
           <img src="images/logo.svg" alt="EcoImpact Logo" class="site-footer__logo" aria-hidden="true" />
           <div>
+            <!-- Tên dự án trong footer -->
             <div class="site-footer__title">EcoImpact</div>
+            <!-- Mô tả ngắn về sứ mệnh dự án -->
             <p class="site-footer__text">Nền tảng theo dõi, học hỏi và giảm thiểu tác động môi trường từ những thói quen nhỏ mỗi ngày.</p>
           </div>
         </div>
 
+        <!-- Cột 2: Danh sách các liên kết nội bộ giúp người dùng chuyển trang nhanh -->
         <div>
           <div class="site-footer__label">Liên kết nhanh</div>
           <div class="site-footer__links">
@@ -550,13 +580,18 @@
           </div>
         </div>
 
+        <!-- Cột 3: Thông tin liên hệ trực tiếp của sinh viên thực hiện đồ án và liên kết MXH -->
         <div>
           <div class="site-footer__label">Liên hệ & Kết nối</div>
           <div class="site-footer__meta">
+            <!-- Email liên hệ sinh viên -->
             <div><strong>Email:</strong> baolhg.25ns@vku.udn.vn</div>
+            <!-- Số điện thoại liên lạc -->
             <div><strong>Điện thoại:</strong> 0374571549</div>
+            <!-- Địa chỉ liên hệ thực tế -->
             <div><strong>Địa chỉ:</strong> 470 Đường Trần Đại Nghĩa, Phường Ngũ Hành Sơn, Thành phố Đà Nẵng</div>
           </div>
+          <!-- Các liên kết tài khoản mạng xã hội để kiểm thử -->
           <div class="site-footer__label" style="margin-top: 20px;">Mạng xã hội</div>
           <div class="site-footer__social">
             <a class="site-footer__badge" href="https://www.facebook.com/g.bao007/" target="_blank" rel="noopener noreferrer">Facebook</a>
@@ -567,6 +602,7 @@
         </div>
       </div>
 
+      <!-- Dòng thông tin bản quyền và chính sách pháp lý dưới cùng của Footer -->
       <div class="site-footer__bottom">
         <div>© 2026 EcoImpact. All rights reserved.</div>
         <div class="site-footer__policy">
@@ -577,5 +613,88 @@
       </div>
     </div>
   </footer>
+
+  <!-- 📚 HỘI ĐỒNG PHẢN BIỆN - NÚT BẤM MỞ TÀI LIỆU ÔN TẬP TRỰC QUAN -->
+  <button class="defense-notes-btn" onclick="toggleDefenseNotes()">
+    <!-- Vòng tròn hiệu ứng sóng phát sáng lan tỏa thu hút sự chú ý -->
+    <span class="defense-notes-btn-pulse"></span>📚 Tài liệu Ôn tập
+  </button>
+
+  <!-- Khung ngăn kéo (Drawer) trượt từ bên phải chứa thông tin ôn thi bảo vệ đồ án -->
+  <div id="defenseNotesDrawer" class="defense-notes-drawer">
+    <!-- Nút đóng Drawer (dấu X) -->
+    <button class="defense-notes-close" onclick="toggleDefenseNotes()">&times;</button>
+    <h2 class="defense-notes-title">EcoImpact</h2>
+    <div class="defense-notes-subtitle">Tài liệu ôn tập - Phần 4</div>
+    
+    <!-- Phần 1: Ghi chú kiến trúc phía Client -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Kiến trúc Tầng Client-side (Trang chủ)</h3>
+      <ul class="defense-notes-list">
+        <li><strong>Đồ họa Hồi sinh (Three.js)</strong>: Sử dụng mô hình 3D chính là cây sự sống (<code>caytrangchu.glb</code>) đặt ở trung tâm vũ trụ và sương mù bao quanh đổi màu theo cuộn trang.</li>
+        <li><strong>Thuật toán Camera Lerp</strong>: Vị trí camera (x, y, z) được tính nội suy trơn (Lerp) dựa trên tỷ lệ phần trăm cuộn trang hiện tại: <code>camera.position.x += (targetX - camera.position.x) * 0.05</code>.</li>
+        <li><strong>Dynamic Grass & Custom Shader</strong>: 1,000 lá cỏ và hoa được phân phối xung quanh mặt đất 3D, uốn cong theo gió nhờ Vertex Shader và mọc dần theo vị trí cuộn trang của người dùng.</li>
+        <li><strong>Tia sáng Volumetric (God Rays)</strong>: Custom Fragment Shader mô phỏng tia sáng mặt trời xiên qua kẽ lá tạo hiệu ứng lung linh cực kỳ cao cấp.</li>
+      </ul>
+    </div>
+
+    <!-- Phần 2: Máy chủ PowerShell backend -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Dữ liệu & Backend Proxy</h3>
+      <ul class="defense-notes-list">
+        <li><strong>PowerShell serve.ps1</strong>: Khởi tạo HTTP Listener dùng <code>System.Net.HttpListener</code> để chạy Web Server không phụ thuộc NodeJS.</li>
+        <li><strong>Giải quyết CORS</strong>: Endpoint <code>/api/proxy?url=...</code> cho phép gửi yêu cầu gián tiếp từ server, sau đó trả về dữ liệu kèm header <code>Access-Control-Allow-Origin: *</code>.</li>
+        <li><strong>In-Memory Caching</strong>: Lưu trữ kết quả API trong RAM (HashTable) kèm theo mốc thời gian (timestamp). Nếu yêu cầu trùng lặp và còn trong thời gian TTL (5 phút), server trả trực tiếp từ RAM không cần tải lại.</li>
+      </ul>
+    </div>
+
+    <!-- Kịch bản thuyết trình đồ án theo 5 hồi -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Kịch bản thuyết trình (5 Hồi)</h3>
+      <ul class="defense-notes-list">
+        <li><strong>Hồi 1 (Khởi động)</strong>: Giới thiệu giao diện HUD công nghệ cao và màn hình chờ mượt mà.</li>
+        <li><strong>Hồi 2 (Hiện trạng)</strong>: Cuộn trang xuống để camera xoay đến mô hình Trái Đất bị tàn phá, bụi mịn PM2.5 lơ lửng dày đặc và sương mù màu xám ô nhiễm.</li>
+        <li><strong>Hồi 3 (Mục đích)</strong>: Cuộn tiếp đến Bento Grid giới thiệu 3 mục tiêu cốt lõi: Nâng cao nhận thức, Đo lường thói quen, Hành động vì tương lai.</li>
+        <li><strong>Hồi 4 (Hồi sinh)</strong>: Khi cuộn tới phần hành trình xanh, sương mù chuyển dần sang màu xanh dịu mát, cây lớn mọc lá xanh và các hạt bụi biến mất hoàn toàn.</li>
+        <li><strong>Hồi 5 (Kêu gọi)</strong>: Dừng ở chân trang và form Đăng ký bản tin sinh thái để chốt slide.</li>
+      </ul>
+    </div>
+
+    <!-- Câu hỏi ôn tập phản biện đồ án -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Câu hỏi phản biện từ Hội đồng</h3>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Em hãy trình bày giải thuật Camera Lerp theo cuộn trang?</div>
+        <div class="defense-notes-a">Đáp: Ta lấy tỷ lệ cuộn trang (scrollRatio) từ 0 đến 1, xác định các tọa độ đích (target positions) cho camera ứng với từng mốc chính, sau đó dùng thuật toán nội suy tuyến tính (Linear Interpolation) cập nhật mượt mà camera trong hàm render loop.</div>
+      </div>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Làm thế nào để em tối ưu hiệu năng khi render 1,000 lá cỏ động?</div>
+        <div class="defense-notes-a">Đáp: Sử dụng <code>InstancedMesh</code> trong Three.js để gom tất cả các lá cỏ có cùng hình học (geometry) và chất liệu (material) vào một lượt vẽ duy nhất (Single Draw Call) giúp CPU không bị nghẽn cổ chai.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Đoạn script điều khiển đóng/mở Bảng ôn tập tài liệu -->
+  <script>
+    // Hàm toggleDefenseNotes dùng để hoán đổi trạng thái class 'open' giúp Drawer trượt ra/vào bằng hiệu ứng CSS transition
+    function toggleDefenseNotes() {
+      const drawer = document.getElementById('defenseNotesDrawer');
+      if (drawer) {
+        drawer.classList.toggle('open');
+      }
+    }
+  </script>
+
+  <!-- 
+  ================================================================================
+  BẢN GHI CHÚ ĐẦY ĐỦ: TỔNG QUAN CÔNG NGHỆ DỰ ÁN ECOIMPACT - PHẦN 4
+  ================================================================================
+  * Đồ họa WebGL/Three.js nạp mô hình GLTF, xử lý hậu kỳ UnrealBloomPass.
+  * Tích hợp Chart.js vẽ biểu đồ, Canvas Sparkline chống nhòe Retina.
+  * Web Storage API (localStorage) lưu trữ thông tin tài khoản và carbon offset.
+  * PowerShell Web Server & CORS Proxy Server & Caching System.
+  * Xem chi tiết trong /tai_lieu_on_tap/PHAN_4_3D_HOI_SINH_SERVER.md
+  ================================================================================
+  -->
 </body>
 </html>

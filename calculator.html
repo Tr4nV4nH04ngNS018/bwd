@@ -1,33 +1,45 @@
 <!DOCTYPE html>
+<!-- Thẻ gốc xác định ngôn ngữ trang là tiếng Việt -->
 <html lang="vi">
 <head>
+  <!-- Khai báo bảng mã ký tự UTF-8 hỗ trợ tiếng Việt có dấu -->
   <meta charset="UTF-8" />
+  <!-- Cấu hình hiển thị chuẩn Responsive trên mọi kích thước màn hình -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tiêu đề trang hiển thị trên tab trình duyệt -->
   <title>EcoImpact — Calculator</title>
 
+  <!-- Nhúng logic điều phối dùng chung của hệ thống -->
   <script src="app.js"></script>
+  <!-- Nhúng logic tính toán carbon và điều khiển mô hình Trái Đất thiên tai của trang công cụ -->
   <script src="js/calculator.js" defer></script>
+  <!-- Nhúng thư viện Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Tải phông chữ 'Be Vietnam Pro' từ Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <script>
+    // Cấu hình phông chữ mặc định cho Tailwind CSS
     tailwind.config = {
       theme: { extend: { fontFamily: { body: ['Be Vietnam Pro', 'sans-serif'] } } },
     };
   </script>
 
+  <!-- Nhúng file CSS tùy biến thủ công cho hiệu ứng kính mờ và HUD -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Three.js 3D Background -->
+  <!-- Thư viện đồ học 3D Three.js dùng dựng mô hình Trái Đất và hạt thiên tai -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Loader để nạp mô hình 3D từ thư mục local -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <!-- OrbitControls để xoay camera quanh Trái Đất -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body class="page-calculator">
-  <!-- Premium Loading Screen -->
+  <!-- Màn hình chờ (Loading Screen) cao cấp hiển thị trong lúc tải mô hình 3D Trái Đất nặng -->
   <div id="loading-screen" class="loading-screen">
     <div class="loading-container">
       <div class="loader-logo">
@@ -35,25 +47,31 @@
         <span class="loader-logo-text">EcoImpact</span>
       </div>
       <div class="loader-spinner-wrapper">
+        <!-- Vòng quay kép neon phát sáng -->
         <div class="loader-spinner"></div>
         <div class="loader-spinner-inner"></div>
       </div>
+      <!-- Trạng thái tải của trang Công cụ -->
       <div class="loader-text">Đang khởi tạo hệ sinh thái...</div>
     </div>
   </div>
+  <!-- Lưới HUD overlay công nghệ phủ lên toàn bộ màn hình -->
   <div class="grid-overlay"></div>
+  <!-- Đường quét Radar chạy tạo hiệu ứng giao diện tương lai -->
   <div class="radar-line"></div>
 
 <!-- ══════════════════════════════════════════
-     NAVBAR
+     NAVBAR (Thanh điều hướng dùng chung)
      ══════════════════════════════════════════ -->
 <nav class="navbar">
+  <!-- Khu vực logo thương hiệu bên trái -->
   <div class="flex items-center gap-2">
     <img src="images/logo.svg" alt="EcoImpact Logo" class="w-[26px] h-[26px]" />
     <span class="text-white font-bold text-[0.98rem] tracking-tight">
       EcoImpact
     </span>
   </div>
+  <!-- Các liên kết điều hướng trên màn hình máy tính -->
   <div class="hidden md:flex items-center gap-8">
     <a href="index.html" class="nav-link">Trang chủ</a>
     <a href="dashboard.html" class="nav-link">Bảng điều khiển</a>
@@ -62,10 +80,10 @@
     <a href="community.html" class="nav-link">Cộng đồng</a>
   </div>
 
-  <!-- Toggle Input -->
+  <!-- Checkbox ẩn để làm biến cờ bật/tắt menu trên di động -->
   <input type="checkbox" id="nav-toggle" class="hidden" />
 
-  <!-- Mobile nav panel -->
+  <!-- Menu điều hướng trên điện thoại, tự động mở khi #nav-toggle được check -->
   <div class="mobile-nav-panel hidden md:hidden flex-col items-center gap-4 p-6 glass-dark border border-white/10 rounded-2xl absolute top-[calc(100%+10px)] left-0 right-0 z-50 text-center">
     <a href="index.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Trang chủ</a>
     <a href="dashboard.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Bảng điều khiển</a>
@@ -75,13 +93,14 @@
     <a href="login.html" class="btn-login w-full mt-2 py-2 block text-center" style="text-decoration:none;">Đăng nhập</a>
   </div>
 
-  <!-- Hamburger toggle -->
+  <!-- Nút Hamburger ba gạch trên di động -->
   <label for="nav-toggle" class="hamburger-toggle md:hidden cursor-pointer flex flex-col gap-[5px] p-2 rounded-lg hover:bg-white/10 active:scale-95 transition-all">
     <span class="w-5 h-[2px] bg-white rounded-full"></span>
     <span class="w-5 h-[2px] bg-white rounded-full"></span>
     <span class="w-5 h-[2px] bg-white rounded-full"></span>
   </label>
 
+  <!-- Nút Đăng nhập dành cho màn hình lớn -->
   <a href="login.html" class="btn-login hidden md:block" style="text-decoration:none;">Đăng nhập</a>
 </nav>
 
@@ -457,7 +476,101 @@
           <a href="#">Hỗ trợ</a>
         </div>
       </div>
+      </div>
     </div>
   </footer>
+
+  <!-- 📚 HỘI ĐỒNG PHẢN BIỆN - TÀI LIỆU ÔN TẬP TRỰC QUAN -->
+  <button class="defense-notes-btn" onclick="toggleDefenseNotes()">
+    <span class="defense-notes-btn-pulse"></span>📚 Tài liệu Ôn tập
+  </button>
+
+  <div id="defenseNotesDrawer" class="defense-notes-drawer">
+    <button class="defense-notes-close" onclick="toggleDefenseNotes()">&times;</button>
+    <h2 class="defense-notes-title">EcoImpact</h2>
+    <div class="defense-notes-subtitle">Tài liệu ôn tập - Phần 3</div>
+    
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Danh sách các file quản lý</h3>
+      <ul class="defense-notes-list">
+        <li><strong>calculator.html</strong>: Trang tính Carbon và hiển thị Trái Đất 3D.</li>
+        <li><strong>js/calculator.js</strong>: Nạp mô hình 3D (<code>juan.glb</code>), thiết lập hệ thống hạt dung nham núi lửa, lốc xoáy lượng giác cực, sét đánh răng cưa và đồng bộ thanh kéo.</li>
+      </ul>
+    </div>
+
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Giải thích cơ chế & Code chính</h3>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">1. Phép tính hạt magma núi lửa phun trào</div>
+        <div class="defense-notes-a">
+          Mỗi hạt magma bay ra có một vận tốc ban đầu hướng chéo lên. Ta kéo hạt rơi xuống bề mặt Trái Đất bằng cách nhân hướng tâm Trái Đất <code>gravityDir</code> với gia tốc và thời gian sai lệch khung hình <code>delta</code>: <code>gravityStrength = 0.45 * delta</code>. Khi hạt hết tuổi thọ <code>life</code>, ta reset nó về vị trí miệng núi lửa.
+        </div>
+      </div>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">2. Thuật toán dựng lốc xoáy (Cyclone) bằng Hệ tọa độ cực</div>
+        <div class="defense-notes-a">
+          Lốc xoáy là tập hợp hạt xoay quanh trục nghiêng. Tại mỗi khung hình, ta lấy hình nón có bán kính tăng dần theo độ cao hạt <code>curR</code> rồi dùng lượng giác lượng cực <code>Math.cos(d.angle) * curR</code> và <code>Math.sin(d.angle) * curR</code> để tính độ lệch vị trí hạt quanh trục lốc xoáy.
+        </div>
+      </div>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">3. Giải thuật vẽ tia sét giật cục (Lightning Strike)</div>
+        <div class="defense-notes-a">
+          - Vẽ sét bằng <code>THREE.Line</code>.<br>
+          - Dùng <code>lerpVectors(startPos, endPos, fraction)</code> để lấy các điểm nội suy tuyến tính giữa mây và đất, sau đó cộng thêm một vector dịch lệch ngẫu nhiên <code>randVec</code> vuông góc để làm gãy gập các điểm giữa tạo dáng sét ngoằn ngoèo.<br>
+          - <strong>Hiệu ứng chớp:</strong> Tăng độ sáng đèn Ambient từ 0.6 lên 1.6 và đèn Directional lên 3.0 trong 0.15 giây để mô phỏng sấm sét rực sáng.
+        </div>
+      </div>
+    </div>
+
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Câu hỏi phản biện từ Hội đồng</h3>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Làm thế nào để thay đổi màu sắc và trạng thái hủy diệt của Trái Đất khi lượng CO2 tăng cao?</div>
+        <div class="defense-notes-a">Đáp: Tính ra hệ số hủy diệt <code>targetIntensity</code> (0 đến 1) từ lượng phát thải. Hệ số này điều khiển trực tiếp các filter của Canvas WebGL: <code>grayscale</code> (xám màu), <code>sepia</code> (úa vàng), và <code>brightness</code> (tối tăm). Đồng thời, độ đục <code>opacity</code> của khói độc và bụi lửa cũng tăng tương ứng.</div>
+      </div>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Tại sao các hạt dung nham núi lửa lại hiển thị được hai tông màu Đỏ-Vàng và Xám-Đen khác nhau?</div>
+        <div class="defense-notes-a">Đáp: Ta khai báo mảng màu sắc <code>volColors</code> tương ứng với mỗi hạt. Khi hạt mới sinh, ta random xem hạt đó là dung nham (đỏ cam) hay tro bụi (xám nâu). Khi hạt bay ra xa, ta giảm sắc đỏ và tăng sắc đen nguội lạnh theo tỷ lệ thời gian sống của hạt.</div>
+      </div>
+    </div>
+
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Code mẫu thô viết tay</h3>
+      <div class="defense-notes-code">const gravity = new THREE.Vector3(0, -9.8, 0);
+const pos = new THREE.Vector3(0, 0, 0);
+const vel = new THREE.Vector3(2, 8, 0);
+
+function updateParticle(delta) {
+  vel.addScaledVector(gravity, delta);
+  pos.addScaledVector(vel, delta);
+  if (pos.y < 0) {
+    pos.set(0, 0, 0);
+    vel.set(2, 8, 0);
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- Script điều khiển đóng mở Bảng ôn tập tài liệu Phần 3 -->
+  <script>
+    // Hàm toggle class open của Drawer trượt bên phải
+    function toggleDefenseNotes() {
+      const drawer = document.getElementById('defenseNotesDrawer');
+      if (drawer) {
+        drawer.classList.toggle('open');
+      }
+    }
+  </script>
+
+  <!-- 
+  ================================================================================
+  BẢN GHI CHÚ ĐẦY ĐỦ: TỔNG QUAN CÔNG NGHỆ DỰ ÁN ECOIMPACT - PHẦN 3
+  ================================================================================
+  * Các file quản lý: calculator.html, js/calculator.js
+  * Kiến thức chính: GLTFLoader, Hệ thống hạt núi lửa trọng lực, Lốc xoáy hệ tọa độ cực,
+    Tia sét nội suy gãy gập, Chớp sáng Ambient, CSS filter WebGL.
+  * Xem chi tiết trong /tai_lieu_on_tap/PHAN_3_3D_THAM_HOA.md
+  ================================================================================
+  -->
 </body>
 </html>

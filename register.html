@@ -1,16 +1,24 @@
 <!DOCTYPE html>
+<!-- Xác định ngôn ngữ chính của tài liệu là tiếng Việt -->
 <html lang="vi">
 <head>
+    <!-- Khởi tạo bảng mã ký tự UTF-8 hỗ trợ tiếng Việt có dấu hoàn hảo -->
     <meta charset="UTF-8">
+    <!-- Cấu hình chế độ hiển thị linh hoạt (Responsive) trên màn hình di động và máy tính -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mô tả ngắn gọn về trang đăng ký để tối ưu hóa SEO -->
     <meta name="description" content="Trang đăng ký EcoImpact - Tham gia cộng đồng xanh của chúng tôi.">
+    <!-- Tiêu đề hiển thị trên thanh tab trình duyệt -->
     <title>EcoImpact | Đăng ký</title>
+    <!-- Liên kết đến tệp style CSS tùy biến riêng cho trang đăng ký -->
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-  <!-- Premium Loading Screen -->
+  <!-- Màn hình chờ (Loading Screen) cao cấp hiển thị trong lúc trang đang tải tài nguyên nặng -->
   <div id="loading-screen" class="loading-screen">
+    <!-- Khung căn giữa màn hình chờ -->
     <div class="loading-container">
+      <!-- Khu vực hiển thị Logo và tên thương hiệu EcoImpact phát sáng neon -->
       <div class="loader-logo">
         <svg class="loader-logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
@@ -20,24 +28,36 @@
         </svg>
         <span class="loader-logo-text">EcoImpact</span>
       </div>
+      <!-- Hiệu ứng vòng xoay quay tròn kép (ngoài xuôi, trong ngược chiều) -->
       <div class="loader-spinner-wrapper">
         <div class="loader-spinner"></div>
         <div class="loader-spinner-inner"></div>
       </div>
+      <!-- Dòng trạng thái tải dữ liệu -->
       <div class="loader-text">Đang khởi tạo hệ sinh thái...</div>
     </div>
   </div>
+
+    <!-- Khối cha chính chia bố cục màn hình đăng ký (chia đôi: Trái giới thiệu, Phải form đăng ký) -->
     <main class="login-page">
+        <!-- Phần giới thiệu thương hiệu và thông điệp xanh bên trái (Hero Section) -->
         <section class="login-hero" aria-label="Giới thiệu EcoImpact">
+            <!-- Khung chứa nội dung thông điệp -->
             <div class="hero-content">
+                <!-- Tiêu đề lớn của thông điệp thương hiệu -->
                 <h1 class="hero-title">EcoImpact: Vì một tương lai xanh</h1>
+                <!-- Phụ đề chi tiết định hướng người dùng đến hành vi sống xanh -->
                 <p class="hero-subtitle">Cùng nhau xây dựng thói quen sống xanh, bền vững và tích cực hơn mỗi ngày.</p>
             </div>
         </section>
 
+        <!-- Phần panel chứa form đăng ký bên phải -->
         <section class="login-panel" aria-label="Khu vực đăng ký">
+            <!-- Thanh điều hướng phụ phía trên đầu của panel -->
             <header class="topbar">
+                <!-- Liên kết quay lại trang chủ và logo của EcoImpact -->
                 <a class="brand" href="index.html" aria-label="EcoImpact trang chủ">
+                    <!-- Icon thương hiệu vẽ bằng SVG nhỏ gọn -->
                     <span class="brand-mark" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 21c5-3 7-7.4 7-12-4.8 0-9 1.8-11.5 4.4C5.9 15.3 7.9 19 12 21Z"></path>
@@ -48,63 +68,86 @@
                     EcoImpact
                 </a>
 
+                <!-- Liên kết nhanh tới các tài nguyên khác trên website -->
                 <nav class="nav" aria-label="Điều hướng">
                     <a href="index.html">Home</a>
                     <a href="community.html">About</a>
                 </nav>
             </header>
 
+            <!-- Vỏ bọc chứa thẻ card đăng ký căn giữa của panel -->
             <div class="form-shell">
+                <!-- Thẻ chứa nội dung form đăng ký (login-card) -->
                 <article class="login-card">
+                    <!-- Tiêu đề lớn chào mừng người dùng -->
                     <h1>Tạo tài khoản</h1>
+                    <!-- Dòng văn bản phụ hướng dẫn -->
                     <p class="lead">Bắt đầu hành trình xanh của bạn ngay hôm nay.</p>
 
+                    <!-- Form thu thập thông tin đăng ký tài khoản mới -->
                     <form class="login-form" novalidate>
+                        <!-- Ô nhập liệu Họ và tên kèm nhãn và icon SVG bên trái -->
                         <label class="field" for="fullname">
+                            <!-- Icon hình người dùng biểu thị Họ và tên -->
                             <span class="field-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
                             </span>
+                            <!-- Trường nhập họ và tên, bắt buộc nhập -->
                             <input id="fullname" type="text" name="fullname" placeholder="Họ và tên" autocomplete="name" required>
                         </label>
 
+                        <!-- Ô nhập liệu Email kèm nhãn và icon SVG bên trái -->
                         <label class="field" for="email">
+                            <!-- Icon phong bì thư biểu thị email -->
                             <span class="field-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="3" y="5" width="18" height="14" rx="3"></rect>
                                     <path d="m4 7 8 6 8-6"></path>
                                 </svg>
                             </span>
+                            <!-- Trường nhập địa chỉ email, tự động hoàn thành, bắt buộc nhập -->
                             <input id="email" type="email" name="email" placeholder="Email" autocomplete="email" required>
                         </label>
 
+                        <!-- Ô nhập liệu Mật khẩu kèm nút Toggle ẩn/hiện mật khẩu và icon khóa -->
                         <label class="field" for="password">
+                            <!-- Icon chiếc ổ khóa biểu thị mật khẩu bảo mật -->
                             <span class="field-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="4" y="10" width="16" height="10" rx="2.5"></rect>
                                     <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
                                 </svg>
                             </span>
+                            <!-- Trường nhập mật khẩu, bắt buộc nhập -->
                             <input id="password" type="password" name="password" placeholder="Mật khẩu" autocomplete="new-password" required>
+                            <!-- Nút bấm hiển thị mật khẩu -->
                             <button class="password-toggle" type="button" aria-label="Hiện mật khẩu" data-toggle-password>Hiện</button>
                         </label>
 
+                        <!-- Ô nhập lại Mật khẩu để tránh gõ nhầm -->
                         <label class="field" for="confirm-password">
+                            <!-- Icon chiếc ổ khóa biểu thị xác nhận mật khẩu -->
                             <span class="field-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="4" y="10" width="16" height="10" rx="2.5"></rect>
                                     <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
                                 </svg>
                             </span>
+                            <!-- Trường xác nhận lại mật khẩu, bắt buộc nhập -->
                             <input id="confirm-password" type="password" name="confirm-password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" required>
+                            <!-- Nút bấm hiển thị lại xác nhận mật khẩu -->
                             <button class="password-toggle" type="button" aria-label="Hiện mật khẩu" data-toggle-confirm-password>Hiện</button>
                         </label>
 
+                        <!-- Nút gửi form thực hiện đăng ký tài khoản mới -->
                         <button class="primary-action" type="submit">Đăng ký</button>
 
+                        <!-- Nút đăng ký nhanh qua Google -->
                         <button class="secondary-action" type="button" aria-label="Đăng ký với Google">
+                            <!-- Logo Google bằng SVG -->
                             <svg class="google-mark" viewBox="0 0 48 48" aria-hidden="true">
                                 <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.4 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.9z"></path>
                                 <path fill="#FF3D00" d="M6.3 14.7 12.9 19C14.7 14.6 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.4 29.4 4 24 4 16.1 4 9.2 8.5 6.3 14.7z"></path>
@@ -114,9 +157,11 @@
                             Đăng ký với Google
                         </button>
 
+                        <!-- Chỉ dẫn cho người dùng đã có tài khoản -->
                         <p style="text-align: center; margin-top: 1rem; color: var(--muted);">
                             Đã có tài khoản? <a href="login.html" style="color: var(--green); text-decoration: none; font-weight: 600;">Đăng nhập</a>
                         </p>
+                        <!-- Hiển thị thông báo lỗi/thành công tự động gửi từ auth.js -->
                         <p class="message" aria-live="polite"></p>
                     </form>
                 </article>
@@ -124,6 +169,106 @@
         </section>
     </main>
 
+    <!-- Nhúng logic auth xử lý kiểm tra đăng ký và ghi vào localStorage mock_users_v1 -->
     <script src="auth.js"></script>
+    
+    <!-- 📚 HỘI ĐỒNG PHẢN BIỆN - NÚT BẤM MỞ TÀI LIỆU ÔN TẬP TRỰC QUAN -->
+    <button class="defense-notes-btn" onclick="toggleDefenseNotes()">
+      <!-- Sóng lan tỏa của nút bấm nổi -->
+      <span class="defense-notes-btn-pulse"></span>📚 Tài liệu Ôn tập
+    </button>
+
+    <!-- Ngăn kéo trượt chứa nội dung kiến thức phục vụ phản biện đồ án -->
+    <div id="defenseNotesDrawer" class="defense-notes-drawer">
+      <button class="defense-notes-close" onclick="toggleDefenseNotes()">&times;</button>
+      <h2 class="defense-notes-title">EcoImpact</h2>
+      <div class="defense-notes-subtitle">Tài liệu ôn tập - Phần 1</div>
+      
+      <!-- Danh sách các file liên quan -->
+      <div class="defense-notes-section">
+        <h3 class="defense-notes-sec-title">Danh sách các file quản lý</h3>
+        <ul class="defense-notes-list">
+          <li><strong>login.html, register.html, forgot-password.html</strong>: Giao diện HTML của các trang xác thực.</li>
+          <li><strong>login.css</strong>: Định nghĩa hiệu ứng Glassmorphism & HUD.</li>
+          <li><strong>app.js</strong>: Xử lý dropdown user & đồng bộ session đăng nhập.</li>
+          <li><strong>auth.js</strong>: Động cơ lưu trữ danh sách tài khoản & kiểm tra đăng nhập/đăng ký/OTP quên mật khẩu.</li>
+          <li><strong>js/universeBg.js</strong>: Bầu trời sao 3D & dải sao băng rơi làm nền.</li>
+        </ul>
+      </div>
+
+      <!-- Kỹ thuật Mock Auth và Đồ họa nền -->
+      <div class="defense-notes-section">
+        <h3 class="defense-notes-sec-title">Giải thích cơ chế & Code chính</h3>
+        <div class="defense-notes-qa">
+          <div class="defense-notes-q">1. Cơ chế Mock Authentication (localStorage)</div>
+          <div class="defense-notes-a">
+            Ứng dụng lưu mảng user vào <code>localStorage</code> bằng khóa <code>mock_users_v1</code> dưới dạng chuỗi JSON thô (<code>JSON.stringify</code>). Khi đăng nhập, ta đọc ra (<code>JSON.parse</code>) và tìm kiếm email/mật khẩu khớp.
+          </div>
+        </div>
+        <div class="defense-notes-qa">
+          <div class="defense-notes-q">2. Bầu trời sao 3D (Three.js)</div>
+          <div class="defense-notes-a">
+            - Dùng <code>Float32Array(particleCount * 3)</code> để khởi tạo tọa độ (x, y, z) cho 2,000 hạt sao phẳng tốc độ cao.<br>
+            - Lerp màu ngẫu nhiên giữa Xanh lá (<code>0x4ade80</code>) và Xanh dương (<code>0x7dd3fc</code>).<br>
+            - Di chuyển camera theo chuột (Parallax) mượt mà bằng thuật toán Lerp: <code>camera.position.x += (mouseX - camera.position.x) * 0.02</code>.
+          </div>
+        </div>
+        <div class="defense-notes-qa">
+          <div class="defense-notes-q">3. Xoay đầu nhọn sao băng chéo trùng hướng rơi</div>
+          <div class="defense-notes-a">
+            Dùng Quaternion: <code>quaternion.setFromAxisAngle(axis, radians)</code>, trong đó trục xoay là tích có hướng của vector hướng lên và vector vận tốc rơi, góc là góc giữa hai vector đó.
+          </div>
+        </div>
+      </div>
+
+      <!-- Câu hỏi ôn tập đồ án -->
+      <div class="defense-notes-section">
+        <h3 class="defense-notes-sec-title">Câu hỏi phản biện từ Hội đồng</h3>
+        <div class="defense-notes-qa">
+          <div class="defense-notes-q">Hỏi: Hệ thống đăng nhập/đăng ký hoạt động thế nào khi không có database? Mất dữ liệu khi tải lại trang không?</div>
+          <div class="defense-notes-a">Đáp: Tận dụng <code>localStorage</code> của trình duyệt để ghi trực tiếp xuống đĩa cứng thiết bị nên dữ liệu tài khoản được giữ nguyên vẹn kể cả khi tắt trình duyệt hay khởi động lại máy tính.</div>
+        </div>
+        <div class="defense-notes-qa">
+          <div class="defense-notes-q">Hỏi: Quên mật khẩu hoạt động như thế nào?</div>
+          <div class="defense-notes-a">Đáp: Mô phỏng sinh mã OTP 6 số cố định (<code>123456</code>) hiển thị trên giao diện/console, có cooldown đếm ngược 30 giây gửi lại. Khi nhập đúng, mật khẩu mới được cập nhật vào <code>localStorage</code>.</div>
+        </div>
+      </div>
+
+      <!-- Đoạn code ví dụ viết tay thuyết trình -->
+      <div class="defense-notes-section">
+        <h3 class="defense-notes-sec-title">Code mẫu thô viết tay</h3>
+        <div class="defense-notes-code">function loginUser(email, password) {
+  const users = JSON.parse(localStorage.getItem('mock_users_v1') || '[]');
+  const match = users.find(u => u.email === email && u.password === password);
+  if (match) {
+    localStorage.setItem('current_user', JSON.stringify(match));
+    alert('Đăng nhập thành công!');
+  } else {
+    alert('Sai email hoặc mật khẩu!');
+  }
+}</div>
+      </div>
+    </div>
+
+    <!-- Script điều khiển đóng mở Drawer ôn tập -->
+    <script>
+      // Hàm hoán đổi class CSS open cho Drawer trượt ra từ bên phải màn hình
+      function toggleDefenseNotes() {
+        const drawer = document.getElementById('defenseNotesDrawer');
+        if (drawer) {
+          drawer.classList.toggle('open');
+        }
+      }
+    </script>
+
+    <!-- 
+    ================================================================================
+    BẢN GHI CHÚ ĐẦY ĐỦ: TỔNG QUAN CÔNG NGHỆ DỰ ÁN ECOIMPACT - PHẦN 1
+    ================================================================================
+    * Các file quản lý: login.html, register.html, forgot-password.html, login.css, app.js, auth.js, js/universeBg.js
+    * Kiến thức chính: Glassmorphism & HUD Styling, Web Storage API, Mock Auth.
+    * Xem chi tiết trong /tai_lieu_on_tap/PHAN_1_UI_XAC_THUC.md
+    ================================================================================
+    -->
 </body>
 </html>

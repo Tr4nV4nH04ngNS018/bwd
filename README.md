@@ -67,18 +67,98 @@ Dự án được tối ưu hóa chạy trực tiếp trên trình duyệt ở p
 ## 📂 Sơ Đồ Cấu Trúc Thư Mục Chính
 
 ```text
-bwd/
-├── index.html                   # Trang chủ (Hiện trạng thế giới & Sứ mệnh)
-├── calculator.html              # Công cụ tính toán lượng phát thải CO2 cá nhân
-├── dashboard.html               # Bảng thống kê dữ liệu biến đổi khí hậu thực tế
-├── community.html               # Diễn đàn chia sẻ ý tưởng xanh & Leaderboard
-├── news.html                    # Tin tức và dự án môi trường nổi bật
-├── login.html / register.html   # Các trang xác thực tài khoản người dùng
-├── serve.ps1                    # Script khởi tạo Local Web Server & CORS Proxy
-├── styles.css                   # CSS chính tùy biến giao diện HUD & Glassmorphic
-├── app.js                       # Logic xử lý giao diện chung và cuộc gọi API
-├── js/
-│   └── bg3d.js                  # Logic dựng & tương tác bối cảnh 3D (Three.js)
-├── images/                      # Thư mục chứa các tài nguyên ảnh tĩnh
-└── planet_earth.glb / ...       # Các tệp mô hình 3D dung lượng nhẹ cho WebGL
+📂 bwd/ (Thư mục gốc của dự án EcoImpact)
+│
+├── 📄 index.html               # Trang chủ chính (Giao diện cuộn cảnh 3D hồi sinh & 5 hồi kịch bản thuyết trình)
+│
+├── 📄 calculator.html          # Trang công cụ (Tính dấu chân carbon cá nhân & tương tác Trái Đất thiên tai 3D)
+│
+├── 📄 dashboard.html           # Bảng điều khiển (Đồ thị Chart.js, APIs live khí hậu & Bản đồ nhiệt Canvas)
+│
+├── 📄 community.html           # Diễn đàn cộng đồng (Chia sẻ ý tưởng xanh & Leaderboard bảng xếp hạng thành viên)
+│
+├── 📄 news.html                # Trang tin tức (Nhúng iframe trang tin Môi trường và Đời sống thực tế)
+│
+├── 📄 login.html               # Màn hình đăng nhập tài khoản (HUD Futuristic & Glassmorphic)
+│
+├── 📄 register.html            # Màn hình đăng ký tài khoản mới trong hệ sinh thái EcoImpact
+│
+├── 📄 forgot-password.html     # Màn hình khôi phục mật khẩu (Xác thực OTP giả lập & Cooldown 30s)
+│
+├── ⚙️ app.js                   # Logic xử lý giao diện chung (Đồng bộ session người dùng, dropdown Navbar)
+│
+├── ⚙️ auth.js                  # Logic xử lý xác thực (Lưu localStorage mock_users_v1, logic đăng ký/đăng nhập/OTP)
+│
+├── 🔌 serve.ps1                # Script PowerShell khởi tạo Web Server local port 8000 & CORS Proxy / RAM Caching
+│
+├── 🎨 styles.css               # CSS tùy biến giao diện Futuristic HUD, Radar scan & bộ lọc kính mờ (blur 18px)
+│
+├── 🎨 login.css                # CSS tùy biến HUD Glassmorphism riêng cho luồng xác thực (Login/Register/Forgot)
+│
+├── 📊 owid_electricity_generation.csv  # Dữ liệu sản lượng điện thế giới từ Our World in Data (quy đổi TWh)
+│
+├── 📊 owid_share_renewables.csv        # Dữ liệu tỷ trọng năng lượng tái tạo thế giới (quy đổi tỷ lệ %)
+│
+├── 📁 js/                      # Thư mục chứa các tệp JavaScript logic nghiệp vụ động nâng cao
+│   │
+│   ├── ⚙️ bg3d.js              # Khởi tạo Three.js nền: Life Tree 3D, camera Lerp cuộn trang, mưa axit, bụi mịn PM2.5
+│   │
+│   ├── ⚙️ calculator.js        # Điều khiển 3D Trái Đất thiên tai, hệ hạt dung nham núi lửa, lốc xoáy cực, sét chớp sáng
+│   │
+│   ├── ⚙️ dashboard.js         # Gọi API ngoài, vẽ Chart.js, chiếu vĩ độ/kinh độ lên Canvas bản đồ phẳng Mercator
+│   │
+│   ├── ⚙️ index.js             # Xử lý scroll reveal (IntersectionObserver), chạy số counter, vẽ Canvas Sparkline
+│   │
+│   └── ⚙️ universeBg.js        # Khởi tạo Three.js nền: Bầu trời sao động và hiệu ứng hạt sao băng chéo cho trang Auth
+│
+├── 📁 lib/                     # Thư mục chứa thư viện API hoặc module kết nối Client-side
+│   │
+│   └── 📁 api/
+│       │
+│       ├── ⚙️ api.js           # Module JavaScript gọi APIs
+│       └── ⚙️ api.ts           # Khai báo kiểu TypeScript cho các endpoint
+│
+├── 📁 models/                  # Thư mục chứa các mô hình đồ họa 3D WebGL (Định dạng GLB, GLTF, Blend)
+│   │
+│   ├── 📦 planet_earth.glb     # Mô hình Trái Đất 3D dung lượng nhẹ cho trang chủ
+│   │
+│   ├── 📦 earth.glb            # Mô hình Trái Đất 3D độ phân giải trung bình phục vụ trang thiên tai
+│   │
+│   ├── 📦 caytrangchu.glb      # Mô hình Cây Sự Sống (Life Tree) phục vụ hiệu ứng hồi sinh mọc lá
+│   │
+│   ├── 📦 juan.glb             # Mô hình nhân vật tương tác động
+│   │
+│   └── 📦 *.blend              # Các tệp thiết kế nguồn 3D Blender gốc phục vụ chỉnh sửa (earth.blend, ...)
+│
+├── 📁 images/                  # Thư mục chứa các tài nguyên ảnh phẳng & Vector SVG
+│   │
+│   ├── 🖼️ logo.svg            # Logo chính thức của dự án EcoImpact dạng vector sắc nét phát sáng
+│   │
+│   ├── 🖼️ world-map.svg        # Bản đồ thế giới 2D dùng làm nền Canvas phẳng nội suy tọa độ nhiệt độ
+│   │
+│   └── 🖼️ *.png / *.jpg        # Các hình ảnh bento card và ảnh nền rừng xanh dự phòng khi sập mạng
+│
+├── 📁 textures/                # Thư mục chứa các vân phủ bề mặt (Texture maps) cho các mô hình 3D WebGL
+│   │
+│   ├── 🗺️ 8k_earth_daymap.png  # Vân bề mặt ban ngày độ phân giải cao 8K của Trái Đất
+│   │
+│   ├── 🗺️ 8k_earth_nightmap.png # Vân bề mặt ban đêm (ánh đèn thành phố tỏa sáng từ vũ trụ)
+│   │
+│   ├── 🗺️ Ground_BaseColor.png # Vân bề mặt mặt đất
+│   │
+│   └── 🗺️ Stump_Roughness.png / ... # Các map ánh xạ ánh sáng (Roughness), độ nổi gồ ghề (Normal map)
+│
+└── 📁 tai_lieu_on_tap/         # Thư mục chứa bộ tài liệu ôn thi học phần và phản biện đồ án chi tiết
+    │
+    ├── 📘 PHAN_1_UI_XAC_THUC.md       # Tài liệu ôn thi phần 1: Giao diện HUD, Mock Auth, bầu trời sao Three.js
+    │
+    ├── 📘 PHAN_2_TRUC_QUAN_API.md     # Tài liệu ôn thi phần 2: Gọi API, bóc tách CSV, Canvas bản đồ phẳng Mercator
+    │
+    ├── 📘 PHAN_3_3D_THAM_HOA.md       # Tài liệu ôn thi phần 3: Mô hình 3D thiên tai, hệ hạt dung nham, sấm sét ngẫu nhiên
+    │
+    ├── 📘 PHAN_4_3D_HOI_SINH_SERVER.md # Tài liệu ôn thi phần 4: Camera Lerp, thảm cỏ uốn gió, server PowerShell & CORS
+    │
+    ├── 📘 CAC_CONG_NGHE.md            # Tổng hợp kiến thức và vai trò của các thư viện sử dụng trong đồ án
+    │
+    └── 📘 HUONG_DAN_BAO_VE_DO_AN.md    # Hướng dẫn chi tiết mẹo thuyết trình, trả lời câu hỏi khó của Hội đồng
 ```

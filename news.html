@@ -1,33 +1,49 @@
 <!DOCTYPE html>
+<!-- Thẻ gốc xác định ngôn ngữ trang là tiếng Việt -->
 <html lang="vi">
 <head>
+  <!-- Khai báo bảng mã ký tự UTF-8 hỗ trợ tiếng Việt có dấu -->
   <meta charset="UTF-8" />
+  <!-- Cấu hình hiển thị chuẩn Responsive trên mọi kích thước màn hình điện thoại/máy tính -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tiêu đề hiển thị trên tab của trình duyệt -->
   <title>EcoImpact — Tin tức</title>
 
+  <!-- Nhúng file logic dùng chung (quản lý dropdown user, hiệu ứng chuyển trang...) -->
   <script src="app.js"></script>
+  <!-- Nhúng Tailwind CSS CDN để sử dụng các utility class căn chỉnh layout nhanh chóng -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Kết nối trước (preconnect) tới Google Fonts để tối ưu tốc độ tải phông chữ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Tải phông chữ 'Be Vietnam Pro' chuyên dùng cho các chữ số kỹ thuật và văn bản đọc -->
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <script>
+    // Cấu hình phông chữ mặc định cho Tailwind sử dụng phông chữ Be Vietnam Pro vừa tải
     tailwind.config = {
       theme: { extend: { fontFamily: { body: ['Be Vietnam Pro', 'sans-serif'] } } },
     };
   </script>
 
+  <!-- Nhúng file CSS tùy biến thủ công cho hiệu ứng kính mờ Glassmorphism và giao diện HUD công nghệ cao -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Three.js 3D Background -->
+  <!-- Thư viện đồ họa 3D Three.js dùng để dựng bầu trời sao động ở nền phía sau -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Loader hỗ trợ nạp mô hình 3D định dạng nén GLB/GLTF từ thư mục cục bộ -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
+
+<!-- Thiết lập body dạng Flex dọc, chiều cao chiếm trọn màn hình và ẩn thanh cuộn scroll ngoài để iframe cuộn riêng -->
 <body class="page-index" style="display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
-  <!-- Premium Loading Screen -->
+  
+  <!-- Màn hình chờ (Loading Screen) cao cấp hiển thị trong lúc đang tải các mô hình 3D nặng -->
   <div id="loading-screen" class="loading-screen">
     <div class="loading-container">
       <div class="loader-logo">
+        <!-- SVG của logo EcoImpact phát sáng neon -->
         <svg class="loader-logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
           <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
@@ -37,19 +53,23 @@
         <span class="loader-logo-text">EcoImpact</span>
       </div>
       <div class="loader-spinner-wrapper">
+        <!-- Vòng quay xoay tròn bên ngoài và bên trong ngược chiều nhau -->
         <div class="loader-spinner"></div>
         <div class="loader-spinner-inner"></div>
       </div>
+      <!-- Văn bản mô tả trạng thái tải -->
       <div class="loader-text">Đang khởi tạo hệ sinh thái...</div>
     </div>
   </div>
+
+  <!-- Lưới HUD overlay công nghệ cơ khí phủ lên toàn bộ màn hình -->
   <div class="grid-overlay"></div>
+  <!-- Đường quét Radar chạy từ trên xuống dưới tạo cảm giác không gian công nghệ cao -->
   <div class="radar-line"></div>
 
-  <!-- ═══════════════════════════════════════════
-       NAVBAR
-  ═══════════════════════════════════════════ -->
+  <!-- Thanh điều hướng chính (Navbar) thiết lập hiệu ứng kính mờ (glass-nav) -->
   <nav class="navbar glass-nav">
+    <!-- Khu vực hiển thị Logo và tên thương hiệu EcoImpact bên trái -->
     <div class="flex items-center gap-2">
       <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
         <circle cx="13" cy="13" r="12" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1.5"/>
@@ -59,7 +79,7 @@
       <span class="text-white font-bold text-[0.98rem] tracking-tight">EcoImpact</span>
     </div>
 
-    <!-- Nav links -->
+    <!-- Danh sách liên kết điều hướng trên máy tính (sẽ ẩn đi nếu màn hình nhỏ dưới mức md: 768px) -->
     <div class="hidden md:flex items-center gap-8">
       <a href="index.html" class="nav-link">Trang chủ</a>
       <a href="dashboard.html" class="nav-link">Bảng điều khiển</a>
@@ -68,40 +88,52 @@
       <a href="community.html" class="nav-link">Cộng đồng</a>
     </div>
 
-    <!-- Toggle Input -->
+    <!-- Ô Checkbox ẩn dùng làm biến cờ đóng/mở menu di động mà không cần viết thêm hàm JavaScript (CSS Selector :checked) -->
     <input type="checkbox" id="nav-toggle" class="hidden" />
 
-    <!-- Mobile nav panel -->
+    <!-- Panel menu điều hướng trên điện thoại (mặc định ẩn hidden, chỉ xuất hiện flex khi #nav-toggle được check) -->
     <div class="mobile-nav-panel hidden md:hidden flex-col items-center gap-4 p-6 glass-dark border border-white/10 rounded-2xl absolute top-[calc(100%+10px)] left-0 right-0 z-50 text-center">
+      <!-- Liên kết về Trang chủ trên thiết bị di động -->
       <a href="index.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Trang chủ</a>
+      <!-- Liên kết đến Bảng điều khiển trên thiết bị di động -->
       <a href="dashboard.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Bảng điều khiển</a>
+      <!-- Liên kết đến Công cụ tính Carbon trên thiết bị di động -->
       <a href="calculator.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Công cụ</a>
+      <!-- Liên kết đến trang Tin tức trên thiết bị di động, được gán class active để làm nổi bật -->
       <a href="news.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg active">Tin tức</a>
+      <!-- Liên kết đến trang Cộng đồng thảo luận trên thiết bị di động -->
       <a href="community.html" class="nav-link w-full py-2 hover:bg-white/5 rounded-lg">Cộng đồng</a>
+      <!-- Nút Đăng nhập dạng khối (block) rộng 100% trên thiết bị di động -->
       <a href="login.html" class="btn-login w-full mt-2 py-2 block text-center" style="text-decoration:none;">Đăng nhập</a>
     </div>
 
-    <!-- Hamburger toggle -->
+    <!-- Biểu tượng nút Hamburger ba gạch trên điện thoại (được liên kết bằng thuộc tính 'for="nav-toggle"') -->
     <label for="nav-toggle" class="hamburger-toggle md:hidden cursor-pointer flex flex-col gap-[5px] p-2 rounded-lg hover:bg-white/10 active:scale-95 transition-all">
+      <!-- 3 thanh ngang tạo hình icon hamburger bằng CSS -->
       <span class="w-5 h-[2px] bg-white rounded-full"></span>
       <span class="w-5 h-[2px] bg-white rounded-full"></span>
       <span class="w-5 h-[2px] bg-white rounded-full"></span>
     </label>
 
-    <!-- Login -->
+    <!-- Nút Đăng nhập/Tài khoản người dùng trên màn hình lớn (mặc định ẩn trên di động và hiện từ breakpoint md trở lên) -->
     <a href="login.html" class="btn-login hidden md:block" style="text-decoration:none;">Đăng nhập</a>
   </nav>
 
-  <!-- Content Area (Iframe) -->
+  <!-- Vùng chứa nội dung chính (Flex: 1 chiếm toàn bộ khoảng trống còn lại, cách lề trên 80px để tránh bị Navbar đè lên) -->
   <div style="flex: 1; margin-top: 80px; width: 100%; border-radius: 20px 20px 0 0; overflow: hidden; background: white; z-index: 10; position: relative;">
+    <!-- Thẻ Iframe dùng để nhúng trực tiếp website Tin tức Môi trường & Đời sống vào trong trang EcoImpact -->
     <iframe src="https://moitruong.net.vn/" style="width: 100%; height: 100%; border: none;"></iframe>
   </div>
 
-  <!-- Footer -->
+  <!-- Phần chân trang (Footer) chứa thông tin dự án, địa chỉ, email và mạng xã hội của sinh viên -->
   <footer class="site-footer">
+    <!-- Panel giới hạn độ rộng của footer để căn giữa nội dung gọn gàng -->
     <div class="site-footer__panel">
+      <!-- Bố cục lưới Grid chia làm 3 cột chính trên màn hình máy tính -->
       <div class="site-footer__grid">
+        <!-- Cột 1: Thông tin thương hiệu EcoImpact, Logo SVG phát sáng và đoạn văn giới thiệu ngắn -->
         <div class="site-footer__brand">
+          <!-- Logo SVG thu nhỏ của EcoImpact -->
           <svg class="site-footer__logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="32" cy="32" r="30" fill="rgba(61,220,132,0.14)" stroke="#3ddc84" stroke-width="2"/>
             <path d="M32 14C22 20 18 30 20 39C22 48 28 53 32 54C36 53 42 48 44 39C46 30 42 20 32 14Z" fill="#22c55e" opacity="0.95"/>
@@ -109,11 +141,14 @@
             <path d="M32 22C36 28 38 35 40 43" stroke="#ecfff2" stroke-width="2" stroke-linecap="round" opacity="0.42"/>
           </svg>
           <div>
+            <!-- Tên dự án trong footer -->
             <div class="site-footer__title">EcoImpact</div>
+            <!-- Mô tả ngắn về sứ mệnh dự án -->
             <p class="site-footer__text">Nền tảng theo dõi, học hỏi và giảm thiểu tác động môi trường từ những thói quen nhỏ mỗi ngày.</p>
           </div>
         </div>
 
+        <!-- Cột 2: Danh sách các liên kết nội bộ giúp người dùng chuyển trang nhanh -->
         <div>
           <div class="site-footer__label">Liên kết nhanh</div>
           <div class="site-footer__links">
@@ -126,13 +161,18 @@
           </div>
         </div>
 
+        <!-- Cột 3: Thông tin liên hệ trực tiếp của sinh viên thực hiện đồ án và liên kết MXH -->
         <div>
           <div class="site-footer__label">Liên hệ & Kết nối</div>
           <div class="site-footer__meta">
+            <!-- Email liên hệ sinh viên -->
             <div><strong>Email:</strong> baolhg.25ns@vku.udn.vn</div>
+            <!-- Số điện thoại liên lạc -->
             <div><strong>Điện thoại:</strong> 0374571549</div>
+            <!-- Địa chỉ liên hệ thực tế -->
             <div><strong>Địa chỉ:</strong> 470 Đường Trần Đại Nghĩa, Phường Ngũ Hành Sơn, Thành phố Đà Nẵng</div>
           </div>
+          <!-- Các liên kết tài khoản mạng xã hội để kiểm thử -->
           <div class="site-footer__label" style="margin-top: 20px;">Mạng xã hội</div>
           <div class="site-footer__social">
             <a class="site-footer__badge" href="https://www.facebook.com/g.bao007/" target="_blank" rel="noopener noreferrer">Facebook</a>
@@ -143,6 +183,7 @@
         </div>
       </div>
 
+      <!-- Dòng thông tin bản quyền và chính sách pháp lý dưới cùng của Footer -->
       <div class="site-footer__bottom">
         <div>© 2026 EcoImpact. All rights reserved.</div>
         <div class="site-footer__policy">
@@ -154,15 +195,92 @@
     </div>
   </footer>
 
-  <!-- 3D Background -->
+  <!-- Nhúng các thư viện bổ trợ Three.js phục vụ xử lý đồ họa nền 3D chuyển động -->
+  <!-- OrbitControls: Hỗ trợ điều khiển camera bằng chuột (xoay, zoom, kéo) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- EffectComposer: Bộ quản lý hiệu ứng hậu kỳ (Post-processing) của Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <!-- RenderPass: Pass cơ bản dùng để render lại toàn bộ scene gốc lên Composer -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <!-- UnrealBloomPass: Hiệu ứng phát sáng Bloom neon mờ ảo chất lượng cao -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <!-- ShaderPass: Pass trung gian cho phép chèn bộ lọc shader tự định nghĩa -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <!-- CopyShader: Shader sao chép texture dùng nội bộ cho Composer -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <!-- LuminosityHighPassShader: Bộ lọc độ sáng phục vụ xác định vùng phát sáng cho UnrealBloomPass -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <!-- Script khởi tạo và render cảnh nền 3D (bụi mịn PM2.5, lưới HUD...) đã được viết riêng -->
   <script src="js/bg3d.js?v=4.0"></script>
 
+  <!-- 📚 HỘI ĐỒNG PHẢN BIỆN - NÚT BẤM MỞ TÀI LIỆU ÔN TẬP TRỰC QUAN -->
+  <button class="defense-notes-btn" onclick="toggleDefenseNotes()">
+    <!-- Vòng tròn hiệu ứng sóng phát sáng lan tỏa thu hút sự chú ý -->
+    <span class="defense-notes-btn-pulse"></span>📚 Tài liệu Ôn tập
+  </button>
+
+  <!-- Khung ngăn kéo (Drawer) trượt từ bên phải chứa thông tin ôn thi bảo vệ đồ án -->
+  <div id="defenseNotesDrawer" class="defense-notes-drawer">
+    <!-- Nút đóng Drawer (dấu X) -->
+    <button class="defense-notes-close" onclick="toggleDefenseNotes()">&times;</button>
+    <h2 class="defense-notes-title">EcoImpact</h2>
+    <div class="defense-notes-subtitle">Tổng quan Công nghệ & Kiến trúc</div>
+    
+    <!-- Phần 1: Ghi chú kiến trúc phía Client -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Kiến trúc Tầng Client-side</h3>
+      <ul class="defense-notes-list">
+        <li><strong>Đồ họa 3D Three.js</strong>: UnrealBloomPass phát sáng neon, nạp mô hình GLB (caytrangchu.glb, earth.glb, juan.glb), camera di chuyển theo cuộn trang.</li>
+        <li><strong>Hiệu ứng hạt 3D</strong>: 4000 hạt mưa axit rơi nghiêng theo gió, 3000 hạt bụi mịn PM2.5 lơ lửng, hạt dung nham núi lửa uốn cong theo gia tốc trọng lực.</li>
+        <li><strong>Giao diện HUD & Glassmorphic</strong>: Sử dụng Tailwind CSS kết hợp Vanilla CSS với thuộc tính <code>backdrop-filter: blur(18px)</code>.</li>
+      </ul>
+    </div>
+
+    <!-- Phần 2: Ghi chú về máy chủ Proxy và Dữ liệu -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Dữ liệu & Backend Proxy</h3>
+      <ul class="defense-notes-list">
+        <li><strong>Nguồn API Live</strong>: Global-Warming (CO2 & Nhiệt độ), Open-Meteo Air Quality, RestCountries.</li>
+        <li><strong>PowerShell serve.ps1</strong>: Phân phối file tĩnh, CORS Web Proxy endpoint <code>/api/proxy?url=...</code> gửi <code>Invoke-WebRequest</code> để lấy hộ dữ liệu bị chặn CORS.</li>
+        <li><strong>In-Memory Caching</strong>: Caching dữ liệu API trong RAM với TTL 5 phút nhằm tăng tốc độ tải và tránh Rate Limit.</li>
+      </ul>
+    </div>
+
+    <!-- Phần 3: Các câu hỏi đáp ôn tập phản biện đồ án -->
+    <div class="defense-notes-section">
+      <h3 class="defense-notes-sec-title">Câu hỏi phản biện từ Hội đồng</h3>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Tại sao em sử dụng PowerShell làm Web Server & Proxy Backend?</div>
+        <div class="defense-notes-a">Đáp: PowerShell tích hợp sẵn trên Windows nên có thể chạy máy chủ trực tiếp thông qua lớp <code>System.Net.HttpListener</code> và gọi API ngoài qua <code>Invoke-WebRequest</code> mà không cần cài thêm môi trường NodeJS/Python nặng nề, hoàn hảo cho chạy demo offline.</div>
+      </div>
+      <div class="defense-notes-qa">
+        <div class="defense-notes-q">Hỏi: Em hãy giải thích cơ chế giải quyết lỗi chặn CORS của máy chủ?</div>
+        <div class="defense-notes-a">Đáp: Khi javascript frontend fetch trực tiếp API ngoài, trình duyệt sẽ chặn do khác domain (chính sách Same-Origin Policy). Đi qua proxy backend <code>/api/proxy</code>, server-side fetch dữ liệu từ API ngoài không bị hạn chế CORS, sau đó trả về cho frontend kèm Header <code>Access-Control-Allow-Origin: *</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Đoạn script điều khiển đóng/mở Bảng ôn tập tài liệu -->
+  <script>
+    // Hàm toggleDefenseNotes dùng để hoán đổi trạng thái class 'open' giúp Drawer trượt ra/vào bằng hiệu ứng CSS transition
+    function toggleDefenseNotes() {
+      const drawer = document.getElementById('defenseNotesDrawer');
+      if (drawer) {
+        drawer.classList.toggle('open');
+      }
+    }
+  </script>
+
+  <!-- 
+  ================================================================================
+  BẢN GHI CHÚ ĐẦY ĐỦ: TỔNG QUAN CÔNG NGHỆ DỰ ÁN ECOIMPACT
+  ================================================================================
+  * Đồ họa WebGL/Three.js nạp mô hình GLTF, xử lý hậu kỳ UnrealBloomPass.
+  * Tích hợp Chart.js vẽ biểu đồ, Canvas Sparkline chống nhòe Retina.
+  * Web Storage API (localStorage) lưu trữ thông tin tài khoản và carbon offset.
+  * PowerShell Web Server & CORS Proxy Server & Caching System.
+  * Xem chi tiết trong /tai_lieu_on_tap/CAC_CONG_NGHE.md
+  ================================================================================
+  -->
 </body>
 </html>

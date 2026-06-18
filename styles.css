@@ -1523,3 +1523,177 @@ input[type=range]:active::-webkit-slider-thumb {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
+
+/* ─── Defense Notes Drawer Styling ─── */
+.defense-notes-btn {
+  position: fixed;
+  bottom: 60px;
+  left: 20px;
+  z-index: 9999;
+  background: rgba(8, 18, 14, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  color: #86efac;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(74, 222, 128, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+.defense-notes-btn:hover {
+  transform: scale(1.05);
+  background: rgba(74, 222, 128, 0.15);
+  box-shadow: 0 4px 25px rgba(74, 222, 128, 0.3), 0 0 15px rgba(74, 222, 128, 0.25);
+  color: #fff;
+  border-color: rgba(74, 222, 128, 0.7);
+}
+.defense-notes-btn-pulse {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: livePulse 1.4s infinite;
+}
+
+.defense-notes-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(480px, 90vw);
+  height: 100vh;
+  background: rgba(10, 24, 15, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(74, 222, 128, 0.35);
+  z-index: 100000;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  box-shadow: 5px 0 30px rgba(0, 0, 0, 0.7);
+  padding: 30px 24px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  text-align: left;
+}
+.defense-notes-drawer.open {
+  transform: translateX(0);
+}
+.defense-notes-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.defense-notes-close:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+.defense-notes-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+  border-bottom: 2px solid rgba(74, 222, 128, 0.3);
+  padding-bottom: 12px;
+  padding-right: 32px;
+}
+.defense-notes-subtitle {
+  font-size: 0.82rem;
+  color: #86efac;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.defense-notes-section {
+  margin-bottom: 24px;
+}
+.defense-notes-sec-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.defense-notes-sec-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 14px;
+  background: #4ade80;
+  border-radius: 2px;
+}
+.defense-notes-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.defense-notes-list li {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 14px;
+  color: rgba(255,255,255,0.7);
+}
+.defense-notes-list li::before {
+  content: '•';
+  color: #4ade80;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+.defense-notes-qa {
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid rgba(74, 222, 128, 0.5);
+}
+.defense-notes-q {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.defense-notes-a {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+}
+.defense-notes-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 6px;
+  color: #a7f3d0;
+  overflow-x: auto;
+  white-space: pre;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 8px;
+}
+

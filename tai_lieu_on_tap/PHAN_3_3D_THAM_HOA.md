@@ -1,171 +1,96 @@
-/**
- * ═══════════════════════════════════════════════════════════════════════
- *  FILE: js/calculator.js
- *  MÔ TẢ: Xử lý logic trang Máy tính Carbon (calculator.html) của EcoImpact
- *  
- *  CÁC CHỨC NĂNG CHÍNH:
- *  1. Quả địa cầu 3D tương tác (Three.js + OrbitControls + GLTFLoader)
- *  2. Hệ thống hiệu ứng thảm họa 3D phản ứng theo mức CO2:
- *     - Khói độc (Toxic Smoke Particles)
- *     - Tia lửa (Fire Sparks)
- *     - Núi lửa phun trào (Volcano Eruption + Lava + Embers)
- *     - Sét đánh (Lightning Bolts)
- *     - Lốc xoáy (Tornado/Cyclone)
- *  3. Bộ tính toán Carbon dựa trên 5 slider:
- *     - Di chuyển (km/ngày), Nhựa (món/ngày), Điện (kWh/ngày)
- *     - Rác thải (kg/ngày), Bữa ăn thịt (bữa/ngày)
- *  4. Hiển thị kết quả: Mức CO2, trạng thái sinh thái, offset carbon
- *  5. Modal báo cáo sinh thái
- *  6. Thanh tin tức chạy ngang (News Ticker)
- *  
- *  THƯ VIỆN SỬ DỤNG:
- *  - Three.js r128: Render 3D trong trình duyệt
- *  - OrbitControls: Xoay/zoom quả cầu bằng chuột
- *  - GLTFLoader: Tải model 3D định dạng .glb
- * ═══════════════════════════════════════════════════════════════════════
- */
+# 🌋 TÀI LIỆU ÔN THI & BẢO VỆ ĐỒ ÁN - PHẦN 3: ĐỒ HỌA 3D TRÁI ĐẤT THIÊN TAI & HIỆU ỨNG VẬT LÝ
 
+Tài liệu này được biên soạn đầy đủ và chi tiết dành riêng cho thành viên phụ trách **Phần 3**. Bạn chỉ cần đọc kỹ và học thuộc file này để tự tin trả lời mọi câu hỏi của hội đồng cũng như code lại toàn bộ phần việc của mình.
+
+---
+
+## 📂 Danh sách các file quản lý
+1.  [calculator.html](file:///c:/Users/ACER/Downloads/CNW/bwd/calculator.html): Trang tính Carbon và hiển thị Trái Đất 3D.
+2.  [js/calculator.js](file:///c:/Users/ACER/Downloads/CNW/bwd/js/calculator.js): Nạp mô hình 3D (`juan.glb`), thiết lập hệ thống hạt dung nham núi lửa, lốc xoáy lượng giác cực, sét đánh răng cưa và đồng bộ thanh kéo.
+
+---
+
+## 🛠️ TOÀN BỘ MÃ NGUỒN CHI TIẾT (COMPLETE CODE)
+
+### File [js/calculator.js](file:///c:/Users/ACER/Downloads/CNW/bwd/js/calculator.js) (Toàn bộ mã nguồn)
+```javascript
 (function () {
   'use strict';
 
   /* ══════════════════════════════════════════════
-   *  PHẦN 1: CÀI ĐẶT QUẢ ĐỊA CẦU 3D (Three.js)
-   *  
-   *  - Tạo Scene, Camera, Renderer
-   *  - Cấu hình OrbitControls (xoay, zoom bằng chuột)
-   *  - Thiết lập ánh sáng (ambient + directional)
-   *  - Tải model 3D (juan.glb) bằng GLTFLoader
-   * ══════════════════════════════════════════════ */
-
-  // Kiểm tra phần tử chứa 3D có tồn tại không (chỉ chạy trên trang calculator)
+     1. 3D EARTH ORB SETUP (Three.js)
+     ══════════════════════════════════════════════ */
   const orbContainer = document.getElementById('orbContainer');
   if (!orbContainer) return;
 
-  // Lấy các overlay để hiển thị hiệu ứng 2D (khói, lửa, tối) phủ lên 3D
-  const smokeOverlay = document.getElementById('smokeOverlay');  // Lớp khói mờ
-  const fireOverlay  = document.getElementById('fireOverlay');   // Lớp lửa đỏ
-  const darkOverlay  = document.getElementById('darkOverlay');   // Lớp tối dần
-
-  // Kích thước vùng render 3D
+  const smokeOverlay = document.getElementById('smokeOverlay');
+  const fireOverlay  = document.getElementById('fireOverlay');
+  const darkOverlay  = document.getElementById('darkOverlay');
   let orbW = orbContainer.clientWidth || 320;
   let orbH = orbContainer.clientHeight || 320;
    
-  /**
-   * THREE.Scene: Không gian 3D chứa tất cả đối tượng
-   * THREE.PerspectiveCamera: Camera phối cảnh (góc nhìn 35°, near 0.1, far 100)
-   * THREE.WebGLRenderer: Engine render sử dụng GPU (WebGL)
-   *   - antialias: Khử răng cưa
-   *   - alpha: Nền trong suốt
-   */
   const orbScene    = new THREE.Scene();
   const orbCamera   = new THREE.PerspectiveCamera(35, orbW / orbH, 0.1, 100);
-  orbCamera.position.z = 5.5; // Camera cách quả cầu 5.5 đơn vị
+  orbCamera.position.z = 5.5;
    
   const orbRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  orbRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Giới hạn pixel ratio (tiết kiệm GPU)
+  orbRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   orbRenderer.setSize(orbW, orbH);
-  orbRenderer.setClearColor(0x000000, 0); // Nền trong suốt
-  orbContainer.appendChild(orbRenderer.domElement); // Thêm canvas 3D vào DOM
+  orbRenderer.setClearColor(0x000000, 0);
+  orbContainer.appendChild(orbRenderer.domElement);
    
-  /**
-   * OrbitControls: Điều khiển camera bằng chuột
-   * - Xoay: Kéo chuột trái
-   * - Zoom: Cuộn chuột (giới hạn 3-10 đơn vị)
-   * - autoRotate: Tự xoay 1.5 vòng/phút
-   * - enableDamping: Hiệu ứng quán tính khi dừng kéo
-   */
+  // OrbitControls
   const orbControls = new THREE.OrbitControls(orbCamera, orbRenderer.domElement);
   orbControls.enableZoom = true;
-  orbControls.minDistance = 3;        // Zoom gần nhất
-  orbControls.maxDistance = 10;       // Zoom xa nhất
-  orbControls.enablePan = false;      // Tắt di chuyển ngang
-  orbControls.autoRotate = true;      // Tự động xoay
-  orbControls.autoRotateSpeed = 1.5;  // Tốc độ xoay
-  orbControls.dampingFactor = 0.08;   // Hệ số quán tính
+  orbControls.minDistance = 3;
+  orbControls.maxDistance = 10;
+  orbControls.enablePan = false;
+  orbControls.autoRotate = true;
+  orbControls.autoRotateSpeed = 1.5;
+  orbControls.dampingFactor = 0.08;
   orbControls.enableDamping = true;
    
-  /**
-   * Ánh sáng trong scene 3D:
-   * - AmbientLight: Ánh sáng môi trường (chiếu đều mọi hướng)
-   * - DirectionalLight: Ánh sáng định hướng (giống ánh nắng mặt trời)
-   */
   const orbAmbient = new THREE.AmbientLight(0xffffff, 0.6);
   orbScene.add(orbAmbient);
   const orbDir = new THREE.DirectionalLight(0xffffff, 1.0);
-  orbDir.position.set(3, 3, 3); // Vị trí nguồn sáng
+  orbDir.position.set(3, 3, 3);
   orbScene.add(orbDir);
    
-  // Biến lưu trữ model 3D và animation
-  let orbEarth = null;          // Model quả đất (.glb)
-  let orbMixer = null;          // AnimationMixer (nếu model có animation)
-  let orbIntensity = 0.0;       // Mức độ thảm họa hiện tại (0→1, nội suy mượt)
-  let targetIntensity = 0.0;    // Mức độ thảm họa mục tiêu (từ slider)
-
-  // Group chứa model quả đất + tất cả hiệu ứng xoay theo
+  let orbEarth = null, orbMixer = null;
+  let orbIntensity = 0.0, targetIntensity = 0.0;
   const orbPivot = new THREE.Group();
   orbScene.add(orbPivot);
   
-  /* ══════════════════════════════════════════════
-   *  HỆ THỐNG HIỆU ỨNG THẢM HỌA 3D
-   *  
-   *  Mức CO2 càng cao → hiệu ứng thảm họa càng dữ dội:
-   *  - 0.10+ → Khói độc xuất hiện
-   *  - 0.30+ → Núi lửa + lốc xoáy bắt đầu
-   *  - 0.40+ → Tia lửa + sét đánh
-   *  - 0.45+ → Sét đánh thường xuyên hơn
-   *  - 0.50+ → Núi lửa thứ 2 phun trào
-   * ══════════════════════════════════════════════ */
-
-  // ── Tạo texture cho hạt khói (Canvas 2D → CanvasTexture) ──
-  /**
-   * createSmokeTexture(): Tạo texture hình tròn gradient cho hạt khói
-   * - Dùng Canvas 2D 64x64 pixel
-   * - Gradient tỏa tròn: nâu mờ ở tâm → trong suốt ở viền
-   * - Kết quả: Hạt khói mềm mại, không có cạnh cứng
-   */
+  // ── 3D DISASTER EFFECTS ──
   function createSmokeTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = 64; canvas.height = 64;
     const ctx = canvas.getContext('2d');
     const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    grad.addColorStop(0, 'rgba(100, 85, 70, 0.5)');     // Tâm: nâu mờ
+    grad.addColorStop(0, 'rgba(100, 85, 70, 0.5)');
     grad.addColorStop(0.3, 'rgba(80, 70, 60, 0.25)');
     grad.addColorStop(0.7, 'rgba(60, 50, 45, 0.05)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');               // Viền: trong suốt
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 64, 64);
     return new THREE.CanvasTexture(canvas);
   }
   
-  // Tạo texture cho tia lửa (sáng rực ở tâm, mờ dần ra ngoài)
   function createSparkTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = 32; canvas.height = 32;
     const ctx = canvas.getContext('2d');
     const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    grad.addColorStop(0, 'rgba(255, 235, 170, 1)');      // Tâm: vàng sáng
-    grad.addColorStop(0.2, 'rgba(255, 120, 20, 0.8)');   // Cam
-    grad.addColorStop(0.5, 'rgba(200, 40, 0, 0.3)');     // Đỏ mờ
+    grad.addColorStop(0, 'rgba(255, 235, 170, 1)');
+    grad.addColorStop(0.2, 'rgba(255, 120, 20, 0.8)');
+    grad.addColorStop(0.5, 'rgba(200, 40, 0, 0.3)');
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 32, 32);
     return new THREE.CanvasTexture(canvas);
   }
   
-  /* ── HỆ THỐNG HẠT KHÓI ĐỘC (Toxic Smoke Particle System) ──
-   * 
-   * - 200 hạt khói phân bố ngẫu nhiên trên bề mặt cầu
-   * - Mỗi hạt bay lên theo hướng Y với tốc độ ngẫu nhiên
-   * - Opacity thay đổi theo orbIntensity (0 khi Trái Đất khỏe mạnh)
-   * 
-   * THUẬT TOÁN PHÂN BỐ CẦU (Spherical Coordinates):
-   * - u, v: số ngẫu nhiên [0, 1]
-   * - theta = u × 2π (góc kinh tuyến)
-   * - phi = arccos(2v - 1) (góc vĩ tuyến - phân bố đều trên mặt cầu)
-   * - x = r × sin(phi) × cos(theta)
-   * - y = r × sin(phi) × sin(theta)
-   * - z = r × cos(phi)
-   */
+  // ── Toxic Smoke Particle System
   const smokeCount = 200;
   const smokeGeo = new THREE.BufferGeometry();
   const smokePos = new Float32Array(smokeCount * 3);
@@ -183,7 +108,7 @@
     
     smokeSpeeds.push({
       x: (Math.random() - 0.5) * 0.05,
-      y: 0.15 + Math.random() * 0.2,  // Bay lên
+      y: 0.15 + Math.random() * 0.2,
       z: (Math.random() - 0.5) * 0.05
     });
   }
@@ -192,19 +117,14 @@
     size: 0.65,
     map: createSmokeTexture(),
     transparent: true,
-    depthWrite: false,              // Không ghi depth buffer (cho trong suốt)
+    depthWrite: false,
     blending: THREE.NormalBlending,
-    opacity: 0.0                    // Ban đầu ẩn hoàn toàn
+    opacity: 0.0
   });
   const toxicSmoke = new THREE.Points(smokeGeo, smokeMat);
   orbScene.add(toxicSmoke);
   
-  /* ── HỆ THỐNG TIA LỬA (Fire Sparks Particle System) ──
-   * 
-   * - 120 tia lửa bay ra từ bề mặt quả cầu
-   * - Sử dụng AdditiveBlending: Ánh sáng cộng dồn → rực rỡ hơn
-   * - Mỗi tia lửa có vòng đời (life) và tốc độ riêng
-   */
+  // ── Fire Sparks Particle System
   const sparkCount = 120;
   const sparkGeo = new THREE.BufferGeometry();
   const sparkPos = new Float32Array(sparkCount * 3);
@@ -224,10 +144,10 @@
     sparkPos[i * 3 + 2] = pos.z;
     
     sparkData.push({
-      dir: dir,                      // Hướng bay ra
-      speed: 0.6 + Math.random() * 0.8,  // Tốc độ
-      radius: startRadius,           // Bán kính bắt đầu
-      life: Math.random()            // Tiến độ vòng đời (0→1)
+      dir: dir,
+      speed: 0.6 + Math.random() * 0.8,
+      radius: startRadius,
+      life: Math.random()
     });
   }
   sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
@@ -236,34 +156,19 @@
     map: createSparkTexture(),
     transparent: true,
     depthWrite: false,
-    blending: THREE.AdditiveBlending, // Additive: ánh sáng cộng dồn → sáng rực
+    blending: THREE.AdditiveBlending,
     opacity: 0.0
   });
   const fireSparks = new THREE.Points(sparkGeo, sparkMat);
   orbScene.add(fireSparks);
   
-  /* ── SÉT ĐÁNH (Lightning Bolts) ──
-   * 
-   * - Tạo tia sét ngẫu nhiên từ không gian đến bề mặt quả cầu
-   * - Hiệu ứng nhấp nháy (flash) bằng cách thay đổi ánh sáng
-   * - Tần suất sét tăng khi mức thảm họa cao
-   */
+  // ── Lightning Bolts Group
   const lightningBoltsGroup = new THREE.Group();
   orbScene.add(lightningBoltsGroup);
-  let lightningCountdown = 0;  // Đếm ngược đến tia sét tiếp theo
-  let lightFlashTime = 0;      // Thời gian hiệu ứng flash còn lại
+  let lightningCountdown = 0;
+  let lightFlashTime = 0;
   
-  /**
-   * createLightningStrike(): Tạo một tia sét mới
-   * 
-   * THUẬT TOÁN:
-   * 1. Chọn điểm bắt đầu ngẫu nhiên trên bề mặt cầu (r=2.1)
-   * 2. Chọn điểm kết thúc gần bề mặt (r=1.0) với góc lệch nhẹ
-   * 3. Chia thành 6 đoạn, mỗi đoạn dịch chuyển ngẫu nhiên
-   *    → Tạo hình zigzag tự nhiên của tia sét
-   */
   function createLightningStrike() {
-    // Xóa tia sét cũ (giải phóng bộ nhớ GPU)
     while (lightningBoltsGroup.children.length > 0) {
       const line = lightningBoltsGroup.children[0];
       line.geometry.dispose();
@@ -271,7 +176,6 @@
       lightningBoltsGroup.remove(line);
     }
   
-    // Chọn điểm bắt đầu ngẫu nhiên trên bề mặt cầu
     const u = Math.random();
     const v = Math.random();
     const theta = u * 2 * Math.PI;
@@ -281,23 +185,20 @@
       Math.sin(phi) * Math.sin(theta),
       Math.cos(phi)
     );
-    const startPos = startDir.clone().multiplyScalar(2.1); // Bắt đầu từ xa
+    const startPos = startDir.clone().multiplyScalar(2.1);
   
-    // Điểm kết thúc: gần bề mặt, lệch góc nhẹ
     const endDir = startDir.clone().applyAxisAngle(
       new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(),
       0.3 + Math.random() * 0.2
     );
     const endPos = endDir.clone().multiplyScalar(1.0);
   
-    // Tạo đường zigzag bằng cách nội suy + dịch chuyển ngẫu nhiên
     const points = [];
     const segments = 6;
     for (let i = 0; i <= segments; i++) {
       const fraction = i / segments;
       const lerped = new THREE.Vector3().lerpVectors(startPos, endPos, fraction);
       if (i > 0 && i < segments) {
-        // Dịch chuyển ngẫu nhiên vuông góc với hướng sét → hiệu ứng zigzag
         const pathVec = new THREE.Vector3().subVectors(endPos, startPos).normalize();
         const randVec = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).cross(pathVec).normalize();
         const displacement = 0.12 + Math.random() * 0.15;
@@ -308,7 +209,7 @@
   
     const lightningGeo = new THREE.BufferGeometry().setFromPoints(points);
     const lightningMat = new THREE.LineBasicMaterial({
-      color: 0x86efac,        // Màu xanh lá sáng
+      color: 0x86efac,
       transparent: true,
       opacity: 0.95
     });
@@ -316,43 +217,28 @@
     const line = new THREE.Line(lightningGeo, lightningMat);
     lightningBoltsGroup.add(line);
   
-    lightFlashTime = 0.18 + Math.random() * 0.15; // Thời gian flash
+    lightFlashTime = 0.18 + Math.random() * 0.15;
   }
   
-  /* ── NÚI LỬA PHUN TRÀO (Volcano Eruption System) ──
-   * 
-   * Bao gồm:
-   * - Miệng núi lửa (crater): Hình tròn phát sáng đỏ
-   * - Hạt phun trào (eruption particles): Bay lên rồi rơi xuống (trọng lực)
-   * - Hồ dung nham (lava pool): Phát sáng ở chân núi lửa
-   * - Vòng cháy xém (scorched ring): Vùng bị đốt cháy xung quanh
-   * - Dòng dung nham (lava flow): Chảy trên bề mặt
-   * - Tàn lửa (embers): Bay lên từ vùng nóng
-   * - Đèn điểm (PointLight): Chiếu sáng vùng núi lửa
-   */
-  const volcanoDir = new THREE.Vector3(0.25, -0.45, 0.85).normalize(); // Hướng núi lửa
+  // ── Volcano Eruption setup
+  const volcanoDir = new THREE.Vector3(0.25, -0.45, 0.85).normalize();
   
-  // Miệng núi lửa (hình tròn đỏ phát sáng)
+  // Volcanic Crater Mesh
   const craterGeo = new THREE.CircleGeometry(0.10, 16);
   const craterMat = new THREE.MeshBasicMaterial({
     color: 0xff3300,
     transparent: true,
-    opacity: 0.0,                      // Ban đầu ẩn
+    opacity: 0.0,
     side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending   // Additive: sáng rực
+    blending: THREE.AdditiveBlending
   });
   const craterMesh = new THREE.Mesh(craterGeo, craterMat);
   let craterPos = volcanoDir.clone().multiplyScalar(0.8);
   craterMesh.position.copy(craterPos);
-  craterMesh.lookAt(craterPos.clone().add(volcanoDir)); // Quay mặt ra ngoài
+  craterMesh.lookAt(craterPos.clone().add(volcanoDir));
   orbPivot.add(craterMesh);
   
-  /**
-   * Hạt phun trào núi lửa (90 hạt):
-   * - Mỗi hạt có vị trí, vận tốc, tuổi thọ riêng
-   * - Phân chia thành 2 loại: dung nham (cam vàng) và khói (xám)
-   * - Chịu tác dụng trọng lực (kéo về tâm quả cầu)
-   */
+  // Volcanic Eruption Particles
   const volCount = 90;
   const volGeo = new THREE.BufferGeometry();
   const volPos = new Float32Array(volCount * 3);
@@ -364,16 +250,16 @@
     volPos[i * 3 + 1] = craterPos.y;
     volPos[i * 3 + 2] = craterPos.z;
   
-    const isLava = Math.random() > 0.45; // 55% là dung nham, 45% là khói
-    volColors[i * 3]     = isLava ? 1.0 : 0.3;  // R
-    volColors[i * 3 + 1] = isLava ? 0.8 : 0.3;  // G
-    volColors[i * 3 + 2] = isLava ? 0.1 : 0.3;  // B
+    const isLava = Math.random() > 0.45;
+    volColors[i * 3]     = isLava ? 1.0 : 0.3;
+    volColors[i * 3 + 1] = isLava ? 0.8 : 0.3;
+    volColors[i * 3 + 2] = isLava ? 0.1 : 0.3;
   
     volData.push({
       pos: craterPos.clone(),
-      vel: new THREE.Vector3(),             // Vận tốc ban đầu = 0
-      life: 0.3 + Math.random() * 0.6,     // Tuổi thọ ngẫu nhiên
-      age: Math.random() * 0.9,            // Tuổi ban đầu (offset thời gian)
+      vel: new THREE.Vector3(),
+      life: 0.3 + Math.random() * 0.6,
+      age: Math.random() * 0.9,
       isLava: isLava
     });
   }
@@ -383,7 +269,7 @@
   
   const volMat = new THREE.PointsMaterial({
     size: 0.16,
-    vertexColors: true,                     // Màu theo từng vertex
+    vertexColors: true,
     transparent: true,
     depthWrite: false,
     opacity: 0.0,
@@ -393,18 +279,12 @@
   const volcanoParticles = new THREE.Points(volGeo, volMat);
   orbPivot.add(volcanoParticles);
   
-  /**
-   * resetVolcanoParticle(idx): Reset hạt phun trào về miệng núi lửa
-   * Được gọi khi hạt "chết" (age >= life) → tái sử dụng hạt
-   * → Kỹ thuật Object Pooling: không tạo/xóa hạt mới, tiết kiệm bộ nhớ
-   */
   function resetVolcanoParticle(idx) {
     const data = volData[idx];
     data.pos.copy(craterPos);
     data.age = 0;
     data.life = 0.3 + Math.random() * 0.6;
   
-    // Tính hướng phun: hướng núi lửa + nhiễu ngẫu nhiên
     const randVec = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).cross(volcanoDir).normalize();
     const spread = 0.35;
     const launchDir = volcanoDir.clone().add(randVec.multiplyScalar(Math.random() * spread)).normalize();
@@ -419,7 +299,6 @@
     posArr[idx * 3 + 1] = craterPos.y;
     posArr[idx * 3 + 2] = craterPos.z;
   
-    // Reset màu sắc
     if (data.isLava) {
       colArr[idx * 3]     = 1.0;
       colArr[idx * 3 + 1] = 0.9;
@@ -431,34 +310,40 @@
     }
   }
   
-  // ── Hồ dung nham (Lava Pool) ──
+  // ── Ground Effect: BIG Lava Pool
   const lavaPoolGeo = new THREE.CircleGeometry(0.04, 16);
   const lavaPoolMat = new THREE.MeshBasicMaterial({
-    color: 0xff6600, transparent: true, opacity: 0.0,
-    side: THREE.DoubleSide, blending: THREE.AdditiveBlending
+    color: 0xff6600,
+    transparent: true,
+    opacity: 0.0,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending
   });
   const lavaPoolMesh = new THREE.Mesh(lavaPoolGeo, lavaPoolMat);
   lavaPoolMesh.position.copy(craterPos);
   lavaPoolMesh.lookAt(craterPos.clone().add(volcanoDir));
   orbPivot.add(lavaPoolMesh);
   
-  // ── Vòng cháy xém (Scorched Ring) ──
+  // ── Ground Effect: Outer Scorched Ring
   const scorchedGeo = new THREE.RingGeometry(0.04, 0.09, 16);
   const scorchedMat = new THREE.MeshBasicMaterial({
-    color: 0xdd3300, transparent: true, opacity: 0.0,
-    side: THREE.DoubleSide, blending: THREE.AdditiveBlending
+    color: 0xdd3300,
+    transparent: true,
+    opacity: 0.0,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending
   });
   const scorchedMesh = new THREE.Mesh(scorchedGeo, scorchedMat);
   scorchedMesh.position.copy(craterPos);
   scorchedMesh.lookAt(craterPos.clone().add(volcanoDir));
   orbPivot.add(scorchedMesh);
   
-  // ── Đèn điểm núi lửa (PointLight) ──
+  // ── Ground Effect: PointLight
   const volcanoLight = new THREE.PointLight(0xff4400, 0, 0.5, 2);
   volcanoLight.position.copy(volcanoDir.clone().multiplyScalar(craterPos.length() + 0.15));
   orbPivot.add(volcanoLight);
   
-  // Tính vector tiếp tuyến vuông góc với hướng núi lửa (dùng cho dòng lava)
+  // Build tangent vectors perpendicular to volcanoDir
   const tangent1 = new THREE.Vector3();
   if (Math.abs(volcanoDir.y) < 0.9) {
     tangent1.crossVectors(volcanoDir, new THREE.Vector3(0, 1, 0)).normalize();
@@ -467,7 +352,7 @@
   }
   const tangent2 = new THREE.Vector3().crossVectors(volcanoDir, tangent1).normalize();
   
-  // ── Dòng dung nham chảy trên bề mặt (Lava Flow Streams) ──
+  // ── Ground Effect: Lava Flow Streams
   const lavaFlowCount = 60;
   const lavaFlowGeo = new THREE.BufferGeometry();
   const lavaFlowPos = new Float32Array(lavaFlowCount * 3);
@@ -514,13 +399,18 @@
   lavaFlowGeo.setAttribute('position', new THREE.BufferAttribute(lavaFlowPos, 3));
   lavaFlowGeo.setAttribute('color', new THREE.BufferAttribute(lavaFlowColors, 3));
   const lavaFlowMat = new THREE.PointsMaterial({
-    size: 0.10, map: lavaFlowTexture, vertexColors: true,
-    transparent: true, depthWrite: false, opacity: 0.0, blending: THREE.AdditiveBlending
+    size: 0.10,
+    map: lavaFlowTexture,
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+    opacity: 0.0,
+    blending: THREE.AdditiveBlending
   });
   const lavaFlowParticles = new THREE.Points(lavaFlowGeo, lavaFlowMat);
   orbPivot.add(lavaFlowParticles);
   
-  // ── Tàn lửa bay lên (Rising Embers) ──
+  // ── Ground Effect: Rising Embers
   const emberCount = 35;
   const emberGeo = new THREE.BufferGeometry();
   const emberPos = new Float32Array(emberCount * 3);
@@ -554,19 +444,17 @@
   emberGeo.setAttribute('position', new THREE.BufferAttribute(emberPos, 3));
   emberGeo.setAttribute('color', new THREE.BufferAttribute(emberColors, 3));
   const emberMat = new THREE.PointsMaterial({
-    size: 0.06, vertexColors: true, transparent: true,
-    depthWrite: false, opacity: 0.0, blending: THREE.AdditiveBlending
+    size: 0.06,
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+    opacity: 0.0,
+    blending: THREE.AdditiveBlending
   });
   const emberParticles = new THREE.Points(emberGeo, emberMat);
   orbPivot.add(emberParticles);
   
-  /* ── LỐC XOÁY (Tornado/Cyclone System) ──
-   * 
-   * - 5 lốc xoáy ở các vị trí khác nhau trên quả cầu
-   * - Mỗi lốc xoáy: hình phễu xoay tròn, nhỏ ở đáy, rộng ở trên
-   * - Hạt xoay theo angular speed, có wobble ngẫu nhiên
-   * - Di chuyển chậm trên bề mặt (drift)
-   */
+  // ── Tornado / Cyclone System
   function createTornadoTexture() {
     const c = document.createElement('canvas');
     c.width = 32; c.height = 32;
@@ -581,7 +469,6 @@
   }
   const tornadoTex = createTornadoTexture();
   
-  // Cấu hình 5 lốc xoáy
   const tornadoConfigs = [
     { dir: new THREE.Vector3(-0.6, 0.2, -0.75).normalize(), count: 100, maxH: 0.50, baseR: 0.02, topR: 0.16, size: 0.065, driftSpeed: 0.72 },
     { dir: new THREE.Vector3(0.4, 0.6, -0.65).normalize(),  count: 70,  maxH: 0.35, baseR: 0.015, topR: 0.10, size: 0.05,  driftSpeed: 1.08 },
@@ -593,9 +480,7 @@
   const tornadoes = [];
   const tornadoSurfaceRadius = 0.8;
   
-  // Khởi tạo mỗi lốc xoáy
   tornadoConfigs.forEach((cfg) => {
-    // Tính vector tiếp tuyến cho mỗi lốc xoáy
     const t1 = new THREE.Vector3();
     if (Math.abs(cfg.dir.y) < 0.9) {
       t1.crossVectors(cfg.dir, new THREE.Vector3(0, 1, 0)).normalize();
@@ -615,14 +500,14 @@
       .add(t2.clone().multiplyScalar(Math.sin(driftAngle))).normalize();
   
     for (let i = 0; i < cfg.count; i++) {
-      const hR = Math.random();                    // Tỷ lệ chiều cao (0 = đáy, 1 = đỉnh)
-      const fR = cfg.baseR + hR * (cfg.topR - cfg.baseR); // Bán kính phễu (rộng dần lên trên)
-      const a = Math.random() * Math.PI * 2;       // Góc xoay ban đầu
-      const h = hR * cfg.maxH;                     // Chiều cao thực
+      const hR = Math.random();
+      const fR = cfg.baseR + hR * (cfg.topR - cfg.baseR);
+      const a = Math.random() * Math.PI * 2;
+      const h = hR * cfg.maxH;
   
       const pt = basePos.clone()
-        .add(cfg.dir.clone().multiplyScalar(h))     // Bay lên theo hướng lốc xoáy
-        .add(t1.clone().multiplyScalar(Math.cos(a) * fR))  // Xoay tròn
+        .add(cfg.dir.clone().multiplyScalar(h))
+        .add(t1.clone().multiplyScalar(Math.cos(a) * fR))
         .add(t2.clone().multiplyScalar(Math.sin(a) * fR));
   
       positions[i * 3] = pt.x; positions[i * 3 + 1] = pt.y; positions[i * 3 + 2] = pt.z;
@@ -632,7 +517,7 @@
   
       particles.push({
         heightRatio: hR, angle: a, funnelRadius: fR, height: h,
-        angularSpeed: 3.0 + Math.random() * 4.0 + (1.0 - hR) * 3.0, // Đáy xoay nhanh hơn
+        angularSpeed: 3.0 + Math.random() * 4.0 + (1.0 - hR) * 3.0,
         wobble: Math.random() * 0.3
       });
     }
@@ -657,9 +542,7 @@
     });
   });
   
-  /* ── NÚI LỬA THỨ 2 (Second Volcano) ──
-   * Giống núi lửa 1 nhưng vị trí khác, kích hoạt ở mức thảm họa cao hơn
-   */
+  // ── Second Volcano Setup
   const volcano2Dir = new THREE.Vector3(-0.55, 0.3, -0.75).normalize();
   let crater2Pos = volcano2Dir.clone().multiplyScalar(0.8);
   
@@ -692,6 +575,7 @@
   const vol2Particles = new THREE.Points(vol2Geo, vol2Mat);
   orbPivot.add(vol2Particles);
   
+  // Lava pool for volcano 2
   const lava2Geo = new THREE.CircleGeometry(0.04, 16);
   const lava2Mat = new THREE.MeshBasicMaterial({
     color: 0xff5500, transparent: true, opacity: 0.0, side: THREE.DoubleSide, blending: THREE.AdditiveBlending
@@ -715,28 +599,17 @@
     posArr[idx * 3] = crater2Pos.x; posArr[idx * 3 + 1] = crater2Pos.y; posArr[idx * 3 + 2] = crater2Pos.z;
   }
   
-  /* ── TẢI MODEL 3D (juan.glb) BẰNG GLTFLoader ──
-   * 
-   * - Load file .glb (binary GLTF) chứa model quả đất
-   * - Scale model vừa vặn trong scene
-   * - Cập nhật vị trí tất cả hiệu ứng theo kích thước model thực tế
-   * - Gọi triggerPageLoaded() khi load xong → tắt loading screen
-   */
+  // Load juan.glb model
   new THREE.GLTFLoader().load('./models/juan.glb', function(gltf) {
     orbEarth = gltf.scene;
-
-    // Scale model vừa vặn (đường kính = 2.4 đơn vị)
     const box = new THREE.Box3().setFromObject(orbEarth);
     const size = box.getSize(new THREE.Vector3());
     const scale = 2.4 / Math.max(size.x, size.y, size.z);
     orbEarth.scale.set(scale, scale, scale);
-
-    // Căn giữa model (dịch tâm về gốc tọa độ)
     const scaledBox = new THREE.Box3().setFromObject(orbEarth);
     const center = scaledBox.getCenter(new THREE.Vector3());
     orbEarth.position.sub(center);
   
-    // Cập nhật vị trí hiệu ứng theo kích thước model thực tế
     const scaledSize = scaledBox.getSize(new THREE.Vector3());
     const earthBodyRadius = Math.min(scaledSize.x, scaledSize.y, scaledSize.z) / 2.0;
   
@@ -746,7 +619,9 @@
   
     const posArr = volGeo.attributes.position.array;
     for (let i = 0; i < volCount; i++) {
-      posArr[i * 3] = craterPos.x; posArr[i * 3 + 1] = craterPos.y; posArr[i * 3 + 2] = craterPos.z;
+      posArr[i * 3]     = craterPos.x;
+      posArr[i * 3 + 1] = craterPos.y;
+      posArr[i * 3 + 2] = craterPos.z;
       volData[i].pos.copy(craterPos);
     }
     volGeo.attributes.position.needsUpdate = true;
@@ -759,7 +634,9 @@
   
     const lfp = lavaFlowGeo.attributes.position.array;
     for (let i = 0; i < lavaFlowCount; i++) {
-      lfp[i * 3] = craterPos.x; lfp[i * 3 + 1] = craterPos.y; lfp[i * 3 + 2] = craterPos.z;
+      lfp[i * 3] = craterPos.x;
+      lfp[i * 3 + 1] = craterPos.y;
+      lfp[i * 3 + 2] = craterPos.z;
       lavaFlowData[i].pos.copy(craterPos);
       lavaFlowData[i].surfaceRadius = craterPos.length();
       lavaFlowData[i].progress = Math.random();
@@ -774,7 +651,9 @@
         .add(tangent2.clone().multiplyScalar(Math.sin(angle)));
       const basePos = craterPos.clone().add(surfDir.multiplyScalar(dist));
       basePos.normalize().multiplyScalar(craterPos.length());
-      ep[i * 3] = basePos.x; ep[i * 3 + 1] = basePos.y; ep[i * 3 + 2] = basePos.z;
+      ep[i * 3] = basePos.x;
+      ep[i * 3 + 1] = basePos.y;
+      ep[i * 3 + 2] = basePos.z;
       emberData[i].basePos.copy(basePos);
     }
     emberGeo.attributes.position.needsUpdate = true;
@@ -808,13 +687,10 @@
     }
     vol2Geo.attributes.position.needsUpdate = true;
   
-    // Kích hoạt animation nếu model có
     if (gltf.animations && gltf.animations.length > 0) {
       orbMixer = new THREE.AnimationMixer(orbEarth);
       gltf.animations.forEach(clip => orbMixer.clipAction(clip).play());
     }
-
-    // Tối ưu chất lượng texture (anisotropic filtering)
     const maxAniso = orbRenderer.capabilities.getMaxAnisotropy();
     orbEarth.traverse(child => {
       if (child.isMesh && child.material) {
@@ -824,44 +700,31 @@
         });
       }
     });
-
     orbPivot.add(orbEarth);
     orbControls.target.set(0, 0, 0);
     orbControls.update();
     
-    // Tắt loading screen khi model đã load xong
     if (typeof window.triggerPageLoaded === 'function') {
       window.triggerPageLoaded();
     }
   }, undefined, function (error) {
     console.error('Error loading juan.glb:', error);
     if (typeof window.triggerPageLoaded === 'function') {
-      window.triggerPageLoaded(); // Tắt loading ngay cả khi load lỗi
+      window.triggerPageLoaded();
     }
   });
   
-  /* ── VÒNG LẶP ANIMATION CHÍNH (Main Render Loop) ──
-   * 
-   * Chạy liên tục bằng requestAnimationFrame
-   * Mỗi frame:
-   * 1. Nội suy orbIntensity → targetIntensity (mượt mà)
-   * 2. Cập nhật tất cả hiệu ứng theo orbIntensity
-   * 3. Render scene
-   * 
-   * orbIntensity (t): 0 = Trái Đất khỏe mạnh, 1 = thảm họa tối đa
-   */
   const orbClock = new THREE.Clock();
   function animateOrb() {
     requestAnimationFrame(animateOrb);
-    const delta = orbClock.getDelta(); // Thời gian giữa 2 frame (giây)
-    if (orbMixer) orbMixer.update(delta); // Cập nhật animation model
-    orbControls.update(); // Cập nhật camera controls
+    const delta = orbClock.getDelta();
+    if (orbMixer) orbMixer.update(delta);
+    orbControls.update();
    
-    // NỘI SUY MỨC ĐỘ THẢM HỌA (Lerp): mượt mà, không giật
     orbIntensity += (targetIntensity - orbIntensity) * 0.04;
-    const t = orbIntensity; // t: 0 = khỏe mạnh, 1 = thảm họa tối đa
+    const t = orbIntensity; 
    
-    // ═══ CẬP NHẬT OVERLAY 2D (khói, lửa, tối) ═══
+    // Overlays
     const smokeOpacity = Math.max(0, (t - 0.15) / 0.85) * 0.4;
     if (smokeOverlay) {
       smokeOverlay.style.opacity = smokeOpacity;
@@ -877,7 +740,6 @@
     const darkOpacity = Math.max(0, (t - 0.30) / 0.70) * 0.6;
     if (darkOverlay) darkOverlay.style.opacity = darkOpacity;
    
-    // CSS filter trên Canvas 3D: grayscale + brightness + sepia + contrast
     const grayscale = Math.min(t * 60, 50);
     const brightness = 1.0 - t * 0.35;
     const sepia = Math.min(t * 40, 30);
@@ -887,13 +749,13 @@
         `grayscale(${grayscale}%) brightness(${brightness}) sepia(${sepia}%) contrast(${contrast})`;
     }
    
-    // ═══ CẬP NHẬT KHÓI ═══
+    // Smoke
     toxicSmoke.rotation.y += 0.0015;
     toxicSmoke.rotation.z += 0.0008;
     const targetSmokeOpacity = Math.max(0, Math.min(0.5, (t - 0.1) * 0.7));
     smokeMat.opacity = targetSmokeOpacity;
   
-    // ═══ CẬP NHẬT TIA LỬA ═══
+    // Sparks
     const positions = sparkGeo.attributes.position.array;
     const targetSparkOpacity = Math.max(0, Math.min(0.55, (t - 0.4) * 1.2));
     sparkMat.opacity = targetSparkOpacity;
@@ -907,14 +769,14 @@
         }
         const currentRadius = data.radius + data.life * 0.85;
         const currentPos = data.dir.clone().multiplyScalar(currentRadius);
-        positions[i * 3] = currentPos.x;
+        positions[i * 3]     = currentPos.x;
         positions[i * 3 + 1] = currentPos.y;
         positions[i * 3 + 2] = currentPos.z;
       }
       sparkGeo.attributes.position.needsUpdate = true;
     }
   
-    // ═══ CẬP NHẬT NÚI LỬA 1 ═══
+    // Volcano
     const targetCraterOpacity = Math.max(0, Math.min(0.6, (t - 0.3) * 1.2));
     craterMat.opacity = targetCraterOpacity * (0.5 + Math.sin(orbClock.getElapsedTime() * 12.0) * 0.15);
   
@@ -930,9 +792,8 @@
         data.age += delta;
   
         if (data.age >= data.life) {
-          resetVolcanoParticle(i); // Hạt "chết" → reset về miệng núi lửa
+          resetVolcanoParticle(i);
         } else {
-          // Trọng lực: kéo hạt về tâm quả cầu
           const gravityDir = data.pos.clone().normalize();
           const gravityStrength = 0.45 * delta;
           data.vel.addScaledVector(gravityDir, -gravityStrength);
@@ -942,7 +803,6 @@
           volPositions[i * 3 + 1] = data.pos.y;
           volPositions[i * 3 + 2] = data.pos.z;
   
-          // Dung nham nguội dần: vàng → cam → đỏ tối
           const progress = data.age / data.life;
           if (data.isLava) {
             volColArr[i * 3]     = 1.0 - progress * 0.3;
@@ -959,14 +819,13 @@
       volGeo.attributes.color.needsUpdate = true;
     }
   
-    // ═══ HIỆU ỨNG MẶT ĐẤT: Hồ dung nham + vòng cháy + ánh sáng ═══
+    // Ground effects
     const elapsed = orbClock.getElapsedTime();
     const groundEffectOpacity = Math.max(0, Math.min(1.0, (t - 0.3) * 2.5));
     lavaPoolMat.opacity = groundEffectOpacity * (0.3 + Math.sin(elapsed * 4.0) * 0.15);
     scorchedMat.opacity = groundEffectOpacity * (0.15 + Math.sin(elapsed * 2.0 + 1.0) * 0.1);
     volcanoLight.intensity = groundEffectOpacity * (1.2 + Math.sin(elapsed * 5.0) * 0.6);
   
-    // Dòng dung nham chảy trên bề mặt
     lavaFlowMat.opacity = groundEffectOpacity * 0.45;
     if (groundEffectOpacity > 0) {
       const lfPositions = lavaFlowGeo.attributes.position.array;
@@ -993,7 +852,6 @@
       lavaFlowGeo.attributes.color.needsUpdate = true;
     }
   
-    // Tàn lửa bay lên/xuống (dao động sin)
     emberMat.opacity = groundEffectOpacity * 0.4;
     if (groundEffectOpacity > 0) {
       const ePositions = emberGeo.attributes.position.array;
@@ -1008,14 +866,12 @@
       emberGeo.attributes.position.needsUpdate = true;
     }
   
-    // ═══ CẬP NHẬT LỐC XOÁY ═══
+    // Tornadoes
     const tornadoOpacity = Math.max(0, Math.min(1.0, (t - 0.35) * 2.5));
     if (tornadoOpacity > 0) {
       tornadoes.forEach(tor => {
         tor.mat.opacity = tornadoOpacity * 0.5;
         tor.driftAngle += tor.driftSpeed * delta;
-
-        // Di chuyển lốc xoáy trên bề mặt
         const rotMatrix = new THREE.Matrix4().makeRotationAxis(
           new THREE.Vector3(0, 1, 0).cross(tor.dir).normalize() || new THREE.Vector3(0, 0, 1),
           tor.driftSpeed * delta
@@ -1030,11 +886,10 @@
         tor.t2.crossVectors(tor.dir, tor.t1).normalize();
         tor.basePos = tor.dir.clone().multiplyScalar(tor.surfaceRadius);
   
-        // Cập nhật vị trí hạt xoay tròn
         const tpArr = tor.geo.attributes.position.array;
         for (let i = 0; i < tor.count; i++) {
           const d = tor.particles[i];
-          d.angle += d.angularSpeed * delta; // Xoay tròn
+          d.angle += d.angularSpeed * delta;
           const wobbleOff = Math.sin(elapsed * 2.0 + d.heightRatio * 4.0) * d.wobble;
           const curR = d.funnelRadius + wobbleOff * 0.02;
           const pt = tor.basePos.clone()
@@ -1049,7 +904,7 @@
       tornadoes.forEach(tor => { tor.mat.opacity = 0; });
     }
   
-    // ═══ CẬP NHẬT NÚI LỬA 2 ═══
+    // Volcano 2
     const v2CraterOp = Math.max(0, Math.min(0.6, (t - 0.4) * 1.5));
     crater2Mat.opacity = v2CraterOp * (0.4 + Math.sin(elapsed * 10.0) * 0.12);
     lava2Mat.opacity = v2CraterOp * (0.25 + Math.sin(elapsed * 3.5) * 0.12);
@@ -1082,17 +937,16 @@
       vol2Geo.attributes.color.needsUpdate = true;
     }
   
-    // ═══ CẬP NHẬT SÉT ĐÁNH ═══
+    // Lightning
     if (t > 0.45) {
       lightningCountdown -= delta;
       if (lightningCountdown <= 0) {
         createLightningStrike();
-        const frequencyFactor = 1.5 - (t - 0.45) * 1.2; // Tần suất tăng khi t cao
+        const frequencyFactor = 1.5 - (t - 0.45) * 1.2;
         lightningCountdown = Math.max(0.18, Math.random() * frequencyFactor);
       }
     }
   
-    // Hiệu ứng flash sét (nhấp nháy ánh sáng)
     if (lightFlashTime > 0) {
       lightFlashTime -= delta;
       if (lightFlashTime <= 0) {
@@ -1117,7 +971,6 @@
         }
       }
     } else {
-      // Chuyển đổi màu ánh sáng: trắng (khỏe) → cam (thảm họa)
       const healthy = new THREE.Color(0xffffff);
       const dying   = new THREE.Color(0xff6633);
       orbAmbient.color.copy(healthy).lerp(dying, t);
@@ -1126,13 +979,12 @@
       orbDir.intensity = 1.0 - t * 0.4;
     }
    
-    // RENDER: Vẽ scene ra Canvas
     orbRenderer.render(orbScene, orbCamera);
   }
   
-  animateOrb(); // Bắt đầu vòng lặp animation
+  animateOrb();
   
-  // Xử lý resize cửa sổ
+  // Resize handler
   window.addEventListener('resize', () => {
     orbW = orbContainer.clientWidth || 320;
     orbH = orbContainer.clientHeight || 320;
@@ -1142,25 +994,8 @@
   });
 
   /* ══════════════════════════════════════════════
-   *  PHẦN 2: BỘ TÍNH TOÁN CARBON (Carbon Calculator)
-   *  
-   *  - 5 slider điều chỉnh thói quen hàng ngày
-   *  - Tính tổng CO2 phát thải dựa trên hệ số nhân
-   *  - Animation số chạy mượt mà
-   *  - Đánh giá mức sinh thái (5 cấp từ Xuất sắc → Nguy hiểm)
-   *  - Cập nhật cường độ thảm họa 3D theo mức CO2
-   * ══════════════════════════════════════════════ */
-
-  /**
-   * HỆ SỐ PHÁT THẢI (Emission Factors):
-   * - TRANSPORT: 0.178 kg CO2 / km di chuyển
-   * - PLASTIC: 0.85 kg CO2 / món nhựa sử dụng
-   * - ELECTRIC: 0.155 kg CO2 / kWh điện tiêu thụ
-   * - WASTE: 1.25 kg CO2 / kg rác thải
-   * - DIET: 1.95 kg CO2 / bữa ăn thịt
-   * 
-   * GLOBAL_AVG_CO2: 10.4 kg CO2/ngày/người (trung bình toàn cầu)
-   */
+     2. CARBON CALCULATOR SLIDER LOGIC
+     ══════════════════════════════════════════════ */
   const TRANSPORT_FACTOR = 0.178;
   const PLASTIC_FACTOR   = 0.85;
   const ELECTRIC_FACTOR  = 0.155;
@@ -1169,13 +1004,6 @@
   
   const GLOBAL_AVG_CO2   = 10.4;
   
-  /**
-   * ECO_LEVELS: 5 mức đánh giá sinh thái
-   * - max: Ngưỡng CO2 tối đa của mức này
-   * - text: Mô tả trạng thái
-   * - color: Màu hiển thị
-   * - pct: Phần trăm sức khỏe sinh thái
-   */
   const ECO_LEVELS = [
     { max: 5.0, text: 'Xuất sắc – Rất tốt', color: '#4ade80', pct: 95 },
     { max: 10.4, text: 'Tốt – Ổn định', color: '#86efac', pct: 78 },
@@ -1184,11 +1012,10 @@
     { max: Infinity, text: 'Nguy hiểm – Xấu', color: '#ef4444', pct: 10 }
   ];
 
-  let displayedCO2 = 12.5;  // Giá trị CO2 đang hiển thị (animation)
-  let targetCO2 = 12.5;     // Giá trị CO2 mục tiêu
-  let animFrame = null;      // ID của requestAnimationFrame
+  let displayedCO2 = 12.5;
+  let targetCO2 = 12.5;
+  let animFrame = null;
   
-  // Lấy reference đến các slider
   const sliders = {
     transport: document.getElementById('transportSlider'),
     plastic: document.getElementById('plasticSlider'),
@@ -1197,7 +1024,6 @@
     diet: document.getElementById('dietSlider'),
   };
   
-  // Lấy reference đến các phần tử hiển thị giá trị slider
   const valDisplays = {
     transport: document.getElementById('transportVal'),
     plastic: document.getElementById('plasticVal'),
@@ -1206,14 +1032,6 @@
     diet: document.getElementById('dietVal'),
   };
 
-  /**
-   * calcCO2(): Tính tổng CO2 phát thải dựa trên giá trị 5 slider
-   * 
-   * CÔNG THỨC:
-   * CO2 = (km × 0.178) + (nhựa × 0.85) + (kWh × 0.155) + (rác × 1.25) + (thịt × 1.95)
-   * 
-   * @returns {number} Tổng CO2 (kg/ngày)
-   */
   function calcCO2() {
     const tVal = parseFloat(sliders.transport.value) || 0;
     const pVal = parseFloat(sliders.plastic.value) || 0;
@@ -1223,38 +1041,20 @@
     return (tVal * TRANSPORT_FACTOR) + (pVal * PLASTIC_FACTOR) + (eVal * ELECTRIC_FACTOR) + (wVal * WASTE_FACTOR) + (dVal * DIET_FACTOR);
   }
 
-  /**
-   * updateSliderTrack(slider): Cập nhật thanh gradient của slider
-   * - Phần đã kéo: xanh lá (#4ade80)
-   * - Phần chưa kéo: xám mờ
-   */
   function updateSliderTrack(slider) {
     if (!slider) return;
     const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
     slider.style.background = `linear-gradient(to right, #4ade80 ${pct}%, rgba(255,255,255,0.14) ${pct}%)`;
   }
 
-  /**
-   * updateEcosystem(co2): Cập nhật hiển thị trạng thái sinh thái
-   * 
-   * @param {number} co2 - Tổng CO2 (kg/ngày)
-   * 
-   * CẬP NHẬT:
-   * - Trạng thái text + màu sắc
-   * - Phần trăm sức khỏe + gauge rotation
-   * - Carbon offset cần thiết
-   * - Số cây cần trồng để bù đắp
-   * - So sánh với trung bình toàn cầu
-   */
   function updateEcosystem(co2) {
-    const lvl = ECO_LEVELS.find(l => co2 <= l.max); // Tìm mức phù hợp
-    const diff = co2 - GLOBAL_AVG_CO2;              // Chênh lệch vs trung bình
+    const lvl = ECO_LEVELS.find(l => co2 <= l.max);
+    const diff = co2 - GLOBAL_AVG_CO2;
    
     document.getElementById('ecoStatusText').textContent = lvl.text;
     document.getElementById('ecoPct').textContent         = lvl.pct + '%';
     document.getElementById('ecoPct').style.color         = lvl.color;
     
-    // Xoay kim gauge (-45° → +135°)
     const rotation = -45 + (lvl.pct / 100) * 180;
     const ecoGauge = document.getElementById('ecoGauge');
     if (ecoGauge) {
@@ -1262,36 +1062,28 @@
       ecoGauge.style.borderColor = `${lvl.color} ${lvl.color} transparent transparent`;
     }
    
-    // Carbon offset cần bù đắp (25% CO2 phát thải)
     const offsetKg = -(co2 * 0.25).toFixed(1);
     document.getElementById('carbonOffset').textContent = offsetKg + ' kg';
    
-    // Số cây cần trồng: (CO2/năm) ÷ 21 kg CO2/cây/năm
     const trees = Math.ceil((co2 * 365) / 21);
     document.getElementById('treesNeeded').textContent = `~${trees} cây`;
    
-    // So sánh với trung bình toàn cầu
     const vsEl = document.getElementById('vsAvg');
     if (vsEl) {
       if (diff >= 0) {
         vsEl.textContent = `+${diff.toFixed(1)} kg`;
-        vsEl.style.color = '#fb923c';   // Cam: cao hơn trung bình
+        vsEl.style.color = '#fb923c';
       } else {
         vsEl.textContent = `${diff.toFixed(1)} kg`;
-        vsEl.style.color = '#86efac';   // Xanh: thấp hơn trung bình
+        vsEl.style.color = '#86efac';
       }
     }
   }
 
-  /**
-   * animateCO2(target): Animation số CO2 chạy mượt
-   * - Sử dụng requestAnimationFrame
-   * - Nội suy 12% mỗi frame (easing tự nhiên)
-   */
   function animateCO2(target) {
     if (animFrame) cancelAnimationFrame(animFrame);
     function step() {
-      displayedCO2 += (target - displayedCO2) * 0.12; // Nội suy 12%
+      displayedCO2 += (target - displayedCO2) * 0.12;
       if (Math.abs(displayedCO2 - target) < 0.015) displayedCO2 = target;
       document.getElementById('co2Display').textContent = displayedCO2.toFixed(1) + ' kg CO2/ngày';
       if (Math.abs(displayedCO2 - target) > 0.01) animFrame = requestAnimationFrame(step);
@@ -1299,47 +1091,25 @@
     step();
   }
 
-  /**
-   * onSliderChange(): Hàm callback khi bất kỳ slider nào thay đổi
-   * 
-   * LUỒNG XỬ LÝ:
-   * 1. Cập nhật hiển thị giá trị slider
-   * 2. Cập nhật thanh gradient slider
-   * 3. Tính tổng CO2 mới
-   * 4. Animation số chạy
-   * 5. Cập nhật cường độ thảm họa 3D (targetIntensity)
-   * 6. Hiệu ứng flash quả cầu
-   * 7. Cập nhật trạng thái sinh thái
-   */
   function onSliderChange() {
-    // Cập nhật hiển thị giá trị các slider
     valDisplays.transport.textContent = sliders.transport.value;
     valDisplays.plastic.textContent   = sliders.plastic.value;
     valDisplays.electric.textContent  = sliders.electric.value;
     valDisplays.waste.textContent     = sliders.waste.value;
     valDisplays.diet.textContent      = sliders.diet.value;
    
-    // Cập nhật thanh gradient cho tất cả slider
     Object.values(sliders).forEach(updateSliderTrack);
    
-    // Tính tổng CO2 mới
     targetCO2 = calcCO2();
     animateCO2(targetCO2);
    
-    /**
-     * Tính cường độ thảm họa 3D:
-     * targetIntensity = CO2 hiện tại / CO2 tối đa có thể
-     * 
-     * CO2 tối đa = 100km×0.178 + 20nhựa×0.85 + 50kWh×0.155 + 10kg×1.25 + 3bữa×1.95
-     */
     const maxCO2 = 100 * TRANSPORT_FACTOR + 20 * PLASTIC_FACTOR + 50 * ELECTRIC_FACTOR + 10 * WASTE_FACTOR + 3 * DIET_FACTOR;
     targetIntensity = targetCO2 / maxCO2;
    
-    // Hiệu ứng flash (nhấp nháy) quả cầu khi thay đổi slider
     const orbEl = document.getElementById('orbContainer');
     if (orbEl) {
       orbEl.classList.remove('orb-flash');
-      void orbEl.offsetWidth;          // Force reflow (trick CSS animation restart)
+      void orbEl.offsetWidth;
       orbEl.classList.add('orb-flash');
     }
    
@@ -1347,18 +1117,8 @@
   }
 
   /* ══════════════════════════════════════════════
-   *  PHẦN 3: MODAL BÁO CÁO SINH THÁI (Report Modal)
-   *  
-   *  - Hiển thị popup chi tiết khi nhấn "Xuất Báo cáo"
-   *  - Chứa: thời gian, tổng CO2, trạng thái, chi tiết từng slider
-   *  - Đóng bằng nút X, click overlay, hoặc phím Escape
-   * ══════════════════════════════════════════════ */
-
-  /**
-   * openReportModal(): Mở modal báo cáo
-   * - Điền dữ liệu hiện tại vào modal
-   * - Thêm class 'active' để hiển thị (CSS animation)
-   */
+     3. REPORT MODAL FUNCTIONS
+     ══════════════════════════════════════════════ */
   window.openReportModal = function () {
     document.getElementById('reportTime').textContent = new Date().toLocaleString('vi-VN');
     document.getElementById('reportCo2').textContent = targetCO2.toFixed(1) + ' kg CO2/ngày';
@@ -1367,7 +1127,6 @@
     document.getElementById('reportStatus').textContent = lvl.text;
     document.getElementById('reportStatus').style.color = lvl.color;
     
-    // Chi tiết từng slider
     document.getElementById('repValTransport').textContent = sliders.transport.value + ' km/ngày';
     document.getElementById('repValPlastic').textContent = sliders.plastic.value + ' món/ngày';
     document.getElementById('repValElectric').textContent = sliders.electric.value + ' kWh/ngày';
@@ -1377,12 +1136,6 @@
     document.getElementById('reportModal').classList.add('active');
   };
   
-  /**
-   * Đóng modal: 3 cách
-   * 1. Nhấn nút X → closeReportModalDirect()
-   * 2. Click overlay (nền mờ) → closeReportModal(e)
-   * 3. Phím Escape → document.addEventListener('keydown')
-   */
   window.closeReportModalDirect = function () {
     const reportModal = document.getElementById('reportModal');
     if (reportModal) reportModal.classList.remove('active');
@@ -1401,11 +1154,7 @@
     if (e.key === 'Escape') window.closeReportModalDirect();
   });
 
-  /* ══════════════════════════════════════════════
-   *  PHẦN 4: THANH TIN TỨC (News Ticker)
-   *  - Nhân đôi mảng tin tức để tạo vòng lặp liền mạch
-   *  - CSS animation marquee cuộn ngang liên tục
-   * ══════════════════════════════════════════════ */
+  // ── News Ticker ──
   const NEWS = [
     '<strong>LIVE:</strong> Global reforestation initiative achieves 1 million trees planted...',
     'New study shows record adoption of solar energy in cities...',
@@ -1423,17 +1172,11 @@
     });
   }
 
-  /* ══════════════════════════════════════════════
-   *  KHỞI TẠO (Init)
-   *  1. Cập nhật thanh gradient cho tất cả slider
-   *  2. Gọi onSliderChange() lần đầu để tính CO2 ban đầu
-   *  3. Gán event listener 'input' cho tất cả slider
-   * ══════════════════════════════════════════════ */
+  // ── Init on load ──
   function initCalculator() {
     Object.values(sliders).forEach(updateSliderTrack);
-    onSliderChange(); // Tính toán ban đầu
+    onSliderChange();
     
-    // Gán sự kiện: mỗi khi kéo slider → gọi onSliderChange()
     Object.values(sliders).forEach((slider) => {
       slider.addEventListener('input', onSliderChange);
     });
@@ -1444,4 +1187,54 @@
   } else {
     initCalculator();
   }
-})(); // Kết thúc IIFE
+})();
+```
+
+---
+
+## 🔍 GIẢI THÍCH CHI TIẾT CÁC THUẬT TOÁN ĐỒ ÁN CỦA BẠN
+
+### 1. Phép tính hạt magma núi lửa phun trào
+*   `gravityStrength = 0.45 * delta`: Mỗi hạt magma bay ra có một vận tốc ban đầu hướng chéo lên. Lực trọng lực kéo hạt rơi xuống được tính bằng cách nhân hướng tâm Trái Đất `gravityDir` với gia tốc và nhân khoảng thời gian sai lệch khung hình `delta`. Nhờ vậy hạt bay uốn cong thành hình vòm cung rồi rơi sập xuống bề mặt Trái Đất.
+*   `resetVolcanoParticle(i)`: Khi hạt magma có tuổi thọ `age` vượt quá giới hạn ngẫu nhiên `life`, ta thiết lập lại tọa độ hạt trở về vị trí miệng núi lửa `craterPos` và sinh lại vận tốc mới, tránh việc các hạt bay vô hạn ra ngoài không gian gây lãng phí bộ nhớ.
+
+### 2. Thuật toán dựng lốc xoáy (Cyclone) bằng Hệ tọa độ cực
+*   `Math.cos(d.angle) * curR` và `Math.sin(d.angle) * curR`: Lốc xoáy là tập hợp hạt xoay quanh trục nghiêng hướng ra ngoài. Tại mỗi khung hình, góc xoay `d.angle` tăng dần theo vận tốc góc. Ta lấy hình nón có bán kính tăng dần theo độ cao hạt `curR` rồi áp dụng lượng giác để tính độ lệch X, Y của hạt quanh trục lốc xoáy.
+
+### 3. Giải thuật vẽ tia sét giật cục (Lightning Strike)
+*   `THREE.Line(lightningGeo, lightningMat)`: Tia sét được tạo từ một chuỗi các đoạn thẳng nối tiếp nhau.
+*   `lerpVectors(startPos, endPos, fraction)`: Để tạo dáng sét ngoằn ngoèo, ta lấy các điểm nội suy tuyến tính giữa mây và đất, sau đó cộng thêm một vector dịch lệch ngẫu nhiên `randVec` vuông góc với tia sét để làm gãy gập các điểm giữa.
+*   **Chớp sét:** Khi sét đánh, ta tăng độ sáng đèn AmbientLight từ mức $0.6$ lên mức cực đại $1.6$ và đèn DirectionalLight lên mức $3.0$ trong thời gian ngắn ngủi ($0.15$ giây) để tạo cảm giác toàn bộ mô hình Trái Đất rực sáng giật cục.
+
+---
+
+## ❓ CÂU HỎI PHẢN BIỆN THƯỜNG GẶP CỦA HỘI ĐỒNG (VÀ ĐÁP ÁN)
+
+1.  **Hỏi:** *Làm thế nào để thay đổi màu sắc và trạng thái hủy diệt của Trái Đất khi lượng CO₂ tăng cao?*
+    *   **Đáp:** Dựa vào lượng phát thải carbon tổng kết, ta tính ra hệ số hủy diệt `targetIntensity` từ 0 đến 1. Chỉ số này điều khiển lớp lọc đồ họa CSS filter của Canvas: `grayscale` (xám màu), `sepia` (úa vàng cổ xưa), và `brightness` (tối tăm). Ngoài ra, độ đục `opacity` của các hạt khói độc và bụi lửa cũng tăng tương ứng để che mờ Trái Đất.
+2.  **Hỏi:** *Tại sao các hạt dung nham núi lửa lại hiển thị được hai tông màu Đỏ-Vàng (đá nóng chảy) và Xám-Đen (tro bụi) khác nhau?*
+    *   **Đáp:** Ta khai báo mảng màu sắc `volColors` tương ứng với mỗi hạt dung nham. Khi hạt mới sinh, ta random xem hạt đó là dung nham hay tro bụi (`isLava`). Nếu là dung nham, ta truyền màu sắc đỏ cam, nếu là tro bụi, ta truyền màu xám nâu. Khi hạt bay ra xa, ta giảm sắc đỏ và tăng sắc đen nguội lạnh theo tỷ lệ thời gian sống của hạt.
+
+---
+
+## ✍️ HƯỚNG DẪN VIẾT LẠI CODE MẪU TỐI GIẢN
+Code mẫu JS tạo hạt núi lửa phun trào bay chéo lên và bị hút rơi xuống bằng vector trọng lực:
+
+```javascript
+const gravity = new THREE.Vector3(0, -9.8, 0); // Lực hút hướng xuống
+const pos = new THREE.Vector3(0, 0, 0);       // Điểm miệng núi lửa
+const vel = new THREE.Vector3(2, 8, 0);        // Vận tốc bay lên ban đầu
+
+function updateParticle(delta) {
+  // Cập nhật vận tốc chịu tác động trọng lực
+  vel.addScaledVector(gravity, delta);
+  
+  // Dịch chuyển hạt theo vận tốc mới
+  pos.addScaledVector(vel, delta);
+  
+  if (pos.y < 0) {
+    pos.set(0, 0, 0); // Reset hạt khi rơi xuống đất
+    vel.set(2, 8, 0); // Reset vận tốc
+  }
+}
+```
