@@ -1739,6 +1739,14 @@ input[type=range]:active::-webkit-slider-thumb {
 .club-card:hover::before {
   opacity: 1;
 }
+.club-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
 
 .club-card-tag {
   background: rgba(74, 222, 128, 0.12);
@@ -1750,12 +1758,22 @@ input[type=range]:active::-webkit-slider-thumb {
   padding: 3px 8px;
   font-size: 0.68rem;
   transition: all 0.3s;
+  white-space: nowrap;
 }
 
 .club-card:hover .club-card-tag {
   background: rgba(74, 222, 128, 0.2);
   border-color: rgba(74, 222, 128, 0.4);
   box-shadow: 0 0 10px rgba(74, 222, 128, 0.15);
+}
+
+.club-card-location {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
 }
 
 .club-card-link {
