@@ -42,8 +42,26 @@
 
 ---
 
-## 🛠️ PHẦN 3: ĐIỂM NHẤN CÔNG NGHỆ (Tech Stack & Algorithms)
-*(Phần này dùng để 'ghi điểm' điểm kỹ thuật với các thầy cô chấm code)*
+## 🛠️ PHẦN 3: BẢNG TỔNG HỢP CÔNG NGHỆ SỬ DỤNG (TECH STACK)
+*(Dành để giới thiệu trực quan với hội đồng giảng viên trước khi đi sâu vào giải thích mã nguồn)*
+
+| Lớp công nghệ (Layer) | Tên công nghệ / Thư viện | Vai trò & Ứng dụng cụ thể trong Đồ án |
+| :--- | :--- | :--- |
+| **Frontend Core** | HTML5, Vanilla CSS3, JavaScript (ES6+) | Xây dựng cấu trúc trang, logic điều phối và đồng bộ hóa trạng thái giao diện người dùng. |
+| **Giao diện & Bố cục** | **Tailwind CSS (CDN)** | Hỗ trợ chia lưới Bento Grid hiện đại, xử lý giao diện đáp ứng (Responsive) trên Mobile và Desktop cực nhanh. |
+| **Đồ họa WebGL 3D** | **Three.js (r128)** | Thư viện đồ họa cốt lõi để tạo cảnh 3D động, di chuyển máy ảnh và quản lý ánh sáng. |
+| **Nạp mô hình 3D** | **GLTFLoader.js** | Tải các tệp mô hình nén dạng `.glb` (Life Tree, Trái đất thiên tai, nhân vật Juan) tối ưu dung lượng. |
+| **Hiệu ứng hậu kỳ** | **Three.js Post-processing** | Tạo hiệu ứng phát sáng Neon (UnrealBloomPass), bụi bặm sương mù và luồng sáng God Rays đi xuyên tán lá. |
+| **Trực quan dữ liệu** | **Chart.js (v4.4.2)** | Vẽ đồ thị đường động biểu diễn xu hướng phát thải CO2 và đồ thị cột so sánh nhiệt độ giữa các châu lục. |
+| **Đồ họa 2D Hiệu năng** | **HTML5 Canvas API** | Vẽ đồ thị thu nhỏ (Sparklines) ngoài trang chủ và lập trình bản đồ phẳng nội suy nhiệt độ (Heatmap) thế giới. |
+| **Dữ liệu Thời gian thực** | **APIs (Global Warming, Open-Meteo, REST Countries)** | Cung cấp dữ liệu trực tiếp về nồng độ khí nhà kính CO2 (ppm), chỉ số AQI/PM2.5, tọa độ quốc gia toàn cầu. |
+| **Lưu trữ dữ liệu** | **Web Storage API (localStorage)** | Lưu trữ thông tin đăng nhập, dữ liệu tài khoản (Mock Auth) và kết quả đo carbon của người dùng. |
+| **Backend / Local Server** | **PowerShell HTTP Server (`serve.ps1`)** | Máy chủ cục bộ tích hợp CORS Proxy trung gian và bộ nhớ đệm ẩn (In-memory Cache) tối ưu hóa API. |
+
+---
+
+## 🧬 PHẦN 4: ĐIỂM NHẤN THUẬT TOÁN & KỸ THUẬT
+*(Phần này dùng để giải thích sâu về kỹ thuật, giúp ghi điểm phản biện xuất sắc)*
 
 ### 1. Kỹ thuật Đồ họa WebGL 3D (Client-side)
 * **Three.js & GLTFLoader:** Load trực tiếp các mô hình nén dạng `.glb` (Life Tree, Trái đất thiên tai) giúp tối ưu hóa dung lượng tải trang (dưới 3MB).
@@ -67,7 +85,7 @@
 
 ---
 
-## 🎯 PHẦN 4: KẾT LUẬN & HƯỚNG PHÁT TRIỂN (Thời gian gợi ý: 1 phút)
+## 🎯 PHẦN 5: KẾT LUẬN & HƯỚNG PHÁT TRIỂN (Thời gian gợi ý: 1 phút)
 
 **Lời thoại gợi ý:**
 > *"Qua quá trình thực hiện đồ án EcoImpact, em đã tự nghiên cứu và giải quyết được các bài toán khó về đồ họa WebGL hiệu năng cao trên Client, thuật toán xử lý bản đồ nhiệt, và xây dựng máy chủ trung gian CORS Proxy tối giản.
