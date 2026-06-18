@@ -714,6 +714,11 @@ body {
   background: linear-gradient(180deg, #4ade80, #16a34a);
   transition: height 0.8s cubic-bezier(.4,0,.2,1);
 }
+.mini-label {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 400;
+}
 
 .legend-dot {
   width: 8px; height: 8px; border-radius: 50%;
