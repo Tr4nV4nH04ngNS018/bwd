@@ -814,76 +814,41 @@
    *  4. Cập nhật biểu đồ cột Chart.js
    * ═══════════════════════════════════════════════════════════ */
 
-  // URL API lấy thông tin quốc gia
-  const CAPITALS_API_URL = 'https://restcountries.com/v3.1/all?fields=name,capital,capitalInfo,latlng,region,translations';
+  // Danh sách cố định 25 thủ đô lớn đại diện cho 5 châu lục (tránh gọi RestCountries API dung lượng lớn và chậm)
+  const STATIC_CAPITALS = [
+    // Americas
+    { label: 'Washington D.C.', region: 'Americas', lat: 38.90, lon: -77.03 },
+    { label: 'Ottawa', region: 'Americas', lat: 45.42, lon: -75.69 },
+    { label: 'Brasilia', region: 'Americas', lat: -15.79, lon: -47.88 },
+    { label: 'Mexico City', region: 'Americas', lat: 19.43, lon: -99.13 },
+    { label: 'Buenos Aires', region: 'Americas', lat: -34.60, lon: -58.38 },
+    // Asia
+    { label: 'Hà Nội', region: 'Asia', lat: 21.03, lon: 105.85 },
+    { label: 'Tokyo', region: 'Asia', lat: 35.68, lon: 139.76 },
+    { label: 'Beijing', region: 'Asia', lat: 39.90, lon: 116.40 },
+    { label: 'New Delhi', region: 'Asia', lat: 28.61, lon: 77.20 },
+    { label: 'Jakarta', region: 'Asia', lat: -6.20, lon: 106.82 },
+    // Oceania
+    { label: 'Canberra', region: 'Oceania', lat: -35.28, lon: 149.13 },
+    { label: 'Wellington', region: 'Oceania', lat: -41.29, lon: 174.78 },
+    { label: 'Suva', region: 'Oceania', lat: -18.12, lon: 178.44 },
+    { label: 'Port Moresby', region: 'Oceania', lat: -9.44, lon: 147.18 },
+    { label: 'Apia', region: 'Oceania', lat: -13.83, lon: -171.75 },
+    // Europe
+    { label: 'London', region: 'Europe', lat: 51.51, lon: -0.13 },
+    { label: 'Paris', region: 'Europe', lat: 48.85, lon: 2.35 },
+    { label: 'Berlin', region: 'Europe', lat: 52.52, lon: 13.40 },
+    { label: 'Rome', region: 'Europe', lat: 41.90, lon: 12.50 },
+    { label: 'Madrid', region: 'Europe', lat: 40.41, lon: -3.70 },
+    // Africa
+    { label: 'Cairo', region: 'Africa', lat: 30.04, lon: 31.23 },
+    { label: 'Pretoria', region: 'Africa', lat: -25.75, lon: 28.19 },
+    { label: 'Nairobi', region: 'Africa', lat: -1.29, lon: 36.82 },
+    { label: 'Lagos', region: 'Africa', lat: 6.52, lon: 3.38 },
+    { label: 'Algiers', region: 'Africa', lat: 36.75, lon: 3.06 }
+  ];
+
   const OPEN_METEO_URL = 'https://api.open-meteo.com/v1/forecast';
-
-  /**
-   * getCapitalLocations(countries): Trích xuất tọa độ thủ đô từ dữ liệu RestCountries
-   * 
-   * @param {Array} countries - Mảng các quốc gia từ API
-   * @returns {Array} - Mảng { label, country, region, lat, lon }
-   * 
-   * LOGIC:
-   * - Ưu tiên capitalInfo.latlng (tọa độ thủ đô chính xác)
-   * - Fallback: latlng (tọa độ trung tâm quốc gia)
-   * - Dùng tên tiếng Việt nếu có (translations.vie)
-   */
-  function getCapitalLocations(countries) {
-    if (!Array.isArray(countries)) return [];
-    return countries.flatMap((country) => {
-      const capitalName = Array.isArray(country.capital) ? country.capital[0] : null;
-      const capitalLatLng = country?.capitalInfo?.latlng;     // Tọa độ thủ đô (chính xác)
-      const fallbackLatLng = country?.latlng;                  // Tọa độ quốc gia (fallback)
-      const coords = Array.isArray(capitalLatLng) && capitalLatLng.length >= 2
-        ? capitalLatLng
-        : (Array.isArray(fallbackLatLng) && fallbackLatLng.length >= 2 ? fallbackLatLng : null);
-
-      if (!capitalName || !coords) return []; // Bỏ qua nếu thiếu dữ liệu
-
-      return [{
-        label: capitalName,
-        country: country.translations?.vie?.common || country.name?.common || '',
-        region: country.region || 'Unknown',
-        lat: coords[0],
-        lon: coords[1]
-      }];
-    });
-  }
-
-  /**
-   * fetchTemperaturesForLocations(locations, batchSize):
-   * Tải nhiệt độ thực tế cho nhiều địa điểm theo từng batch
-   * 
-   * @param {Array} locations - Mảng { lat, lon }
-   * @param {number} batchSize - Số request gửi đồng thời mỗi batch (mặc định: 12)
-   * @returns {Array<number|null>} - Mảng nhiệt độ (null nếu lỗi)
-   * 
-   * TẠI SAO GỬI THEO BATCH?
-   * - Nếu gửi 250 request cùng lúc → quá tải trình duyệt & API rate limit
-   * - Chia thành batch 12 request → ổn định, tránh bị block
-   */
-  async function fetchTemperaturesForLocations(locations, batchSize = 12) {
-    const temps = [];
-    for (let index = 0; index < locations.length; index += batchSize) {
-      const batch = locations.slice(index, index + batchSize);
-
-      // Promise.all: Gửi đồng thời batch request
-      const batchTemps = await Promise.all(batch.map(async (location) => {
-        const url = OPEN_METEO_URL + '?latitude=' + location.lat + '&longitude=' + location.lon + '&current=temperature_2m';
-        try {
-          const response = await fetch(url);
-          if (!response.ok) return null;
-          const json = await response.json();
-          return json && json.current ? json.current.temperature_2m : null;
-        } catch {
-          return null; // API lỗi → trả về null
-        }
-      }));
-      temps.push(...batchTemps);
-    }
-    return temps;
-  }
 
   /**
    * initRealtimeDashboard(): Khởi tạo dashboard realtime
@@ -982,41 +947,41 @@
      */
     async function refreshRealtimeData() {
       try {
-        // Bước 1: Tải danh sách quốc gia + thủ đô
-        const countriesRes = await fetch(CAPITALS_API_URL);
-        if (!countriesRes.ok) throw new Error('Failed to load capital data');
+        // Tạo URL gọi hàng loạt tọa độ từ Open-Meteo trong 1 request duy nhất
+        const lats = STATIC_CAPITALS.map(c => c.lat.toFixed(2)).join(',');
+        const lons = STATIC_CAPITALS.map(c => c.lon.toFixed(2)).join(',');
+        const multiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m`;
 
-        const countries = await countriesRes.json();
-        const capitals = getCapitalLocations(countries);
-        if (!capitals.length) throw new Error('No capital locations found');
+        const res = await fetch(multiUrl);
+        if (!res.ok) throw new Error('Failed to load live temperature data');
+        const jsonList = await res.json();
+        
+        // Open-Meteo trả về một mảng chứa dữ liệu của 25 địa điểm
+        const capitalTemps = jsonList.map((item) => item.current ? item.current.temperature_2m : null);
 
-        // Bước 2: Gom nhóm theo châu lục
+        // Gom nhóm theo châu lục
         const regionTempsMap = new Map(REGION_SERIES.map((region) => [region.api, []]));
         
-        // Bước 3: Tải nhiệt độ cho tất cả thủ đô (theo batch)
-        const capitalTemps = await fetchTemperaturesForLocations(capitals);
-
-        // Gom nhiệt độ vào nhóm châu lục tương ứng
-        capitals.forEach((capital, index) => {
+        STATIC_CAPITALS.forEach((capital, index) => {
           const temp = capitalTemps[index];
           if (temp === null || temp === undefined) return;
           if (!regionTempsMap.has(capital.region)) return;
           regionTempsMap.get(capital.region).push(temp);
         });
 
-        // Bước 4: Tính trung bình cộng nhiệt độ mỗi châu lục
+        // Tính trung bình cộng nhiệt độ mỗi châu lục
         const regionTemps = REGION_SERIES.map((region) => {
           const temps = regionTempsMap.get(region.api) || [];
           if (!temps.length) return null;
           const sum = temps.reduce((acc, value) => acc + value, 0);
-          return sum / temps.length; // Trung bình cộng
+          return sum / temps.length;
         });
 
-        // Bước 5: Cập nhật biểu đồ cột
+        // Cập nhật biểu đồ cột
         realtimeChart.data.labels = REGION_SERIES.map((region) => region.label);
         realtimeChart.data.datasets[0].backgroundColor = REGION_SERIES.map((region) => region.color);
         realtimeChart.data.datasets[0].data = regionTemps.map((value) => value !== null ? parseFloat(value.toFixed(1)) : 0);
-        realtimeChart.update(); // Vẽ lại biểu đồ với animation
+        realtimeChart.update();
 
         // Cập nhật nhiệt độ cho 3 thành phố đại diện trên bản đồ
         for (let i = 0; i < activeThreeCities.length; i++) {
@@ -1027,7 +992,7 @@
               const j = await r.json();
               if (j && j.current) {
                 const liveTemp = j.current.temperature_2m;
-                city.temp = liveTemp; // Cập nhật nhiệt độ live
+                city.temp = liveTemp;
                 if (chipEls[i]) {
                   chipEls[i].innerHTML = `<span style="opacity: 0.6; font-weight: normal; margin-right: 4px;">${city.label}:</span>${liveTemp.toFixed(1)}°C`;
                 }
@@ -1039,11 +1004,11 @@
         }
 
         // Lưu dữ liệu và vẽ lại bản đồ nhiệt
-        activeCapitals = capitals;
+        activeCapitals = STATIC_CAPITALS;
         activeTemps = capitalTemps;
         drawWorldHeatmap(hoveredIndex);
 
-        // Tính nhiệt độ toàn cầu trung bình từ tất cả thủ đô
+        // Tính nhiệt độ toàn cầu trung bình từ các thủ đô
         const validCapitalTemps = capitalTemps.filter((value) => value !== null && value !== undefined);
         const globalAvg = validCapitalTemps.length ? (validCapitalTemps.reduce((a, b) => a + b, 0) / validCapitalTemps.length) : FALLBACK_DATA.globalTemp;
         document.getElementById('valGlobalTemp').innerText = parseFloat(globalAvg.toFixed(1)) + '°C';
@@ -1051,7 +1016,7 @@
         const valTempUpdatedEl = document.getElementById('valTempUpdated');
         if (valTempUpdatedEl) valTempUpdatedEl.textContent = 'Cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-        // Cập nhật AQI (Chất lượng không khí) Hà Nội
+        // Cập nhật AQI Hà Nội
         const aqiRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=21.02&longitude=105.83&current=european_aqi');
         const aqiData = await aqiRes.json();
         if (aqiData && aqiData.current && aqiData.current.european_aqi) {
@@ -1061,7 +1026,6 @@
           document.getElementById('aqBar').style.width = Math.min(aqiPct, 100) + '%';
         }
       } catch (error) {
-        // FALLBACK: Khi tất cả API lỗi → dùng dữ liệu tĩnh
         console.error('API Error - Falling back to local data:', error);
         activeCapitals = null;
         activeTemps = null;
@@ -1071,6 +1035,12 @@
         document.getElementById('valTempChange').innerText = '(Dữ liệu dự phòng)';
         const valTempUpdatedFb = document.getElementById('valTempUpdated');
         if (valTempUpdatedFb) valTempUpdatedFb.textContent = 'Không lấy được dữ liệu live, đang dùng dữ liệu dự phòng';
+        
+        // CẬP NHẬT BIỂU ĐỒ VỚI DỮ LIỆU DỰ PHÒNG CHÂU LỤC
+        realtimeChart.data.labels = REGION_SERIES.map((region) => region.label);
+        realtimeChart.data.datasets[0].backgroundColor = REGION_SERIES.map((region) => region.color);
+        realtimeChart.data.datasets[0].data = [20.5, 26.2, 21.8, 12.4, 25.0];
+        realtimeChart.update();
       }
     }
 
