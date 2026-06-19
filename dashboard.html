@@ -138,6 +138,12 @@
         <div class="chart-wrap">
           <canvas id="lineChart"></canvas>
         </div>
+        <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-white/5">
+          <span class="text-[0.62rem] text-white/30">Cập nhật tự động</span>
+          <span class="text-[0.62rem] text-white/45 flex items-center gap-1">
+            Nguồn API: <a href="https://global-warming.org/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">global-warming.org</a>
+          </span>
+        </div>
       </div>
 
       <!-- Two sub-cards side by side -->
@@ -225,6 +231,12 @@
         <div class="temp-chip" id="tempChip1" style="display: none;">14.5°C</div>
         <div class="temp-chip" id="tempChip2" style="display: none;">14.5°C</div>
         <div class="temp-chip" id="tempChip3" style="display: none;">14.5°C</div>
+        <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-white/5">
+          <span class="text-[0.62rem] text-white/30">Dữ liệu thời gian thực</span>
+          <span class="text-[0.62rem] text-white/45 flex items-center gap-1">
+            Nguồn API: <a href="https://open-meteo.com/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">Open-Meteo</a>
+          </span>
+        </div>
       </div>
 
       <!-- Continental Bar Chart -->
@@ -232,6 +244,12 @@
         <p class="text-[0.75rem] text-white/50 mb-1">Nhiệt độ các châu lục (Live API)</p>
         <div class="relative w-full h-[180px]">
           <canvas id="continentChart"></canvas>
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5">
+          <span class="text-[0.62rem] text-white/30">Tính toán tự động theo khu vực</span>
+          <span class="text-[0.62rem] text-white/45 flex items-center gap-1">
+            Nguồn API: <a href="https://open-meteo.com/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">Open-Meteo</a>
+          </span>
         </div>
       </div>
 
@@ -251,6 +269,12 @@
             <div class="temp-gradient-bar w-16"></div>
             <span class="text-[0.7rem] text-white/40">°C</span>
           </div>
+        </div>
+        <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-white/5">
+          <span id="valTempUpdated" class="text-[0.62rem] text-white/30">Cập nhật tự động</span>
+          <span class="text-[0.62rem] text-white/45 flex items-center gap-1">
+            Nguồn API: <a href="https://global-warming.org/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">global-warming.org</a>
+          </span>
         </div>
       </div>
 
@@ -286,6 +310,13 @@
             <div class="progress-fill" id="aqBar"
               style="width:0%; background: linear-gradient(90deg,#ef4444,#eab308,#84cc16);"></div>
           </div>
+        </div>
+        
+        <div class="flex items-center justify-between mt-1 pt-2 border-t border-white/5">
+          <span class="text-[0.62rem] text-white/30">Đồng bộ từ trạm đo</span>
+          <span class="text-[0.62rem] text-white/45 flex items-center gap-1">
+            Nguồn API: <a href="https://global-warming.org/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">global-warming.org</a> & <a href="https://open-meteo.com/" target="_blank" class="text-eco-green hover:underline hover:text-eco-glow transition-colors font-medium">Open-Meteo</a>
+          </span>
         </div>
       </div>
 
